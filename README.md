@@ -1,6 +1,7 @@
 # SDD Harness Kit
 
 Versión **1.1.0**. Arranque guiado: [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md).
+Guía de colaboración: [CONTRIBUTING.md](CONTRIBUTING.md).
 
 Artefactos portátiles de IA —subagentes, skills, hooks, standards y plantillas— para aplicar
 **Spec-Driven Development** con un harness determinista en cualquier proyecto.
