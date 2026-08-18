@@ -1,0 +1,22 @@
+---
+description: Política TDD obligatoria del proyecto
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# TDD Policy
+
+- Sigue siempre el ciclo Red → Green → Refactor.
+- Escribe el test más simple que falle primero, y **confirma que falla** antes de implementar.
+- Implementa solo el código mínimo para pasar el test. Se permite devolver un valor fijo
+  (*Fake It*) si con un caso basta, pero dilo explícitamente para que se añada el test de
+  triangulación.
+- Nunca modifiques ni desactives tests existentes sin aprobación explícita del humano.
+- Un test a la vez. Commits frecuentes.
+- Nombres que expliquen comportamiento observable, no implementación.
+- Patrón Arrange-Act-Assert en cada test, con los tres bloques separados.
+- Los datos de prueba se crean con las factories o helpers del proyecto, no a mano.
+- Dobles de prueba solo en fronteras reales: HTTP saliente, servicios de terceros, reloj,
+  aleatoriedad. Sobre-mockear es tan grave como no mockear.
+- La cobertura es una señal, no un objetivo. Para el código crítico, lo que vale es romper la
+  implementación a propósito y comprobar que algún test se pone en rojo.

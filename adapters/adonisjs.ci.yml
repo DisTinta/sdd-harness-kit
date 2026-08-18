@@ -1,0 +1,37 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint y formato
+        run: npm run lint
+
+      - name: Comprobación de tipos
+        run: npm run typecheck
+
+      - name: Tests
+        run: node ace test
+        env:
+          NODE_ENV: test
+
+      # El gate duro es el mutation score, no la cobertura: exigir un porcentaje de
+      # cobertura fabrica tests vacíos. La cobertura se publica como señal.
+      - name: Mutation testing en paths críticos
+        run: npx stryker run

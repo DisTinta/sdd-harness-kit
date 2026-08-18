@@ -1,0 +1,54 @@
+---
+description: Flujo de trabajo y reglas invariantes del SDD Harness Kit
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Flujo de trabajo — SDD Harness Kit
+
+Las convenciones concretas de este proyecto (comandos, rutas de capas, stack) están en
+`docs/project-context.md`, `docs/backend-standards.md` y `.claude/sdd-harness.env`. `AGENTS.md` /
+`CLAUDE.md` son punteros a la doctrina (`docs/base-standards.md`). Léelos antes de actuar.
+
+## Las diez reglas invariantes
+1. **La especificación gana al código.** Si no concuerdan, se corrige el código o se actualiza la
+   especificación. Nunca se ignora la discrepancia.
+2. **El gate humano va en el plan**, ni antes ni después. Si la tarea toca más de tres ficheros o
+   tiene efectos colaterales, produce un plan y espera aprobación antes de escribir código.
+3. **Los tests son autoría o supervisión humana; la implementación se delega.** Nunca al revés.
+4. **No toques los tests existentes.** Si crees que un test está mal, detente y pregunta. Nunca lo
+   modifiques para poner la suite en verde.
+5. **Hecho → memoria; procedimiento → skill; invariante → hook.** No repitas en el prompt una
+   garantía que ya ejecuta un hook.
+6. **Contexto curado, no acumulado.** Explora en subagente, resume, y no arrastres historial
+   irrelevante.
+7. **Non-goals explícitos** en cada unidad de trabajo. Sin límites, el alcance se dispara.
+8. **El «por qué» no lo escribes tú.** Ni en el PR, ni en el ADR, ni en la story.
+9. **`git push --force` y los merges los firma un humano.**
+10. **Nunca secretos ni datos personales** en el contexto ni en el código.
+
+## Orden de trabajo de cualquier unidad
+Especificación o criterios de aceptación → test en rojo → implementación mínima → refactor en
+verde → verificación contra la especificación → documentación → PR.
+
+## OpenSpec (dirección correcta)
+- Crear artefactos en propose / marcar `tasks.md` / escribir `reports/` → normal.
+- Actualizar specs porque el diseño cambió **antes** de (o mientras) implementas → normal (regla 7).
+- Reescribir la spec para encajar con un atajo de código ya escrito → prohibido.
+
+## Prohibiciones
+- No edites migraciones ya aplicadas: crea una nueva.
+- No añadas dependencias sin justificarlo y sin verificar que el paquete existe realmente en el
+  registro oficial (slopsquatting).
+- No devuelvas entidades de persistencia directamente por la interfaz pública: serializa
+  explícitamente.
+- No leas ni pegues `.env`, tokens o PII en el contexto del agente.
+- No ejecutes `/init` en un repo con este kit: pisaría la doctrina vía los punteros raíz.
+
+## MCP del kit
+- **Context7**: consulta documentación actual de librerías y frameworks **antes** de inventar una API
+  que no está en este repo. No esperes a que el usuario escriba «use context7».
+- **Playwright**: para demostrar un escenario de UI real (`/show-spec-working`). No sustituye la
+  suite E2E del proyecto ni el TDD.
+- Si un servidor MCP está apagado o no responde, dilo y continúa. No pongas API keys en el JSON
+  commiteado; `CONTEXT7_API_KEY` va en el entorno, si hace falta.

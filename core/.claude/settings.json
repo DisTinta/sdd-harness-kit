@@ -1,0 +1,156 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Read(**/credentials.json)",
+      "Read(**/credentials.*)",
+      "Read(**/id_rsa)",
+      "Read(**/id_ed25519)",
+      "Read(**/service-account*.json)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/session-context.sh"
+            ],
+            "timeout": 20,
+            "statusMessage": "Cargando contexto del proyecto..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/block-secrets.sh"
+            ],
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/block-secret-reads.sh"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/block-dangerous-bash.sh"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/protect-specs-and-tests.sh"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/docs-gate.sh"
+            ],
+            "timeout": 20,
+            "if": "Bash(git commit *)"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/post-edit-quality.sh"
+            ],
+            "timeout": 180,
+            "statusMessage": "Formato y análisis estático..."
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/validate-tasks.sh"
+            ],
+            "timeout": 20,
+            "statusMessage": "Validando tasks.md..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node",
+            "args": [
+              ".claude/hooks/invoke.cjs",
+              ".claude/hooks/verify-tests.sh"
+            ],
+            "timeout": 600,
+            "statusMessage": "Ejecutando la suite de tests..."
+          }
+        ]
+      }
+    ]
+  }
+}

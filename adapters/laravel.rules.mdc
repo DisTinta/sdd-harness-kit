@@ -1,0 +1,30 @@
+---
+description: Convenciones de capas del backend Laravel
+globs: ["app/**/*.php", "routes/**/*.php", "database/**/*.php", "tests/**/*.php"]
+alwaysApply: false
+---
+
+# Backend Laravel
+
+## Orden de una unidad vertical
+1. `tests/Feature/<Capability>/<Accion>Test.php` — el test primero, en rojo.
+2. `app/Enums/<Nombre>.php` — backed enum si el dominio tiene un conjunto cerrado de valores.
+3. `app/Http/Requests/<Accion>Request.php` — validación y autorización de entrada.
+4. `app/Models/<Modelo>.php` — casts, relaciones, scopes.
+5. `app/Services/<Modelo>Service.php` — lógica de negocio.
+6. `app/Http/Resources/<Modelo>Resource.php` — forma exacta de la salida.
+7. `app/Http/Controllers/...` y `routes/api.php`.
+
+## Reglas duras
+- `declare(strict_types=1);` en todos los ficheros.
+- El controller NO contiene lógica de negocio ni consultas Eloquent.
+- El service NO recibe `Request` ni devuelve `JsonResponse`.
+- Nunca devuelvas un modelo directamente: usa un Resource con los campos enumerados.
+- Nunca `$request->all()` en `create()` o `update()`: usa el Form Request validado.
+- Tipos explícitos; genéricos de colección documentados en PHPDoc.
+- Inyección por constructor con propiedades promovidas y `readonly`.
+
+## Prohibido
+- `DB::raw`, `whereRaw` o `selectRaw` con interpolación de variables.
+- Añadir paquetes de Composer sin ADR previo.
+- Modificar ficheros bajo `openspec/` o migraciones ya aplicadas.

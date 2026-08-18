@@ -1,0 +1,93 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: xdebug
+          extensions: pdo_sqlite, sqlite
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer packages
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          composer config --global github-oauth.github.com "${{ secrets.GITHUB_TOKEN }}"
+          composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Prepare test database
+        env:
+          DB_FILE: ${{ github.workspace }}/database/database.sqlite
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          mkdir -p database
+          touch database/database.sqlite
+          # Local puede usar MySQL vía .env.testing; en CI forzamos sqlite en ambos.
+          for f in .env .env.testing; do
+            [[ -f "$f" ]] || continue
+            if grep -q '^DB_CONNECTION=' "$f"; then
+              sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' "$f"
+            else
+              echo 'DB_CONNECTION=sqlite' >> "$f"
+            fi
+            if grep -q '^DB_DATABASE=' "$f"; then
+              sed -i "s|^DB_DATABASE=.*|DB_DATABASE=${DB_FILE}|" "$f"
+            else
+              echo "DB_DATABASE=${DB_FILE}" >> "$f"
+            fi
+          done
+          php artisan migrate --force
+
+      - name: Formato
+        run: vendor/bin/pint --test
+
+      - name: Análisis estático
+        run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Tests
+        run: php artisan test --coverage
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ${{ github.workspace }}/database/database.sqlite
+
+      # Requiere infection.json. Sin código en app/Services, se omite (gate activo cuando exista la capa).
+      - name: Mutation testing en paths críticos
+        run: |
+          if [ ! -f infection.json ]; then
+            echo "Skipping Infection: infection.json not found"
+            exit 0
+          fi
+          if ! find app/Services -name '*.php' -print -quit 2>/dev/null | grep -q .; then
+            echo "Skipping Infection: app/Services has no PHP files yet"
+            exit 0
+          fi
+          ./vendor/bin/infection run --configuration=infection.json --test-framework=phpunit --min-msi=70 --no-progress --ignore-msi-with-no-mutations
+        timeout-minutes: 40
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ${{ github.workspace }}/database/database.sqlite
+          XDEBUG_MODE: coverage

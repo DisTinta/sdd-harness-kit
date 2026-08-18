@@ -1,0 +1,226 @@
+<#
+.SYNOPSIS
+    Instala el SDD Harness Kit en un repositorio.
+
+.DESCRIPTION
+    Copia la fuente canónica (ai-specs), los hooks, la doctrina de docs/ y los standards
+    del stack; enlaza .claude y .cursor a ai-specs; y genera docs/project-context.md.
+    Es idempotente: al reejecutarlo conserva lo que ya existe salvo que uses -Force.
+
+.PARAMETER Dest
+    Repositorio destino. Por defecto, el directorio actual.
+
+.PARAMETER Stack
+    Adaptador a usar: adonisjs, laravel o _template. Si se omite, se detecta.
+
+.PARAMETER DryRun
+    Muestra lo que haría sin escribir nada.
+
+.PARAMETER Force
+    Sobrescribe los ficheros que ya existan.
+
+.PARAMETER NoFrontend
+    No copia standards de frontend React; usa la plantilla vacía.
+
+.EXAMPLE
+    .\install.ps1 -Dest C:\proyectos\mi-api
+.EXAMPLE
+    .\install.ps1 -Stack laravel -DryRun
+.EXAMPLE
+    .\install.ps1 -Dest C:\proyectos\mi-api -NoFrontend
+#>
+[CmdletBinding()]
+param(
+    [string]$Dest = (Get-Location).Path,
+    [string]$Stack = "",
+    [switch]$DryRun,
+    [switch]$Force,
+    [switch]$NoFrontend
+)
+
+$ErrorActionPreference = 'Stop'
+$KitDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+function Write-Head($t) { Write-Host ""; Write-Host $t -ForegroundColor Cyan }
+function Write-Ok($t)   { Write-Host "  + $t" -ForegroundColor Green }
+function Write-Skip($t) { Write-Host "  . $t" -ForegroundColor DarkGray }
+function Write-Warn($t) { Write-Host "  ! $t" -ForegroundColor Yellow }
+
+if (-not (Test-Path -LiteralPath $Dest -PathType Container)) {
+    throw "El destino no existe: $Dest"
+}
+$Dest = (Resolve-Path -LiteralPath $Dest).Path
+if ($Dest -eq $KitDir) { throw "No instales el kit sobre si mismo. Usa -Dest." }
+
+# ── Deteccion de stack ───────────────────────────────────────────────────────
+if (-not $Stack) {
+    $pkg = Join-Path $Dest 'package.json'
+    if ((Test-Path $pkg) -and (Select-String -Path $pkg -Pattern '"@adonisjs/core"' -Quiet)) {
+        $Stack = 'adonisjs'
+    } elseif ((Test-Path (Join-Path $Dest 'artisan')) -and (Test-Path (Join-Path $Dest 'composer.json'))) {
+        $Stack = 'laravel'
+    } else {
+        $Stack = '_template'
+    }
+}
+$adapterEnv = Join-Path $KitDir "adapters\$Stack.env"
+if (-not (Test-Path $adapterEnv)) {
+    $avail = (Get-ChildItem (Join-Path $KitDir 'adapters') -Filter '*.env' | ForEach-Object { $_.BaseName }) -join ', '
+    throw "No existe el adaptador '$Stack'. Disponibles: $avail"
+}
+
+Write-Head "SDD Harness Kit"
+$verFile = Join-Path $KitDir 'VERSION'
+$ver = if (Test-Path $verFile) { (Get-Content $verFile -Raw).Trim() } else { 'dev' }
+Write-Host "  Version: $ver"
+Write-Host "  Origen : $KitDir"
+Write-Host "  Destino: $Dest"
+Write-Host "  Stack  : $Stack"
+if ($NoFrontend) { Write-Host "  Frontend: plantilla vacia (-NoFrontend)" }
+if ($DryRun) { Write-Host "  Modo   : simulacion, no se escribe nada" }
+
+function Copy-KitFile($Src, $Rel) {
+    $dst = Join-Path $Dest $Rel
+    if ((Test-Path -LiteralPath $dst) -and -not $Force) {
+        $same = $false
+        try {
+            $same = (Get-FileHash -LiteralPath $Src).Hash -eq (Get-FileHash -LiteralPath $dst).Hash
+        } catch { $same = $false }
+        if ($same) { Write-Skip "$Rel (identico)" }
+        else { Write-Warn "$Rel ya existe y difiere - conservado (usa -Force para sobrescribir)" }
+        return
+    }
+    if ($DryRun) { Write-Ok "$Rel (simulado)"; return }
+    $dir = Split-Path -Parent $dst
+    if ($dir -and -not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    Copy-Item -LiteralPath $Src -Destination $dst -Force
+    Write-Ok $Rel
+}
+
+Write-Head "1. Fuente canonica: ai-specs/ y configuracion de agente"
+$coreRoot = Join-Path $KitDir 'core'
+Get-ChildItem -Path $coreRoot -Recurse -File -Force | ForEach-Object {
+    $rel = $_.FullName.Substring($coreRoot.Length + 1)
+    if ($rel -like 'docs\*') { return }   # la doctrina se copia aparte
+    Copy-KitFile $_.FullName $rel
+}
+
+Write-Head "2. Doctrina en docs/"
+foreach ($d in @('base-standards','documentation-standards','openspec-tasks-mandatory-steps')) {
+    Copy-KitFile (Join-Path $KitDir "core\docs\$d.md") "docs\$d.md"
+}
+
+Write-Head "3. Standards del stack"
+Copy-KitFile $adapterEnv ".claude\sdd-harness.env"
+$be = Join-Path $KitDir "adapters\$Stack.backend-standards.md"
+if (-not (Test-Path $be)) { $be = Join-Path $KitDir 'adapters\_template.backend-standards.md' }
+Copy-KitFile $be "docs\backend-standards.md"
+if ($NoFrontend) {
+    $fe = Join-Path $KitDir 'adapters\_template.frontend-standards.md'
+    if (-not (Test-Path $fe)) { $fe = Join-Path $KitDir 'adapters\react.frontend-standards.md' }
+    Copy-KitFile $fe "docs\frontend-standards.md"
+} else {
+    Copy-KitFile (Join-Path $KitDir 'adapters\react.frontend-standards.md') "docs\frontend-standards.md"
+}
+$rules = Join-Path $KitDir "adapters\$Stack.rules.mdc"
+if (Test-Path $rules) { Copy-KitFile $rules ".cursor\rules\30-stack.mdc" }
+$ci = Join-Path $KitDir "adapters\$Stack.ci.yml"
+if (Test-Path $ci) { Copy-KitFile $ci ".github\workflows\ci.yml" }
+
+Write-Head "4. Plantillas del proyecto"
+Copy-KitFile (Join-Path $KitDir 'core\ai-specs\templates\pull_request_template.md') ".github\pull_request_template.md"
+Copy-KitFile (Join-Path $KitDir 'core\ai-specs\templates\adr.md.tpl') "docs\adr\_template.md"
+
+Write-Head "5. Contexto del proyecto"
+$ctxPath = Join-Path $Dest 'docs\project-context.md'
+if (Test-Path -LiteralPath $ctxPath) {
+    Write-Skip "docs/project-context.md ya existe - conservado (es tuyo, el kit no lo pisa)"
+} elseif ($DryRun) {
+    Write-Ok "docs/project-context.md (simulado, con los comandos del adaptador)"
+} else {
+    $tpl = Get-Content -LiteralPath (Join-Path $KitDir 'core\ai-specs\templates\project-context.md.tpl') -Raw
+    $cfg = @{}
+    foreach ($line in Get-Content -LiteralPath $adapterEnv) {
+        if ($line -match '^\s*([A-Z_]+)="(.*)"\s*$') { $cfg[$Matches[1]] = $Matches[2] }
+    }
+    $tpl = $tpl.Replace('{{PROJECT_NAME}}', (Split-Path -Leaf $Dest))
+    foreach ($key in @('CMD_DEV','CMD_TEST','CMD_TEST_FILTER','CMD_LINT','CMD_STATIC','CMD_MIGRATE')) {
+        $value = if ($cfg[$key]) { $cfg[$key] } else { 'not configured' }
+        $tpl = $tpl.Replace("{{$key}}", $value)
+    }
+    $dir = Split-Path -Parent $ctxPath
+    if (-not (Test-Path $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
+    Set-Content -LiteralPath $ctxPath -Value $tpl -Encoding UTF8
+    Write-Ok "docs/project-context.md creado, con los comandos del adaptador ya puestos"
+    Write-Warn "Tiene marcadores {{...}} pendientes: completalos antes de la primera sesion"
+}
+
+Write-Head "6. Memoria multi-agente"
+foreach ($name in @('CLAUDE.md','AGENTS.md','GEMINI.md','codex.md')) {
+    $mp = Join-Path $Dest $name
+    if (Test-Path -LiteralPath $mp) { Write-Skip "$name ya existe"; continue }
+    if ($DryRun) { Write-Ok "$name -> docs/base-standards.md (simulado)"; continue }
+    try {
+        New-Item -ItemType SymbolicLink -Path $mp -Target 'docs/base-standards.md' -ErrorAction Stop | Out-Null
+        Write-Ok "$name -> docs/base-standards.md (symlink)"
+    } catch {
+        Set-Content -LiteralPath $mp -Value '@docs/base-standards.md' -Encoding UTF8
+        Write-Ok "$name creado con import (el symlink no estaba disponible)"
+    }
+}
+
+Write-Head "7. Referencias de skills y agents"
+if ($DryRun) {
+    Write-Ok ".claude y .cursor -> ai-specs (simulado)"
+} else {
+    Push-Location $Dest
+    $env:CLAUDE_PROJECT_DIR = $Dest
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Dest '.claude\sync-artifacts.ps1')
+    Pop-Location
+}
+
+Write-Head "7b. Doctor del harness (copia local en el proyecto)"
+Copy-KitFile (Join-Path $KitDir 'doctor.ps1') ".claude\doctor.ps1"
+Copy-KitFile (Join-Path $KitDir 'doctor.sh') ".claude\doctor.sh"
+
+Write-Head "8. Comprobaciones"
+if (Get-Command jq -ErrorAction SilentlyContinue) { Write-Ok "jq disponible" }
+else { Write-Warn "jq NO esta instalado: los hooks se desactivaran solos hasta que lo instales (winget install jqlang.jq)" }
+if (Get-Command git -ErrorAction SilentlyContinue) { Write-Ok "git disponible" } else { Write-Warn "git no disponible" }
+if (Test-Path (Join-Path $Dest '.git')) { Write-Ok "el destino es un repositorio git" } else { Write-Warn "el destino no es un repositorio git" }
+if (Get-Command bash -ErrorAction SilentlyContinue) { Write-Ok "bash disponible (los hooks lo necesitan; en Windows lo trae Git for Windows)" }
+else { Write-Warn "bash NO disponible: los hooks no se ejecutaran. Instala Git for Windows." }
+
+$gitignore = Join-Path $Dest '.gitignore'
+if ((Test-Path $gitignore) -and -not (Select-String -Path $gitignore -Pattern 'settings\.local\.json' -Quiet)) {
+    if (-not $DryRun) {
+        Add-Content -LiteralPath $gitignore -Value "`n# sdd-harness-kit`n.claude/settings.local.json`n.worktrees/" -Encoding utf8
+    }
+    Write-Ok ".gitignore - aniadidas entradas del kit (settings.local + .worktrees/)"
+}
+
+if (-not $DryRun) {
+    Write-Head "9. Doctor (salud del harness)"
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $KitDir 'doctor.ps1') -Dest $Dest
+}
+
+Write-Head "Siguientes pasos"
+@"
+  1. Completa docs/project-context.md (<200 lineas). Es el paso de mayor ROI del kit.
+  2. Revisa .claude/sdd-harness.env (comandos reales + BRANCH_PREFIX). Los hooks los ejecutan tal cual.
+  3. Revisa docs/backend-standards.md si tu arquitectura no es la del adaptador.
+  4. Inicializa OpenSpec:  openspec init
+     Luego cablea openspec/config.yaml con ai-specs/templates/openspec/config.yaml.tpl
+  5. Revisa .claude/hooks/ antes de confiar en ellos: ejecutan codigo con tus permisos.
+  6. Anade el secreto ANTHROPIC_API_KEY al repo si usas los workflows de review.
+  7. Abre una sesion y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
+  8. Vuelve a pasar el doctor:  powershell -File $Dest\.claude\doctor.ps1 -Dest $Dest
+
+  NO ejecutes /init: los cuatro ficheros raiz apuntan a docs/base-standards.md y /init
+  escribiria a traves de ellos. Para el contexto del proyecto usa el prompt P0.
+
+  Edita siempre ai-specs/ y ejecuta '.claude\sync-artifacts.ps1' para propagar.
+
+  Guia paso a paso: $KitDir\GUIA-PASO-A-PASO.md
+  Uso / Manual / Prompts: USO.md · MANUAL.md · PROMPTS.md
+"@ | Write-Host

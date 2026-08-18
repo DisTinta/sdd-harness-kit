@@ -1,0 +1,14 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "app/Services"
+        ]
+    },
+    "minMsi": 70,
+    "ignoreMsiWithNoMutations": true,
+    "testFramework": "phpunit",
+    "phpUnit": {
+        "configDir": "."
+    }
+}

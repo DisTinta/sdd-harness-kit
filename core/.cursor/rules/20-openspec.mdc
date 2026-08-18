@@ -1,0 +1,29 @@
+---
+description: Cómo trabajar con changes de OpenSpec en este repositorio
+globs: ["openspec/**", "app/**", "src/**", "tests/**"]
+alwaysApply: false
+---
+
+# OpenSpec
+
+Cuando se te pida implementar un change de `openspec/changes/<id>/`:
+
+1. Lee, en este orden y sin excepción: `proposal.md`, `design.md`, `specs/**/*.md`, `tasks.md`.
+2. Antes de escribir código, produce la tabla `Requisito → Escenario → fichero de test`.
+   Si un escenario no se puede traducir a un test verificable, detente: la especificación tiene un
+   hueco.
+3. Implementa task a task, en el orden de `tasks.md`. Una task equivale a un turno.
+4. Cada `#### Scenario:` del delta spec se traduce a **un test**.
+5. Marca `- [x]` una task solo cuando su test esté en verde.
+6. Si necesitas desviarte de `specs/` o de `design.md`, **detente y pregunta**. No improvises
+   arquitectura.
+7. **OpenSpec artifacts — dirección del cambio:**
+   - **Permitido:** crear artefactos en la fase propose; marcar tasks en `tasks.md`; escribir
+     `reports/`; actualizar specs/design **antes** (o mientras) de tocar código cuando el diseño
+     estaba mal o llega un cambio de alcance (regla 7 de `docs/base-standards.md`); sincronizar
+     deltas con `opsx:sync`.
+   - **Prohibido:** reescribir la spec *después* para que deje de contradecir un atajo de
+     implementación. El hook `protect-specs-and-tests` pedirá confirmación humana al reescribir
+     un artefacto ya existente por exactamente esa razón.
+8. Al terminar el change, archívalo: si quedan changes activos sin archivar, la siguiente propuesta
+   no tendrá el contexto correcto de lo que ya está implementado.

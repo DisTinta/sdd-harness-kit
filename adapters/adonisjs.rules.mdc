@@ -1,0 +1,29 @@
+---
+description: Convenciones de capas del backend AdonisJS
+globs: ["app/**/*.ts", "start/**/*.ts", "database/**/*.ts", "tests/**/*.ts"]
+alwaysApply: false
+---
+
+# Backend AdonisJS
+
+## Orden de una unidad vertical
+1. `tests/functional/<capability>/<accion>.spec.ts` — el test primero, en rojo.
+2. `app/validators/<recurso>.ts` — VineJS. Única fuente de verdad de la forma del input.
+3. `app/models/<recurso>.ts` — Lucid: columnas, relaciones, scopes.
+4. `app/services/<recurso>_service.ts` — lógica de negocio.
+5. `app/controllers/<recursos>_controller.ts` — valida, delega, serializa.
+6. `start/routes.ts` — registro de la ruta con su middleware.
+
+## Reglas duras
+- El controller NO contiene lógica de negocio ni consultas.
+- El service NO importa `HttpContext` ni devuelve códigos HTTP; lanza excepciones de dominio.
+- Nada de `any` ni `as unknown as`. Tipos de retorno explícitos en los métodos públicos.
+- Ficheros en snake_case, clases en PascalCase.
+- Imports con subpath imports (`#services/...`), nunca rutas relativas largas.
+- Las consultas reutilizables son scopes de Lucid, no `where()` sueltos.
+- Todo listado usa `.paginate()` y se devuelve con `.serialize()`.
+
+## Prohibido
+- SQL crudo si Lucid puede expresarlo.
+- Añadir dependencias sin ADR previo.
+- Modificar ficheros bajo `openspec/` o migraciones ya aplicadas.
