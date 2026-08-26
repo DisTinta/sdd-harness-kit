@@ -1,0 +1,36 @@
+---
+description: Convenciones de capas del backend Fastify en monorepo hexagonal
+globs: ["packages/**/*.ts", "packages/**/*.tsx", "tests/**/*.ts"]
+alwaysApply: false
+---
+
+# Backend Fastify · monorepo hexagonal
+
+## Orden de una unidad vertical
+1. `tests/unit/<capacidad>/<comportamiento>.spec.ts` — el test primero, en rojo.
+2. `packages/core/ports/<Puerto>.ts` — la interfaz, si la unidad necesita una frontera nueva.
+3. `packages/core/<dominio>/<Entidad>.ts` — tipos y reglas de dominio. Sin E/S.
+4. `packages/adapters/<impl>/` — la implementación del puerto: SQL, cliente HTTP, ficheros.
+5. `packages/api/schemas/<recurso>.ts` — el esquema Zod. Única fuente de verdad de la forma.
+6. `packages/api/routes/<recurso>.ts` — valida, delega, serializa.
+
+## Reglas duras
+- La dirección de dependencia es hacia dentro: `api` y `adapters` conocen `core`; `core` no
+  conoce a nadie. Importar `adapters/`, `analyzers/` o `api/` desde `packages/core` rompe el
+  build, y el hook `post-edit-quality` avisa antes.
+- `core` no importa `fastify`, no ve un `FastifyRequest` y no conoce códigos de estado.
+- El handler de ruta hace tres cosas: validar, delegar, serializar.
+- Nada de SQL fuera de `packages/adapters/store-postgres`.
+- Todo dato externo pasa por un esquema Zod — **incluida la salida del modelo**: `safeParse`,
+  y lo que no valida se descarta, nunca se interpreta.
+- Nada de `any` ni `as unknown as`. Tipos de retorno explícitos en lo exportado.
+- Ficheros en kebab-case, tipos y clases en PascalCase.
+- Imports entre paquetes por nombre de workspace (`@scope/core`), nunca rutas relativas que
+  salgan del paquete.
+- Todo listado se pagina.
+
+## Prohibido
+- Mover lógica de negocio a una ruta «porque es solo una línea».
+- Mockear la base de datos en un test de integración.
+- Añadir dependencias sin ADR previo.
+- Modificar ficheros bajo `openspec/` o migraciones ya aplicadas.

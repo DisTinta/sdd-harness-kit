@@ -1,0 +1,62 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint y formato
+        run: npm run lint
+
+      - name: Comprobación de tipos
+        run: npm run typecheck
+
+      # La regla de dependencias es la afirmación central de una arquitectura
+      # hexagonal. Sin este paso es una promesa; con él, es una restricción.
+      - name: Regla de dependencias (core no importa infraestructura)
+        run: npx depcruise --config .dependency-cruiser.js packages
+
+      - name: Migraciones (aplicar y revertir)
+        run: npm run db:migrate && npm run db:rollback && npm run db:migrate
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+
+      - name: Tests
+        run: npx vitest run
+        env:
+          NODE_ENV: test
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
+
+      # El gate duro es el mutation score, no la cobertura: exigir un porcentaje de
+      # cobertura fabrica tests vacíos. La cobertura se publica como señal.
+      - name: Mutation testing en paths críticos
+        run: npx stryker run

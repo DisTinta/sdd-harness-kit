@@ -1,7 +1,7 @@
 # SDD Harness Kit
 
-Versión **1.1.0**. Arranque guiado: [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md).
-Guía de colaboración: [CONTRIBUTING.md](CONTRIBUTING.md).
+Versión en [`VERSION`](VERSION), cambios en [CHANGELOG.md](CHANGELOG.md). Arranque guiado: [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md).
+Guía de colaboración: [CONTRIBUTING.md](CONTRIBUTING.md). Origen y créditos: [CREDITS.md](CREDITS.md).
 
 Artefactos portátiles de IA —subagentes, skills, hooks, standards y plantillas— para aplicar
 **Spec-Driven Development** con un harness determinista en cualquier proyecto.
@@ -91,13 +91,15 @@ Todo lo dependiente del stack está en `.claude/sdd-harness.env`. Los hooks lo c
 (allowlist, sin `eval`); las skills lo leen como contexto dinámico. **Ninguno de los dos tiene un
 comando escrito dentro.**
 
-Para soportar un stack nuevo no tocas ni una skill ni un hook: copias `_template.env`, rellenas doce
-variables, escribes `<stack>.backend-standards.md`, y ya está.
+Para soportar un stack nuevo no tocas ni una skill ni un hook: copias `_template.env`, rellenas las
+24 variables del contrato, escribes `<stack>.backend-standards.md`, y ya está. La lista de sitios
+que hay que tocar para que quede completo está en [CONTRIBUTING.md](CONTRIBUTING.md).
 
 | Adaptador | Detección automática | Trae |
 |---|---|---|
 | `adonisjs` | `package.json` con `@adonisjs/core` | env, backend-standards, reglas de Cursor, `ci.yml` |
 | `laravel` | `artisan` + `composer.json` | ídem |
+| `fastify` | `"fastify"` en `package.json` de la raíz o de un paquete del workspace | ídem, más `.dependency-cruiser.js`: monorepo hexagonal, Postgres+pgvector en CI y migraciones reversibles |
 | `_template` | cualquier otro caso | env y standards en blanco, comentados para rellenar |
 
 ---
@@ -178,3 +180,33 @@ La documentación del kit —este fichero, `GUIA-PASO-A-PASO.md`, `USO.md`, `MAN
   herramienta, y el kit no escribe dentro salvo sus plantillas.
 - **No instala Context7 ni Playwright como dependencias del repo.** Deja la config MCP (`npx`); el
   primer uso descarga. Playwright MCP demuestra UI, no sustituye la suite E2E.
+
+---
+
+## Origen
+
+Este kit nace de los apuntes de las clases del **Máster AI4Devs de [LIDR Academy](https://lidr.co)**
+y toma como punto de partida ideas y convenciones de
+**[`LIDR-academy/lidr-specboot`](https://github.com/LIDR-academy/lidr-specboot)** (MIT), el
+repositorio de referencia del máster: la disposición de `ai-specs/` con skills y subagentes como
+fuente canónica, los estándares en `docs/`, y los cuatro ficheros de memoria por copiloto
+—`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `codex.md`— apuntando a una doctrina única.
+
+Lo que este kit añade sobre ese punto de partida:
+
+| Añadido | Qué resuelve |
+|---|---|
+| **Instalable** (`install.sh` / `install.ps1`, con `--dry-run`) | No montar el harness a mano en cada proyecto nuevo |
+| **9 hooks deterministas** del ciclo de vida | Una convención escrita pasa a ser una convención comprobada. Actúan sobre la ruta del fichero, no sobre qué comando lo escribió |
+| **Adaptadores por stack** con detección automática | Los mismos artefactos sirven para Laravel, AdonisJS o Fastify sin tocar una skill ni un hook |
+| **Soporte real en Windows** | PowerShell de primera clase, copia cuando el SO no permite symlinks |
+| **`doctor`** (`doctor.sh` / `doctor.ps1`) | Diagnosticar una instalación en vez de adivinar por qué no funciona |
+| **Gates de secretos en profundidad** | Bloqueo en el prompt y en la lectura de ficheros, no solo en el commit |
+| **27 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/privacy-ethics-check`, `/kit-health` |
+
+El diseño, el afinado y todo lo anterior son trabajo propio. La deuda con `lidr-specboot` es de
+arquitectura y convenciones, y queda declarada aquí y en [CREDITS.md](CREDITS.md).
+
+## Licencia
+
+[MIT](LICENSE).

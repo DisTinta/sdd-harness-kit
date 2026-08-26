@@ -11,7 +11,9 @@
     Repositorio destino. Por defecto, el directorio actual.
 
 .PARAMETER Stack
-    Adaptador a usar: adonisjs, laravel o _template. Si se omite, se detecta.
+    Adaptador a usar: adonisjs, laravel, fastify o _template. Si se omite, se detecta.
+    La lista real es la de adapters\*.env; si pasas uno que no existe, el script
+    la muestra y aborta.
 
 .PARAMETER DryRun
     Muestra lo que haría sin escribir nada.
@@ -59,6 +61,13 @@ if (-not $Stack) {
         $Stack = 'adonisjs'
     } elseif ((Test-Path (Join-Path $Dest 'artisan')) -and (Test-Path (Join-Path $Dest 'composer.json'))) {
         $Stack = 'laravel'
+    } elseif (
+        ((Test-Path $pkg) -and (Select-String -Path $pkg -Pattern '"fastify"' -Quiet)) -or
+        ((Test-Path (Join-Path $Dest 'packages')) -and
+         (Get-ChildItem -LiteralPath (Join-Path $Dest 'packages') -Filter 'package.json' -Recurse -Depth 1 -ErrorAction SilentlyContinue |
+          Select-String -Pattern '"fastify"' -Quiet))
+    ) {
+        $Stack = 'fastify'
     } else {
         $Stack = '_template'
     }
@@ -139,6 +148,15 @@ if (Test-Path $infection) {
         Write-Skip "infection.json ya existe - conservado"
     } else {
         Copy-KitFile $infection 'infection.json'
+    }
+}
+$depcruise = Join-Path $KitDir "adapters\$Stack.dependency-cruiser.js"
+if (Test-Path $depcruise) {
+    $depcruiseDest = Join-Path $Dest '.dependency-cruiser.js'
+    if (Test-Path -LiteralPath $depcruiseDest) {
+        Write-Skip ".dependency-cruiser.js ya existe - conservado"
+    } else {
+        Copy-KitFile $depcruise '.dependency-cruiser.js'
     }
 }
 

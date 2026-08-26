@@ -59,6 +59,10 @@ detect_stack() {
   if [[ -f "$DEST/artisan" ]] && [[ -f "$DEST/composer.json" ]]; then
     echo laravel; return
   fi
+  # Fastify puede estar en la raíz o, en un monorepo, en un paquete del workspace.
+  if grep -rqs '"fastify"' "$DEST/package.json" "$DEST"/packages/*/package.json 2>/dev/null; then
+    echo fastify; return
+  fi
   echo _template
 }
 
@@ -129,6 +133,13 @@ if [[ -f "$KIT_DIR/adapters/$STACK.infection.json" ]]; then
     skip "infection.json ya existe — conservado"
   else
     copy_file "$KIT_DIR/adapters/$STACK.infection.json" "infection.json"
+  fi
+fi
+if [[ -f "$KIT_DIR/adapters/$STACK.dependency-cruiser.js" ]]; then
+  if [[ -f "$DEST/.dependency-cruiser.js" ]]; then
+    skip ".dependency-cruiser.js ya existe — conservado"
+  else
+    copy_file "$KIT_DIR/adapters/$STACK.dependency-cruiser.js" ".dependency-cruiser.js"
   fi
 fi
 
