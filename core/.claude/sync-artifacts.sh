@@ -25,6 +25,18 @@ done
 
 linked=0; copied=0; ok=0; conflicts=0; orphans=0
 
+is_os_junk() {
+  case "$(basename "$1")" in
+    [Dd][Ee][Ss][Kk][Tt][Oo][Pp].[Ii][Nn][Ii]|[Tt][Hh][Uu][Mm][Bb][Ss].[Dd][Bb]|.DS_Store|.ds_store) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
+strip_os_junk() {
+  [[ -e "$1" ]] || return 0
+  find "$1" -type f \( -iname 'desktop.ini' -o -iname 'Thumbs.db' -o -name '.DS_Store' \) -delete 2>/dev/null || true
+}
+
 report() { printf '  %-8s %s\n' "$1" "$2"; }
 
 sync_one() {
@@ -44,7 +56,7 @@ sync_one() {
   fi
   # Copia real ya existente
   if [[ -e "$dst" && ! -L "$dst" ]]; then
-    if diff -rq "$src" "$dst" >/dev/null 2>&1; then ok=$((ok+1)); return; fi
+    if diff -rq -x 'desktop.ini' -x 'Thumbs.db' -x '.DS_Store' "$src" "$dst" >/dev/null 2>&1; then ok=$((ok+1)); return; fi
     if [[ $FORCE -eq 0 ]]; then
       report "DIVERGE" "$dst — difiere de ai-specs. Usa --force para sobrescribir, o mueve tu cambio a ai-specs/"
       conflicts=$((conflicts+1)); return
@@ -61,7 +73,9 @@ sync_one() {
   if ln -s "${rel}${src}" "$dst" 2>/dev/null; then
     linked=$((linked+1))
   else
-    cp -r "$src" "$dst"; copied=$((copied+1))
+    cp -r "$src" "$dst"
+    strip_os_junk "$dst"
+    copied=$((copied+1))
   fi
 }
 
@@ -72,11 +86,13 @@ for tool in .claude .cursor; do
     mkdir -p "$tool/$kind"
     for entry in ai-specs/"$kind"/*; do
       [[ -e "$entry" ]] || continue
+      is_os_junk "$entry" && continue
       sync_one "$entry" "$tool/$kind/$(basename "$entry")"
     done
     # Huérfanos: referencias cuyo origen ya no existe
     for ref in "$tool/$kind"/*; do
       [[ -e "$ref" || -L "$ref" ]] || continue
+      is_os_junk "$ref" && continue
       if [[ ! -e "ai-specs/$kind/$(basename "$ref")" ]]; then
         report "HUÉRFANO" "$ref — no existe en ai-specs/$kind/"
         orphans=$((orphans+1))

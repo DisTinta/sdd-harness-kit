@@ -24,6 +24,18 @@ if (-not (Test-Path 'ai-specs')) { throw "No ai-specs/ directory: nothing to syn
 $linked = 0; $copied = 0; $ok = 0; $conflicts = 0; $orphans = 0
 function Report($tag, $msg) { Write-Host ("  {0,-9} {1}" -f $tag, $msg) }
 
+function Test-OsJunkName([string]$Name) {
+    $n = $Name.ToLowerInvariant()
+    return $n -eq 'desktop.ini' -or $n -eq 'thumbs.db' -or $n -eq '.ds_store'
+}
+
+function Remove-OsJunk($Path) {
+    if (-not (Test-Path -LiteralPath $Path)) { return }
+    Get-ChildItem -LiteralPath $Path -Recurse -Force -File -ErrorAction SilentlyContinue |
+        Where-Object { Test-OsJunkName $_.Name } |
+        Remove-Item -Force
+}
+
 function Sync-One($src, $dst) {
     $item = Get-Item -LiteralPath $dst -Force -ErrorAction SilentlyContinue
 
@@ -49,8 +61,10 @@ function Sync-One($src, $dst) {
     if ($item) {
         $diff = $null
         try {
-            $a = Get-ChildItem -LiteralPath $src -Recurse -File | Sort-Object Name
-            $b = Get-ChildItem -LiteralPath $dst -Recurse -File | Sort-Object Name
+            $a = Get-ChildItem -LiteralPath $src -Recurse -File -Force -ErrorAction SilentlyContinue |
+                Where-Object { -not (Test-OsJunkName $_.Name) } | Sort-Object FullName
+            $b = Get-ChildItem -LiteralPath $dst -Recurse -File -Force -ErrorAction SilentlyContinue |
+                Where-Object { -not (Test-OsJunkName $_.Name) } | Sort-Object FullName
             $diff = Compare-Object ($a | Get-FileHash).Hash ($b | Get-FileHash).Hash
         } catch { $diff = 'unknown' }
         if (-not $diff) { $script:ok++; return }
@@ -72,6 +86,7 @@ function Sync-One($src, $dst) {
         $script:linked++
     } catch {
         Copy-Item -LiteralPath $src -Destination $dst -Recurse -Force
+        Remove-OsJunk $dst
         $script:copied++
     }
 }
@@ -84,10 +99,10 @@ foreach ($tool in @('.claude', '.cursor')) {
         $dstDir = Join-Path $tool $kind
         if (-not (Test-Path $dstDir)) { New-Item -ItemType Directory -Path $dstDir -Force | Out-Null }
 
-        Get-ChildItem -LiteralPath $srcDir -Force | ForEach-Object {
+        Get-ChildItem -LiteralPath $srcDir -Force | Where-Object { -not (Test-OsJunkName $_.Name) } | ForEach-Object {
             Sync-One "$srcDir/$($_.Name)" (Join-Path $dstDir $_.Name)
         }
-        Get-ChildItem -LiteralPath $dstDir -Force -ErrorAction SilentlyContinue | ForEach-Object {
+        Get-ChildItem -LiteralPath $dstDir -Force -ErrorAction SilentlyContinue | Where-Object { -not (Test-OsJunkName $_.Name) } | ForEach-Object {
             if (-not (Test-Path (Join-Path $srcDir $_.Name))) {
                 Report 'ORPHAN' "$dstDir\$($_.Name) - not present in $srcDir"
                 $script:orphans++

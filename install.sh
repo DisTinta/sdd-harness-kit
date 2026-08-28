@@ -79,8 +79,16 @@ say   "  Stack  : $STACK"
 [[ $DRY_RUN -eq 1 ]] && say "  Modo   : simulación, no se escribe nada"
 
 # ── Copia idempotente ────────────────────────────────────────────────────────
+is_os_junk() {
+  case "$(basename "$1")" in
+    [Dd][Ee][Ss][Kk][Tt][Oo][Pp].[Ii][Nn][Ii]|[Tt][Hh][Uu][Mm][Bb][Ss].[Dd][Bb]|.DS_Store|.ds_store) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 copy_file() {
   local src="$1" rel="$2" dst="$DEST/$2"
+  is_os_junk "$src" && return
   if [[ -e "$dst" && $FORCE -eq 0 ]]; then
     if cmp -s "$src" "$dst"; then skip "$rel (idéntico)"
     else warn "$rel ya existe y difiere — conservado (usa --force para sobrescribir)"; fi

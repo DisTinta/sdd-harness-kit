@@ -88,7 +88,13 @@ Write-Host "  Stack  : $Stack"
 if ($NoFrontend) { Write-Host "  Frontend: plantilla vacia (-NoFrontend)" }
 if ($DryRun) { Write-Host "  Modo   : simulacion, no se escribe nada" }
 
+function Test-OsJunkName([string]$Name) {
+    $n = $Name.ToLowerInvariant()
+    return $n -eq 'desktop.ini' -or $n -eq 'thumbs.db' -or $n -eq '.ds_store'
+}
+
 function Copy-KitFile($Src, $Rel) {
+    if (Test-OsJunkName ([System.IO.Path]::GetFileName($Src))) { return }
     $dst = Join-Path $Dest $Rel
     if ((Test-Path -LiteralPath $dst) -and -not $Force) {
         $same = $false
