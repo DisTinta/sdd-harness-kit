@@ -379,6 +379,11 @@ no esté si instalaste con `--no-frontend`.
 `ai-specs/skills/`? En modo copia son ficheros distintos. `sync-artifacts.sh --check` te dirá
 `DIVERGE`; mueve tu cambio a `ai-specs/` y sincroniza.
 
+**El sync marca skills `openspec-*` como `KEEP` (o, en un kit viejo, como huérfanas).** Es
+esperado después de `openspec init`. No viven en `ai-specs/`: son los comandos `/opsx:*` de
+OpenSpec. **No las borres.** `KEEP` no hace fallar el sync. Un `ORPHAN` / `HUÉRFANO` de verdad
+es otro nombre (skill del kit que se renombró o una copia solo en `.claude/skills/`).
+
 **Todos mis turnos tardan mucho en cerrarse.** Es el hook de `Stop` ejecutando `CMD_TEST`. Apúntalo a
 la parte rápida de la suite.
 

@@ -8,6 +8,10 @@
 #   bash .claude/sync-artifacts.sh            enlaza o copia lo que falte
 #   bash .claude/sync-artifacts.sh --check    solo informa, no toca nada
 #   bash .claude/sync-artifacts.sh --force    rehace las copias desactualizadas
+#
+# Entradas en .claude/.cursor que no están en ai-specs/:
+#   KEEP     — skills nativas de OpenSpec (openspec-*), de `openspec init`. No borrar.
+#   HUÉRFANO — cualquier otra. Deriva real; decide el humano.
 # ─────────────────────────────────────────────────────────────────────────────
 set -uo pipefail
 cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
@@ -23,7 +27,7 @@ done
 
 [[ -d ai-specs ]] || { echo "No existe ai-specs/: nada que sincronizar." >&2; exit 1; }
 
-linked=0; copied=0; ok=0; conflicts=0; orphans=0
+linked=0; copied=0; ok=0; conflicts=0; orphans=0; keep=0
 
 is_os_junk() {
   case "$(basename "$1")" in
@@ -35,6 +39,17 @@ is_os_junk() {
 strip_os_junk() {
   [[ -e "$1" ]] || return 0
   find "$1" -type f \( -iname 'desktop.ini' -o -iname 'Thumbs.db' -o -name '.DS_Store' \) -delete 2>/dev/null || true
+}
+
+# OpenSpec init escribe skills openspec-* en .claude/skills y .cursor/skills.
+# openspec-implement del kit vive en ai-specs, así que no entra en esta rama.
+is_expected_foreign() {
+  local kind="$1" name="$2"
+  [[ "$kind" == "skills" ]] || return 1
+  case "$name" in
+    openspec-*) return 0 ;;
+  esac
+  return 1
 }
 
 report() { printf '  %-8s %s\n' "$1" "$2"; }
@@ -89,25 +104,35 @@ for tool in .claude .cursor; do
       is_os_junk "$entry" && continue
       sync_one "$entry" "$tool/$kind/$(basename "$entry")"
     done
-    # Huérfanos: referencias cuyo origen ya no existe
+    # Referencias cuyo origen no está en ai-specs: KEEP (OpenSpec) o HUÉRFANO
     for ref in "$tool/$kind"/*; do
       [[ -e "$ref" || -L "$ref" ]] || continue
       is_os_junk "$ref" && continue
-      if [[ ! -e "ai-specs/$kind/$(basename "$ref")" ]]; then
-        report "HUÉRFANO" "$ref — no existe en ai-specs/$kind/"
-        orphans=$((orphans+1))
+      name="$(basename "$ref")"
+      if [[ ! -e "ai-specs/$kind/$name" ]]; then
+        if is_expected_foreign "$kind" "$name"; then
+          report "KEEP" "$ref — skill nativa de OpenSpec (no vive en ai-specs/; no borrar)"
+          keep=$((keep+1))
+        else
+          report "HUÉRFANO" "$ref — no existe en ai-specs/$kind/"
+          orphans=$((orphans+1))
+        fi
       fi
     done
   done
 done
 
-printf '\n  enlazados %d · copiados %d · correctos %d · divergentes %d · huérfanos %d\n' \
-  "$linked" "$copied" "$ok" "$conflicts" "$orphans"
+printf '\n  enlazados %d · copiados %d · correctos %d · divergentes %d · huérfanos %d · keep %d\n' \
+  "$linked" "$copied" "$ok" "$conflicts" "$orphans" "$keep"
 
 if [[ $copied -gt 0 ]]; then
   echo
   echo "  Esta plataforma no permite symlinks, así que se han hecho copias."
   echo "  Edita siempre ai-specs/ y vuelve a ejecutar este script para propagar."
+fi
+if [[ $keep -gt 0 ]]; then
+  echo
+  echo "  KEEP = skills nativas de OpenSpec (openspec init). No viven en ai-specs/. No las borres."
 fi
 [[ $conflicts -gt 0 || $orphans -gt 0 ]] && exit 1
 exit 0

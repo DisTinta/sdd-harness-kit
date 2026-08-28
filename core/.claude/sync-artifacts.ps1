@@ -6,6 +6,10 @@
     ai-specs/ is the canonical source. This script tries to link with symlinks and falls back
     to copying when the platform does not allow them (Windows without developer mode).
 
+    Entries under .claude/.cursor that are not in ai-specs/ are classified:
+    KEEP    — OpenSpec native skills (openspec-*), installed by `openspec init`. Leave them.
+    ORPHAN  — anything else. Real drift; the human decides whether to delete.
+
 .PARAMETER Check
     Report only, change nothing.
 
@@ -21,8 +25,14 @@ Set-Location $root
 
 if (-not (Test-Path 'ai-specs')) { throw "No ai-specs/ directory: nothing to sync." }
 
-$linked = 0; $copied = 0; $ok = 0; $conflicts = 0; $orphans = 0
+$linked = 0; $copied = 0; $ok = 0; $conflicts = 0; $orphans = 0; $keep = 0
 function Report($tag, $msg) { Write-Host ("  {0,-9} {1}" -f $tag, $msg) }
+
+function Test-ExpectedForeign([string]$Name, [string]$Kind) {
+    # OpenSpec init writes openspec-* skills into .claude/skills and .cursor/skills.
+    # Kit-owned openspec-implement lives in ai-specs, so it never hits this branch.
+    return ($Kind -eq 'skills') -and ($Name -like 'openspec-*')
+}
 
 function Test-OsJunkName([string]$Name) {
     $n = $Name.ToLowerInvariant()
@@ -104,18 +114,27 @@ foreach ($tool in @('.claude', '.cursor')) {
         }
         Get-ChildItem -LiteralPath $dstDir -Force -ErrorAction SilentlyContinue | Where-Object { -not (Test-OsJunkName $_.Name) } | ForEach-Object {
             if (-not (Test-Path (Join-Path $srcDir $_.Name))) {
-                Report 'ORPHAN' "$dstDir\$($_.Name) - not present in $srcDir"
-                $script:orphans++
+                if (Test-ExpectedForeign $_.Name $kind) {
+                    Report 'KEEP' "$dstDir\$($_.Name) - OpenSpec native skill (not from ai-specs; do not delete)"
+                    $script:keep++
+                } else {
+                    Report 'ORPHAN' "$dstDir\$($_.Name) - not present in $srcDir"
+                    $script:orphans++
+                }
             }
         }
     }
 }
 
 Write-Host ""
-Write-Host ("  linked {0} · copied {1} · ok {2} · diverging {3} · orphans {4}" -f $linked, $copied, $ok, $conflicts, $orphans)
+Write-Host ("  linked {0} · copied {1} · ok {2} · diverging {3} · orphans {4} · keep {5}" -f $linked, $copied, $ok, $conflicts, $orphans, $keep)
 if ($copied -gt 0) {
     Write-Host ""
     Write-Host "  This platform does not allow symlinks, so copies were made."
     Write-Host "  Always edit ai-specs/ and re-run this script to propagate."
+}
+if ($keep -gt 0) {
+    Write-Host ""
+    Write-Host "  KEEP = OpenSpec skills from 'openspec init'. They do not live in ai-specs/. Do not delete them."
 }
 if ($conflicts -gt 0 -or $orphans -gt 0) { exit 1 }

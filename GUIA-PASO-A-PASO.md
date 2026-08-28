@@ -297,6 +297,11 @@ pwsh -File .claude/sync-artifacts.ps1
 
 También: `/sync-agent-artifacts`.
 
+Tras `openspec init`, el sync puede listar `openspec-propose`, `openspec-apply-change`, etc. con
+etiqueta **`KEEP`**. Son las skills nativas de OpenSpec (`/opsx:*`). No las borres; no es un
+error. Un **`ORPHAN` / `HUÉRFANO`** de verdad es cualquier otro nombre que no esté en
+`ai-specs/`.
+
 ### `validate-tasks` y `BRANCH_PREFIX`
 
 Si el hook exige `feature/...` y tu equipo usa otro prefijo, alinea `.claude/sdd-harness.env`:

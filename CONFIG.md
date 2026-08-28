@@ -271,7 +271,9 @@ datos y ninguna menciona restauración. La doctrina completa está en
 
 **Una skill no carga.** No es un problema de configuración: es la fuente canónica.
 `bash .claude/sync-artifacts.sh --check` te dice el estado de cada referencia. `TEXTO` significa
-symlink materializado; `DIVERGE`, que editaste la copia en lugar de `ai-specs/`.
+symlink materializado; `DIVERGE`, que editaste la copia en lugar de `ai-specs/`. `KEEP` en un
+`openspec-*` es OpenSpec (`openspec init`): déjalo. `HUÉRFANO` en cualquier otro nombre sí es
+deriva.
 
 **Los MCP no aparecen como herramientas.** El instalador copia `.mcp.json` (Claude Code) y
 `.cursor/mcp.json` (Cursor) desde `ai-specs/templates/mcp.json` (o `mcp.context7-only.json` si

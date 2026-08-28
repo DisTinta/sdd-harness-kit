@@ -10,6 +10,18 @@ Versionado semántico: la versión viva está en [`VERSION`](VERSION).
 
 ---
 
+## [1.2.1]
+
+### Corregido
+
+- Tras `openspec init`, `sync-artifacts` marcaba las skills nativas `openspec-*` (las de `/opsx:*`)
+  como huérfanas y salía con código 1. Un agente leía eso como “borra”. Ahora las etiqueta
+  `KEEP`, no fallan el sync y el mensaje dice que no se borren. Un `ORPHAN` / `HUÉRFANO` de
+  verdad (cualquier otro nombre) sigue siendo error. Misma lógica en `.sh` y `.ps1`;
+  `/sync-agent-artifacts` y `/kit-health` alineados.
+
+---
+
 ## [1.2.0]
 
 ### Añadido
