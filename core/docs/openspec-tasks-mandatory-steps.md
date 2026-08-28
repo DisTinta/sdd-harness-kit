@@ -26,8 +26,9 @@ All implementation task lists MUST include these, in this order:
 ### Step 0: Create Feature Branch (MUST BE FIRST)
 
 - **Location**: the very first step, numbered 0.
-- **Naming**: `feature/<ticket-id>` or `feature/<change-name>`. Use one convention per project and
-  record it in the project context.
+- **Naming**: when a ticket exists, `{BRANCH_PREFIX}<TICKET-ID>-<slug>` (default
+  `feature/KAN-184-filter-listing`). A ticket id is `[A-Z][A-Z0-9]+-[0-9]+`. If there is no
+  ticket, `{BRANCH_PREFIX}<change-name>`. Record the prefix in the project context.
 - **Action**: create and switch to the branch before any code change.
 
 ### Mandatory steps, to be included in every task list
@@ -156,7 +157,7 @@ is part of the title.
 
 ```markdown
 ## 0. Setup: Create Feature Branch (MANDATORY - FIRST STEP)
-- [ ] 0.1 Create feature branch `feature/<change-name>` from the main branch
+- [ ] 0.1 Create feature branch `feature/<TICKET-ID>-<change-name>` from the main branch (or `feature/<change-name>` if there is no ticket)
 - [ ] 0.2 Verify branch creation and current branch status
 
 ## 1. Backend: Validation Tests (TDD)

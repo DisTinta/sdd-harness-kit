@@ -193,7 +193,7 @@ echo '{"source":"startup"}' | bash .claude/hooks/session-context.sh | jq .
 | **F4** Ejecución      | Task a task, TDD                               | `/openspec-implement` o `/opsx:apply`; `/tdd-red` → `/tdd-green` → `/tdd-refactor` |
 | **F5** Verificación   | Evidencia real + conformidad + revisión hostil | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review`                |
 | **F6** Documentación  | Contratos / ADR si aplica                      | `/update-docs`, `/adr-new`                                                         |
-| **F7** Entrega        | Commits atómicos + PR                          | `/commit`, `/pr-describe`, `/pr-review`                                            |
+| **F7** Entrega        | Commits atómicos + PR                          | `/commit` (`feat(TICKET): …`), `/pr-describe`, `/pr-review` |
 | **F8** Cierre         | Archivar change + aprender                     | `/opsx:archive`; apuntes en `project-context` o standards                          |
 | **Transversal**       | Privacidad / deps / datos                      | `/privacy-ethics-check`                                                            |
 | **Prompts flojos**    | Antes de una sesión cara                       | `/meta-prompt`                                                                     |

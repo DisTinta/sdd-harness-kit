@@ -10,6 +10,17 @@ Versionado semántico: la versión viva está en [`VERSION`](VERSION).
 
 ---
 
+## [1.2.2]
+
+### Cambiado
+
+- Norma de rama y commit: con ticket, la rama es `feature/<TICKET>-<slug>` y el mensaje
+  `tipo(TICKET): descripción` (ej. `feat(KAN-184): add listing filter by state`). Sin ticket,
+  el scope es la capability o la capa; el agente pregunta el id y no lo inventa. Doctrina en
+  `docs/base-standards.md`; `/commit`, pasos obligatorios de OpenSpec, P14 y el manual alineados.
+
+---
+
 ## [1.2.1]
 
 ### Corregido

@@ -720,7 +720,10 @@ INPUTS
 INSTRUCCIÓN
 1. COMMITS. Revisa el diff. Si mezcla áreas distintas, propón commits atómicos separados con
    staging selectivo, y pídeme confirmación antes de ejecutar nada. Formato convencional:
-   tipo(scope): descripción, verbo en imperativo presente, primera línea de 72 caracteres máximo.
+   tipo(TICKET-ID): descripción si hay ticket (ej. feat(KAN-184): add listing filter by state);
+   si no, tipo(capa-o-capability): descripción. Verbo en imperativo presente, primera línea de
+   72 caracteres máximo. El id del ticket sale de la rama (`feature/KAN-184-…`), de lo que yo
+   te pase, o me lo preguntas; no lo inventes.
 
 2. DESCRIPCIÓN DEL PR:
    - "¿Qué cambia?" — una a tres frases desde el diff.

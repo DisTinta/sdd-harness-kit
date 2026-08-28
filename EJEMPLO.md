@@ -160,7 +160,7 @@ toda tarea que mute datos incluya su restauración:
 
 ```markdown
 ## 0. Setup: Create Feature Branch (MANDATORY - FIRST STEP)
-- [ ] 0.1 Create feature branch `feature/<change-name>` from the base branch
+- [ ] 0.1 Create feature branch `feature/<TICKET-ID>-<change-name>` from the base branch (or `feature/<change-name>` if there is no ticket)
 - [ ] 0.2 Verify branch creation and current branch status
 
 ## 1. Backend: Validation Tests (TDD)

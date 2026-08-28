@@ -1,9 +1,9 @@
 ---
 name: commit
-description: Use when the user says "commit", "create a commit" or similar. Stages and commits the current changes as atomic conventional commits, after checking the documentation gate.
+description: Use when the user says "commit", "create a commit" or similar. Stages and commits the current changes as atomic conventional commits, after checking the documentation gate. Resolves the ticket id (branch, arguments, or by asking) and uses it as the conventional-commit scope.
 author: sdd-harness-kit
-version: 1.0.0
-argument-hint: [optional scope or paths to limit the commit]
+version: 1.1.0
+argument-hint: [optional TICKET-ID, and/or paths to limit the commit]
 disable-model-invocation: true
 allowed-tools: Bash(git add *) Bash(git commit *) Bash(git status *) Bash(git diff *) Read Grep Glob
 ---
@@ -13,12 +13,19 @@ allowed-tools: Bash(git add *) Bash(git commit *) Bash(git status *) Bash(git di
 - Diff: !`git diff HEAD`
 - Branch: !`git branch --show-current`
 
+## Doctrine
+`docs/base-standards.md` — Git branches and commit messages. Ticket in the commit **scope**, not
+guessed.
+
+A ticket id matches `[A-Z][A-Z0-9]+-[0-9]+` (e.g. `KAN-184`, `AI4-42`).
+
 ## Instructions
 
-### Step 1 — Scope
+### Step 1 — Paths
 
-If `$ARGUMENTS` names a scope or paths, limit the commit to changes matching it. If nothing clearly
-matches, **report it and do not commit**.
+In `$ARGUMENTS`, a token that matches a ticket id is **not** a path. Remaining tokens are paths: if
+they are present, limit the commit to those changes. If a path argument matches nothing, **report it
+and do not commit**.
 
 ### Step 2 — Documentation gate
 
@@ -32,18 +39,32 @@ Inspect the changes. If the diff mixes unrelated areas, **propose separate atomi
 selective staging and ask for confirmation before executing anything. A single large commit makes review
 impossible, and review is the point.
 
-### Step 4 — Message
+### Step 4 — Ticket id (ask; do not guess)
+
+Resolve **one** ticket id before writing the message:
+
+1. If `$ARGUMENTS` contains a ticket-shaped token, use it.
+2. Else take the first ticket-shaped token in the current branch name
+   (`feature/KAN-184-filter-listing` → `KAN-184`; `feature/KAN-184` → `KAN-184`).
+   **Propose it and wait for confirmation.**
+3. Else **ask**: `Is there a ticket id for this commit? (e.g. KAN-184). Reply with the id, or 'none'.`
+4. **Do not commit** until the human answers. Do not invent an id. A slug or a trailing number
+   (`feature/filter-listing`, `feature/filter-listing-123`) is not a ticket.
+
+### Step 5 — Message
 
 Conventional commits: `type(scope): description`.
 
 - Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
-- Scope: the capability or the layer
+- Scope: the ticket id if there is one (`feat(KAN-184): add listing filter by state`). If none, the
+  capability or layer (`feat(listing): add filter by state`)
 - First line: 72 characters maximum, imperative present tense (`add`, not `added`)
 - **In English**, per `docs/base-standards.md` §2
 - If the change needs explaining, add a body after a blank line that explains the *why*, not the what
-- Include the ticket id if the branch or context has one
+- Do not put the ticket in the body instead of the scope. Do not use capability as scope when a
+  ticket exists.
 
-### Step 5 — Execute and confirm
+### Step 6 — Execute and confirm
 
 `git add <paths> && git commit -m "<message>"`, then confirm the commit was created.
 
@@ -53,3 +74,5 @@ Conventional commits: `type(scope): description`.
 - Never `git push --force`, under any circumstances, even if asked in passing.
 - Never `git commit --amend` on a commit that is already pushed.
 - Never stage `.env` or any file matching a secret pattern, even if the user asks.
+- Never invent a ticket id.
+- Never commit before Step 4 is resolved.

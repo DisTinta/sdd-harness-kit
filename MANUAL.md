@@ -300,6 +300,9 @@ ramas concurrentes.
 ### F7 · Entrega
 
 - **Commits convencionales**, atómicos, en imperativo presente, primera línea de 72 caracteres.
+  Si hay ticket, el scope **es el id**: `feat(KAN-184): add listing filter by state`. Rama:
+  `feature/KAN-184-filter-listing`. Si no hay ticket, el scope es la capability o la capa; el
+  agente pregunta antes de commitear.
 - **PR con las tres preguntas obligatorias:** ¿qué cambia? · ¿por qué? · ¿cómo probarlo? El «qué»
   lo genera la IA desde el diff; el «cómo probarlo» en parte; **el «por qué» y las decisiones no**.
 - **Revisión automática** en el pipeline, y revisión humana encima. Nunca solo la primera.

@@ -41,6 +41,26 @@ Everything specific to this project lives in:
     - Test names and descriptions
 - Conversation with the user may happen in any language. The artifacts may not.
 
+### Git branches and commit messages
+
+A ticket id is a tracker key plus a number: `KAN-184`, `AI4-42`, `JIRA-1024` (pattern
+`[A-Z][A-Z0-9]+-[0-9]+`). Bare numbers or slugs are not ticket ids.
+
+**Branch.** When the unit of work has a ticket, name the branch
+`{BRANCH_PREFIX}{TICKET-ID}-{slug}` (default prefix `feature/`). Examples:
+`feature/KAN-184`, `feature/KAN-184-filter-listing`. If there is no ticket,
+`{BRANCH_PREFIX}{change-name}`. Record the team's prefix in `project-context` if it is not
+`feature/`.
+
+**Commit.** Conventional Commits: `type(scope): description`, English, imperative present,
+first line ≤ 72 characters.
+
+- If there is a ticket, **the ticket id is the scope**: `feat(KAN-184): add listing filter by state`.
+  Do not use the capability or layer as scope when a ticket exists.
+- If there is no ticket, the scope is the capability or layer: `feat(listing): add filter by state`.
+- Never invent a ticket id. If the branch has no ticket-shaped token, ask the human before
+  committing (id, or "none").
+
 ## 3. The Ten Invariant Rules
 
 These are non-negotiable. Where a rule can be checked mechanically, a hook in `.claude/hooks/`
