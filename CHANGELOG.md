@@ -12,6 +12,17 @@ Versionado semántico: la versión viva está en [`VERSION`](VERSION).
 
 ---
 
+## [1.2.3]
+
+### Cambiado
+
+- Las capturas de Playwright (y la evidencia binaria de demo) deben guardarse en
+  `openspec/changes/<id>/reports/`, junto al informe markdown; no en la raíz del repo.
+  `/show-spec-working` 1.1.0, `docs/base-standards.md`, pasos obligatorios de OpenSpec y la
+  plantilla `report.md` lo exigen.
+
+---
+
 ## [1.2.2]
 
 ### Cambiado

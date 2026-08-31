@@ -86,7 +86,10 @@ user-facing behaviour that needs a real client.
 3. Test the error scenarios: validation messages and recovery paths.
 4. Verify persistence: what the interface shows matches what is stored.
 5. Restore the environment: clean up test data, close sessions.
-6. Document scenarios and outcomes in a report, and only then mark the task complete.
+6. Document scenarios and outcomes in a report under `openspec/changes/<change-name>/reports/`, and
+   only then mark the task complete. If Playwright (or any browser tool) takes screenshots, save them
+   in that same `reports/` directory (e.g. `YYYY-MM-DD-<scenario-slug>.png`) and link them from the
+   report. Never leave screenshot files at the repository root.
 
 ## 4. Verification checklist
 
@@ -144,6 +147,13 @@ Save under `openspec/changes/<change-name>/reports/`:
   - <indicator>: <value>
 - State restored: Yes/No
 - Restoration actions: <actions or none>
+
+## UI evidence (if applicable)
+Screenshots and related files live in this same `reports/` folder. Link them with relative paths.
+Do not leave captures at the repository root.
+
+- `./YYYY-MM-DD-<scenario-slug>.png` — <what it shows>
+- (none if the change has no browser UI)
 
 ## Outcome
 - Status: PASS/FAIL

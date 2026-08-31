@@ -580,8 +580,9 @@ ACCEPTANCE CRITERIA
 These are three distinct things and are often confused:
 >
 > - **Demonstrate** (`/show-spec-working`): the agent starts the system, exercises each scenario against
->   the real interface and delivers evidence. This is what the harness marks as “AGENT MUST EXECUTE”, and it is
->   work, not documentation. It is never delegated to the user.
+>   the real interface and delivers evidence. Playwright screenshots go under
+>   `openspec/changes/<id>/reports/`, next to the report; not at the repo root. This is what the harness
+>   marks as “AGENT MUST EXECUTE”, and it is work, not documentation. It is never delegated to the user.
 > - **Verify** (`/verify-against-spec`): conformity between code and specification, including what
 >   is surplus.
 > - **Refute** (`/adversarial-review`): hostile review with a verdict, **in a session different from the

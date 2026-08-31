@@ -11,6 +11,17 @@ Semantic versioning: the live version is in [`VERSION`](VERSION).
 
 ---
 
+## [1.2.3]
+
+### Changed
+
+- Playwright screenshots (and durable demo binary evidence) must be saved under
+  `openspec/changes/<id>/reports/`, next to the markdown report; not at the repo root.
+  `/show-spec-working` 1.1.0, `docs/base-standards.md`, OpenSpec mandatory steps, and the
+  `report.md` template require it.
+
+---
+
 ## [1.2.2]
 
 ### Changed

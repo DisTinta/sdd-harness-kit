@@ -215,6 +215,10 @@ equivalent live demo), drive the real UI with the Playwright MCP: navigate, snap
 evidence, then close the browser. This does **not** replace the project's own end-to-end suite;
 those tests remain the CI contract.
 
+Save every screenshot (and any durable binary evidence) under
+`openspec/changes/<change-id>/reports/`, next to the markdown report. Pass that relative path as
+`filename` on `browser_take_screenshot`. Do **not** leave captures at the repository root.
+
 If there is no frontend, or the MCP is not enabled, demonstrate via HTTP/CLI as usual.
 
 Do not use the Playwright MCP to log into production, to capture secrets or PII, or as a substitute

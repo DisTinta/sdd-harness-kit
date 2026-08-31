@@ -581,8 +581,9 @@ CRITERIO DE ACEPTACIÓN
 Son tres cosas distintas y se confunden a menudo:
 >
 > - **Demostrar** (`/show-spec-working`): el agente arranca el sistema, ejerce cada escenario contra
->   la interfaz real y entrega evidencia. Es lo que el harness marca como «AGENT MUST EXECUTE», y es
->   trabajo, no documentación. Nunca se delega al usuario.
+>   la interfaz real y entrega evidencia. Las capturas de Playwright van en
+>   `openspec/changes/<id>/reports/`, junto al informe; no en la raíz. Es lo que el harness marca como
+>   «AGENT MUST EXECUTE», y es trabajo, no documentación. Nunca se delega al usuario.
 > - **Verificar** (`/verify-against-spec`): conformidad entre código y especificación, incluido lo que
 >   sobra.
 > - **Refutar** (`/adversarial-review`): revisión hostil con veredicto, **en una sesión distinta de la

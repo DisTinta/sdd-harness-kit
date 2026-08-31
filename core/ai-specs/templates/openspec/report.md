@@ -22,6 +22,13 @@
 - State restored: Yes/No
 - Restoration actions: <actions or none>
 
+## UI evidence (if applicable)
+Screenshots and related files live in this same `reports/` folder. Link them with relative paths.
+Do not leave captures at the repository root.
+
+- `./YYYY-MM-DD-<scenario-slug>.png` — <what it shows>
+- (none if the change has no browser UI)
+
 ## Outcome
 - Status: PASS/FAIL
 - Blocking issues: <none or list>
