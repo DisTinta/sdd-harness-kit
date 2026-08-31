@@ -1,5 +1,7 @@
 # Changelog
 
+**Idioma:** Español · [English](CHANGELOG.en.md)
+
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 Versionado semántico: la versión viva está en [`VERSION`](VERSION).
 

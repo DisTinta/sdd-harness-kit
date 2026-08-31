@@ -1,5 +1,7 @@
 # Secuencia de prompts
 
+**Idioma:** Español · [English](PROMPTS.en.md)
+
 Dieciséis prompts, uno por paso del ciclo. Agnósticos de stack: los comandos y las rutas los toman de
 `docs/project-context.md`, `docs/backend-standards.md` y `.claude/sdd-harness.env`, así que sirven igual en
 cualquier proyecto donde hayas instalado el kit.

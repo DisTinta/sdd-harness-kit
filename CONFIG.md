@@ -1,5 +1,7 @@
 # Referencia de `sdd-harness.env`
 
+**Idioma:** Español · [English](CONFIG.en.md)
+
 El contrato de configuración del kit. Es el único fichero que cambia entre proyectos: los hooks lo
 cargan de forma segura al arrancar (allowlist de claves, sin `source` ni `eval` del fichero) y las
 skills lo leen como contexto dinámico.

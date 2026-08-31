@@ -1,5 +1,7 @@
 # SDD Harness Kit
 
+**Idioma:** Español · [English](README.en.md)
+
 Versión en [`VERSION`](VERSION), cambios en [CHANGELOG.md](CHANGELOG.md). Arranque guiado: [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md).
 Guía de colaboración: [CONTRIBUTING.md](CONTRIBUTING.md). Origen y créditos: [CREDITS.md](CREDITS.md).
 
@@ -146,14 +148,18 @@ En Windows: `winget install jqlang.jq`.
 
 ### Índice de documentos
 
-| Documento | Cuándo leerlo |
-|---|---|
-| [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md) | **Empieza aquí** si es tu primer arranque |
-| [USO.md](USO.md) | Día 1 y uso cotidiano |
-| [MANUAL.md](MANUAL.md) | Flujo de nueve fases, matriz de artefactos y reglas invariantes |
-| [PROMPTS.md](PROMPTS.md) | Los prompts del ciclo, listos para copiar |
-| [CONFIG.md](CONFIG.md) | Referencia de `sdd-harness.env` y cómo escribir un adaptador nuevo |
-| [EJEMPLO.md](EJEMPLO.md) | Una unidad de trabajo completa, del issue al merge |
+| Documento | Español | English |
+|---|---|---|
+| Arranque | [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md) | [STEP-BY-STEP.md](STEP-BY-STEP.md) |
+| Uso cotidiano | [USO.md](USO.md) | [USAGE.md](USAGE.md) |
+| Manual (F0–F8) | [MANUAL.md](MANUAL.md) | [MANUAL.en.md](MANUAL.en.md) |
+| Prompts P0–P15 | [PROMPTS.md](PROMPTS.md) | [PROMPTS.en.md](PROMPTS.en.md) |
+| Config / adaptadores | [CONFIG.md](CONFIG.md) | [CONFIG.en.md](CONFIG.en.md) |
+| Ejemplo extremo a extremo | [EJEMPLO.md](EJEMPLO.md) | [EXAMPLE.md](EXAMPLE.md) |
+| Briefing para Producto | [presentacion.md](presentacion.md) | [presentation.md](presentation.md) |
+| Changelog | [CHANGELOG.md](CHANGELOG.md) | [CHANGELOG.en.md](CHANGELOG.en.md) |
+| Contribuir | [CONTRIBUTING.md](CONTRIBUTING.md) | [CONTRIBUTING.en.md](CONTRIBUTING.en.md) |
+| Créditos | [CREDITS.md](CREDITS.md) | [CREDITS.en.md](CREDITS.en.md) |
 
 ---
 
@@ -163,8 +169,11 @@ Las skills, los agents, los standards y las plantillas están **en inglés**, po
 `base-standards.md` §2 exige inglés en todo artefacto técnico y el agente no puede leer una regla en
 inglés y una instrucción en español sin incoherencia.
 
-La documentación del kit —este fichero, `GUIA-PASO-A-PASO.md`, `USO.md`, `MANUAL.md`, `PROMPTS.md`,
-`CONFIG.md`, `EJEMPLO.md`— está en español, porque es para ti y no la lee ningún agente.
+La documentación humana de la raíz —este fichero, la guía de arranque, el uso, el manual, los
+prompts, la config, el ejemplo, el briefing para Producto, el changelog, contribuir y créditos—
+está **en español y en inglés**, emparejada. Elige el idioma en la barra superior de cada documento
+o en la tabla de arriba. Los prompts en [PROMPTS.en.md](PROMPTS.en.md) se pegan en inglés; los
+artefactos que produzcan (código, specs, commits) siguen en inglés.
 
 ---
 

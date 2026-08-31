@@ -1,5 +1,7 @@
 # Una unidad de trabajo, de principio a fin
 
+**Idioma:** Español · [English](EXAMPLE.md)
+
 Recorrido completo del flujo sobre una unidad genérica, para ver cómo encajan las piezas. No es un
 tutorial de ningún framework: los nombres van entre `<corchetes>` y la traducción a tu stack sale de
 `docs/backend-standards.md` y de `LAYER_ORDER` en `.claude/sdd-harness.env`.

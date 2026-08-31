@@ -1,5 +1,7 @@
 # Origen y créditos
 
+**Idioma:** Español · [English](CREDITS.en.md)
+
 ## Punto de partida
 
 Este kit nace de los **apuntes de las clases del Máster AI4Devs** de

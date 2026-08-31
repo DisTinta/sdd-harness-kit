@@ -1,5 +1,7 @@
 # Guía paso a paso — SDD Harness Kit
 
+**Idioma:** Español · [English](STEP-BY-STEP.md)
+
 Guía de arranque para instalar y usar el kit en un repositorio de producto. Documentación humana
 (español). Las skills y standards técnicos siguen en inglés.
 

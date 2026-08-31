@@ -1,5 +1,7 @@
 # Cómo se usa
 
+**Idioma:** Español · [English](USAGE.md)
+
 > Empieza por [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md) si es tu primer arranque.
 
 ## Qué se ejecuta y cuándo

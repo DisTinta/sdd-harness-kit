@@ -1,5 +1,7 @@
 # Manual del SDD Harness Kit
 
+**Idioma:** Español · [English](MANUAL.en.md)
+
 El flujo de trabajo que implementan los artefactos del kit, y por qué cada pieza está donde está.
 
 Este documento es agnóstico: no menciona ningún proyecto ni obliga a ningún stack. Lo que cambia

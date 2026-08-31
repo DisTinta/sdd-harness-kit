@@ -1,5 +1,7 @@
 # SDD Harness Kit — briefing para Producto
 
+**Idioma:** Español · [English](presentation.md)
+
 Documento interno para explicar el kit a perfiles no técnicos. No es una guía de instalación.
 
 ---
@@ -265,7 +267,7 @@ Con el kit: la IA propone esos extra; **el humano los tira** en el primer gate; 
 
 ---
 
-## Cómo hablarlo en una reunión (guion corto)
+## Guion corto
 
 1. **No es una herramienta más para el usuario.** Es cómo el equipo usa IA sin perder el control del alcance.
 2. **SDD:** primero el acuerdo, después el código. La spec gana al código.
@@ -278,7 +280,7 @@ Con el kit: la IA propone esos extra; **el humano los tira** en el primer gate; 
 
 ---
 
-## Preguntas que suelen salir
+## Preguntas frecuentes
 
 **¿Esto retrasa las entregas?**  
 La especificación añade tiempo al principio y lo quita al final (menos idas y vueltas, menos PRs de 800 líneas). En tickets triviales no se usa el ciclo completo.
