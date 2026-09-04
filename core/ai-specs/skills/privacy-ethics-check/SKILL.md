@@ -4,11 +4,11 @@ description: Use when the change touches personal data, auth, sessions, logging,
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [path, change-id, or short description of the risk surface]
-allowed-tools: Read Grep Glob Bash(git *)
+allowed-tools: Read Grep Glob Bash(grep *) Bash(git *)
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Instructions
 

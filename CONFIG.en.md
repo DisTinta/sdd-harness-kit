@@ -100,8 +100,12 @@ And all 24 in general, through the dynamic context that opens almost every one:
 
 ```
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 ```
+
+A single Bash command (no pipes or `&&`): Claude Code aborts the skill if dynamic context
+`!`…`` contains multiple operations. Skills that use it must include `Bash(grep *)` in
+`allowed-tools`.
 
 That line is what makes the same skill work on AdonisJS, on Laravel, and on a stack the kit does
 not know yet.

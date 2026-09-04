@@ -11,7 +11,7 @@ allowed-tools: Read Glob Bash(ls *) Bash(bash .claude/sync-artifacts.sh*) Bash(g
 !`ls -1 ai-specs/agents 2>/dev/null`
 
 ## Current references
-!`ls -la .claude/skills 2>/dev/null | head -30`
+!`ls -la .claude/skills`
 
 ## Instructions
 

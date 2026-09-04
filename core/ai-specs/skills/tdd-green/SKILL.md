@@ -4,12 +4,12 @@ description: Use after tdd-red, or when the user says "now implement it" or "mak
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [path to the failing test]
-allowed-tools: Read Grep Glob Edit Write mcp__context7__resolve-library-id mcp__context7__query-docs
+allowed-tools: Read Grep Glob Edit Write Bash(grep *) mcp__context7__resolve-library-id mcp__context7__query-docs
 effort: high
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Instructions
 

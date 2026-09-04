@@ -6,11 +6,11 @@ version: 1.0.0
 argument-hint: [feature or scenario description]
 context: fork
 agent: general-purpose
-allowed-tools: Read Grep Glob Write Edit
+allowed-tools: Read Grep Glob Write Edit Bash(grep *)
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Instructions
 

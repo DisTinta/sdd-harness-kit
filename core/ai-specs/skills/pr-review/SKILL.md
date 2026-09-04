@@ -5,11 +5,11 @@ author: sdd-harness-kit
 version: 1.0.0
 context: fork
 agent: Explore
-allowed-tools: Read Grep Glob Bash(git *)
+allowed-tools: Read Grep Glob Bash(grep *) Bash(git *)
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Changed files
 !`git diff origin/main...HEAD --name-only`

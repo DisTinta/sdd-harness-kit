@@ -3,11 +3,11 @@ name: dod-feature
 description: Use when asked what is missing to close a feature, or for the definition of done of new functionality.
 author: sdd-harness-kit
 version: 1.0.0
-allowed-tools: Read Glob
+allowed-tools: Read Glob Bash(grep *)
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 Generate the definition of done for a **new feature**, adapting the commands to this project. Output a
 markdown checklist ready to paste into the pull request.

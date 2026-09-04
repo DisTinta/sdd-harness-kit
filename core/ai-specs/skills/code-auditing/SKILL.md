@@ -6,12 +6,12 @@ version: 1.0.0
 argument-hint: [path or module to audit]
 context: fork
 agent: Explore
-allowed-tools: Read Grep Glob Bash(git *)
+allowed-tools: Read Grep Glob Bash(grep *) Bash(git *)
 effort: high
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Instructions
 

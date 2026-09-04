@@ -4,12 +4,12 @@ description: Use after tdd-green, or when the user says "now refactor", "clean t
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [file or module to refactor]
-allowed-tools: Read Grep Glob Edit
+allowed-tools: Read Grep Glob Edit Bash(grep *)
 effort: high
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Instructions
 

@@ -4,15 +4,17 @@ description: Use when the user says "implement the change", refers to openspec/c
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [change-id]
-allowed-tools: Read Grep Glob Edit Write Bash(git status *) Bash(git diff *) Bash(git checkout *) Bash(git branch *) mcp__context7__resolve-library-id mcp__context7__query-docs
+allowed-tools: Read Grep Glob Edit Write Bash(grep *) Bash(ls *) Bash(git status *) Bash(git diff *) Bash(git checkout *) Bash(git branch *) mcp__context7__resolve-library-id mcp__context7__query-docs
 effort: high
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Active changes
-!`ls -1 openspec/changes 2>/dev/null | grep -v archive`
+!`ls -1 openspec/changes`
+
+Ignore the `archive` directory if present.
 
 ## Repository state
 - Branch: !`git branch --show-current`

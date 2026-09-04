@@ -4,11 +4,11 @@ description: Use when a ticket or user story arrives without enough detail to im
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [ticket text or ticket id]
-allowed-tools: Read Grep Glob
+allowed-tools: Read Grep Glob Bash(grep *)
 ---
 
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Instructions
 

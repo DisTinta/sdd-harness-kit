@@ -20,6 +20,13 @@ Semantic versioning: the live version is in [`VERSION`](VERSION).
   `/show-spec-working` 1.1.0, `docs/base-standards.md`, OpenSpec mandatory steps, and the
   `report.md` template require it.
 
+### Fixed
+
+- Skill dynamic context used `cat … | grep`, which Claude Code rejects ("multiple operations")
+  and aborts the skill without prompting. Now a single `grep` on `.claude/sdd-harness.env`,
+  with `Bash(grep *)` in `allowed-tools`. Affects `/privacy-ethics-check` and the other skills
+  that inject project config.
+
 ---
 
 ## [1.2.2]

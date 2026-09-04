@@ -4,7 +4,7 @@ description: Use when creating a new skill, editing an existing one, or when the
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [name or purpose of the skill]
-allowed-tools: Read Grep Glob Write Edit
+allowed-tools: Read Grep Glob Write Edit Bash(grep *) Bash(ls *)
 ---
 
 ## Existing skills
@@ -63,8 +63,11 @@ Never hardcode a command. Use dynamic context so the skill reads the project's o
 
 ```
 ## Project configuration
-!`cat .claude/sdd-harness.env 2>/dev/null | grep -vE '^\s*#|^\s*$'`
+!`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 ```
+
+Use a single Bash command (no pipes). Add `Bash(grep *)` to `allowed-tools` so Claude Code
+can inject the output without aborting the skill.
 
 That single line is what makes a skill portable across projects and stacks.
 
