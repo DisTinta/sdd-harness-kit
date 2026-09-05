@@ -17,6 +17,7 @@ support**, a **health doctor**, and **deep secret gates**.
 ./install.sh --dest /path/to/my-project --dry-run   # see what it would do
 ./install.sh --dest /path/to/my-project             # install
 ./install.sh --dest /path/to/my-project --no-frontend
+./install.sh --dest /path/to/my-project --frontend livewire
 bash ./doctor.sh --dest /path/to/my-project
 ```
 
@@ -25,6 +26,7 @@ bash ./doctor.sh --dest /path/to/my-project
 .\install.ps1 -Dest C:\projects\my-project -DryRun
 .\install.ps1 -Dest C:\projects\my-project
 .\install.ps1 -Dest C:\projects\my-project -NoFrontend
+.\install.ps1 -Dest C:\projects\my-project -Frontend livewire
 .\doctor.ps1 -Dest C:\projects\my-project
 ```
 
@@ -42,7 +44,7 @@ doctrine act on the file path, not on which command wrote it. Correspondence tab
 
 | Path in your repository | What it is |
 |---|---|
-| `ai-specs/skills/` | **27 skills**, canonical source. Includes `/show-spec-working`, `/adversarial-review`, `/privacy-ethics-check`, `/meta-prompt`, `/kit-health` |
+| `ai-specs/skills/` | **29 skills**, canonical source. Includes `/show-spec-working`, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/meta-prompt`, `/kit-health` |
 | `ai-specs/agents/` | **9 subagents**, canonical source. Includes the trilogy `tdd-test-writer` / `tdd-implementer` / `tdd-refactorer`, one isolated context per cycle phase |
 | `ai-specs/templates/` | Story, ADR, PR, OpenSpec artefact templates and `config.yaml.tpl` |
 | `.claude/skills/` · `.cursor/skills/` | References to `ai-specs` (symlink, or copy if the OS does not allow it) |
@@ -55,10 +57,10 @@ doctrine act on the file path, not on which command wrote it. Correspondence tab
 | `docs/documentation-standards.md` | Documentation rules and the pre-commit gate |
 | `docs/openspec-tasks-mandatory-steps.md` | What a `tasks.md` must contain to be valid |
 | `docs/backend-standards.md` | Layers and conventions **of your stack** (from the adapter) |
-| `docs/frontend-standards.md` | Component architecture |
+| `docs/frontend-standards.md` | UI architecture (React or Livewire per `--frontend`) |
 | `docs/project-context.md` | **The only file you write.** Survives updates |
 | `.cursor/rules/` | The same rules for Cursor: core, TDD, OpenSpec, and stack |
-| `.github/` | Copilot instructions, review and CI workflows, PR template |
+| `.github/` | Copilot instructions, review and CI workflows, backend CI and `frontend.yml`, PR template |
 | `CLAUDE.md` `AGENTS.md` `GEMINI.md` `codex.md` | All four point to `docs/base-standards.md` |
 
 ---
@@ -99,9 +101,10 @@ places to touch is in [CONTRIBUTING.en.md](CONTRIBUTING.en.md).
 | Adapter | Automatic detection | Ships |
 |---|---|---|
 | `adonisjs` | `package.json` with `@adonisjs/core` | env, backend-standards, Cursor rules, `ci.yml` |
-| `laravel` | `artisan` + `composer.json` | same |
+| `laravel` | `artisan` + `composer.json` | same; FE React or Livewire (`--frontend`) |
 | `fastify` | `"fastify"` in root or workspace-package `package.json` | same, plus `.dependency-cruiser.js`: hexagonal monorepo, Postgres+pgvector in CI, reversible migrations |
 | `_template` | any other case | blank env and standards, commented to fill in |
+| UI `react` / `livewire` | `--frontend` or auto-detect | `frontend-standards.md` + `.github/workflows/frontend.yml` |
 
 ---
 
@@ -211,7 +214,7 @@ What this kit adds on top of that starting point:
 | **Real Windows support** | First-class PowerShell, copy when the OS does not allow symlinks |
 | **`doctor`** (`doctor.sh` / `doctor.ps1`) | Diagnose an install instead of guessing why it fails |
 | **Deep secret gates** | Blocking in the prompt and on file reads, not only at commit |
-| **27 skills and 9 subagents** | The TDD trilogy with isolated context per phase, `/adversarial-review`, `/privacy-ethics-check`, `/kit-health` |
+| **29 skills and 9 subagents** | The TDD trilogy with isolated context per phase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/kit-health` |
 
 The design, the tuning, and everything above are original work. The debt to `lidr-specboot` is
 architecture and conventions, and it is declared here and in [CREDITS.en.md](CREDITS.en.md).

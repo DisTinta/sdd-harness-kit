@@ -65,6 +65,11 @@ Dependency direction: controller → service → model. Never the reverse.
 
 - Migrations are the versioned history. Never edit one already applied on the base branch: create a
   new one, and make sure `down()` actually works.
+- Zero-downtime schema changes follow **Expand → Backfill → Migrate reads → Contract**. Destructive
+  `DROP`s and renames ship in a **later, separate** migration after readers have moved. Before
+  `migrate` on a shared environment, review the SQL (or run `/migration-review`): `dropColumn` /
+  `drop`, unique indexes on existing data, truncating type changes, and renames that are secretly
+  drop-and-add.
 - Update the factory whenever a model gains a column.
 - Avoid N+1: eager load with `with()`.
 - Transactions for any operation that writes to more than one table.

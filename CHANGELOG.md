@@ -12,6 +12,43 @@ Versionado semántico: la versión viva está en [`VERSION`](VERSION).
 
 ---
 
+## [1.3.0]
+
+### Añadido
+
+- Skill `/migration-review`: auditoría read-only de migraciones (Expand-Contract, DROP/UNIQUE/ALTER,
+  renames destructivos, rollback).
+- Skill `/architecture-audit`: modo Fowler, DDD, fronteras hexagonales, SOLID/CUPID (sin implementar).
+- Adaptador frontend **Livewire** (`livewire.frontend-standards.md` + `livewire.ci.yml`) a la par de
+  React; flag `--frontend auto|react|livewire` / `-Frontend …`.
+- Workflow `.github/workflows/frontend.yml` (React o Livewire según UI).
+- Plantilla de referencia `mcp.with-figma.json` (Context7 + Playwright + Figma); el instalador no la
+  aplica.
+- Doctrina WCAG 2.2 AA, `test:a11y` y umbrales CWV en standards FE (React, Livewire, plantilla).
+- Doctrina Expand-Contract en § Persistence de todos los backend-standards; pgvector en Fastify.
+
+### Cambiado
+
+- `frontend-planner` agnóstico a React/Livewire.
+- `/dod-feature` exige `/migration-review` si cambia el schema.
+- Inventario: **29 skills**.
+- Filtro `business` de los `ci.yml` (Laravel, Adonis, Fastify) incluye `tests/**`, para
+  re-lanzar mutación cuando cambian tests.
+
+---
+
+## [1.2.4]
+
+### Cambiado
+
+- El `ci.yml` de cada adaptador gatilla tests y mutación con `dorny/paths-filter@v4` dentro
+  del job `quality`. `runtime` es una allowlist amplia (no solo `app/**`); `business` es
+  `PATH_BUSINESS` más la config de Infection/Stryker, sin `tests/**`. Lint y estático siguen
+  siempre. En Laravel, las PRs mutan solo el diff (`--git-diff-lines`); el push a `main`
+  muta toda la capa.
+
+---
+
 ## [1.2.3]
 
 ### Cambiado

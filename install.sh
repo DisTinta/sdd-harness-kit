@@ -6,7 +6,9 @@
 #   ./install.sh --dest ../mi-proyecto  instala en otro repositorio
 #   ./install.sh --stack laravel        fuerza el adaptador
 #   ./install.sh --dry-run              enseña lo que haría, sin tocar nada
-#   ./install.sh --force                sobrescribe ficheros ya existentes
+#   ./install.sh --frontend livewire   fuerza standards/CI Livewire
+#   ./install.sh --frontend react      fuerza standards/CI React
+#   ./install.sh --frontend auto       detecta Livewire vs React (default)
 #
 # Estructura que deja:
 #   ai-specs/          fuente canónica de skills, agents y plantillas
@@ -24,6 +26,7 @@ STACK=""
 DRY_RUN=0
 FORCE=0
 NO_FRONTEND=0
+FRONTEND="auto"
 
 C_OK=$'\033[0;32m'; C_SKIP=$'\033[0;90m'; C_WARN=$'\033[0;33m'
 C_ERR=$'\033[0;31m'; C_HEAD=$'\033[1;36m'; C_OFF=$'\033[0m'
@@ -39,6 +42,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --dest)        DEST="${2:?--dest necesita una ruta}"; shift 2 ;;
     --stack)       STACK="${2:?--stack necesita un nombre}"; shift 2 ;;
+    --frontend)    FRONTEND="${2:?--frontend necesita auto|react|livewire}"; shift 2 ;;
     --dry-run)     DRY_RUN=1; shift ;;
     --force)       FORCE=1; shift ;;
     --no-frontend) NO_FRONTEND=1; shift ;;
@@ -46,6 +50,11 @@ while [[ $# -gt 0 ]]; do
     *) die "Opción desconocida: $1" ;;
   esac
 done
+
+case "$FRONTEND" in
+  auto|react|livewire) ;;
+  *) die "--frontend debe ser auto, react o livewire (recibido: $FRONTEND)" ;;
+esac
 
 [[ -d "$DEST" ]] || die "El destino no existe: $DEST"
 DEST="$(cd "$DEST" && pwd)"
@@ -66,8 +75,40 @@ detect_stack() {
   echo _template
 }
 
+# ── Detección de UI frontend (react | livewire) ──────────────────────────────
+detect_frontend_ui() {
+  local has_livewire=0 has_react=0
+  if [[ -f "$DEST/composer.json" ]] && grep -q 'livewire/livewire' "$DEST/composer.json" 2>/dev/null; then
+    has_livewire=1
+  fi
+  if [[ -f "$DEST/composer.lock" ]] && grep -q 'livewire/livewire' "$DEST/composer.lock" 2>/dev/null; then
+    has_livewire=1
+  fi
+  if [[ -f "$DEST/package.json" ]] && grep -Eq '"react"|"@inertiajs/react"' "$DEST/package.json" 2>/dev/null; then
+    has_react=1
+  fi
+  if [[ -f "$DEST/composer.json" ]] && grep -q 'inertiajs/inertia-laravel' "$DEST/composer.json" 2>/dev/null \
+     && [[ $has_react -eq 1 ]]; then
+    has_react=1
+  fi
+  # Livewire without Inertia/React wins; otherwise React (historical default).
+  if [[ $has_livewire -eq 1 && $has_react -eq 0 ]]; then
+    echo livewire; return
+  fi
+  echo react
+}
+
 [[ -z "$STACK" ]] && STACK="$(detect_stack)"
 [[ -f "$KIT_DIR/adapters/$STACK.env" ]] || die "No existe el adaptador '$STACK'. Disponibles: $(ls "$KIT_DIR"/adapters/*.env | xargs -n1 basename | sed 's/\.env$//' | paste -sd ', ' -)"
+
+FRONTEND_UI="react"
+if [[ $NO_FRONTEND -eq 1 ]]; then
+  FRONTEND_UI=""
+elif [[ "$FRONTEND" != "auto" ]]; then
+  FRONTEND_UI="$FRONTEND"
+else
+  FRONTEND_UI="$(detect_frontend_ui)"
+fi
 
 head_ "SDD Harness Kit"
 VER="dev"; [[ -f "$KIT_DIR/VERSION" ]] && VER="$(tr -d '\r\n' < "$KIT_DIR/VERSION")"
@@ -75,7 +116,11 @@ say   "  Versión: $VER"
 say   "  Origen : $KIT_DIR"
 say   "  Destino: $DEST"
 say   "  Stack  : $STACK"
-[[ $NO_FRONTEND -eq 1 ]] && say "  Frontend: plantilla vacía (--no-frontend)"
+if [[ $NO_FRONTEND -eq 1 ]]; then
+  say "  Frontend: plantilla vacía (--no-frontend)"
+else
+  say "  Frontend UI: $FRONTEND_UI (--frontend $FRONTEND)"
+fi
 [[ $DRY_RUN -eq 1 ]] && say "  Modo   : simulación, no se escribe nada"
 
 # ── Copia idempotente ────────────────────────────────────────────────────────
@@ -131,11 +176,20 @@ if [[ $NO_FRONTEND -eq 1 ]]; then
   FE="$KIT_DIR/adapters/_template.frontend-standards.md"
   [[ -f "$FE" ]] || FE="$KIT_DIR/adapters/react.frontend-standards.md"
   copy_file "$FE" "docs/frontend-standards.md"
+elif [[ "$FRONTEND_UI" == "livewire" ]]; then
+  copy_file "$KIT_DIR/adapters/livewire.frontend-standards.md" "docs/frontend-standards.md"
 else
   copy_file "$KIT_DIR/adapters/react.frontend-standards.md" "docs/frontend-standards.md"
 fi
 [[ -f "$KIT_DIR/adapters/$STACK.rules.mdc" ]] && copy_file "$KIT_DIR/adapters/$STACK.rules.mdc" ".cursor/rules/30-stack.mdc"
 [[ -f "$KIT_DIR/adapters/$STACK.ci.yml" ]] && copy_file "$KIT_DIR/adapters/$STACK.ci.yml" ".github/workflows/ci.yml"
+if [[ $NO_FRONTEND -eq 0 ]]; then
+  if [[ "$FRONTEND_UI" == "livewire" && -f "$KIT_DIR/adapters/livewire.ci.yml" ]]; then
+    copy_file "$KIT_DIR/adapters/livewire.ci.yml" ".github/workflows/frontend.yml"
+  elif [[ -f "$KIT_DIR/adapters/react.ci.yml" ]]; then
+    copy_file "$KIT_DIR/adapters/react.ci.yml" ".github/workflows/frontend.yml"
+  fi
+fi
 if [[ -f "$KIT_DIR/adapters/$STACK.infection.json" ]]; then
   if [[ -f "$DEST/infection.json" ]]; then
     skip "infection.json ya existe — conservado"

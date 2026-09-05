@@ -577,6 +577,9 @@ CRITERIO DE ACEPTACIÓN
 
 > Skills equivalentes, en este orden: `/show-spec-working <id>` → `/verify-against-spec <id>` →
 > `/adversarial-review <id>`
+>
+> Antes de aplicar migraciones a un entorno compartido: `/migration-review`.
+> Antes de un refactor grande de diseño: `/architecture-audit <módulo>`.
 
 Son tres cosas distintas y se confunden a menudo:
 >

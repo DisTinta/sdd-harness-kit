@@ -22,7 +22,10 @@
     Sobrescribe los ficheros que ya existan.
 
 .PARAMETER NoFrontend
-    No copia standards de frontend React; usa la plantilla vacía.
+    No copia standards de frontend; usa la plantilla vacía y omite Playwright MCP y frontend.yml.
+
+.PARAMETER Frontend
+    UI frontend: auto (detecta Livewire vs React), react o livewire. Ignorado si -NoFrontend.
 
 .EXAMPLE
     .\install.ps1 -Dest C:\proyectos\mi-api
@@ -30,11 +33,15 @@
     .\install.ps1 -Stack laravel -DryRun
 .EXAMPLE
     .\install.ps1 -Dest C:\proyectos\mi-api -NoFrontend
+.EXAMPLE
+    .\install.ps1 -Stack laravel -Frontend livewire
 #>
 [CmdletBinding()]
 param(
     [string]$Dest = (Get-Location).Path,
     [string]$Stack = "",
+    [ValidateSet('auto', 'react', 'livewire')]
+    [string]$Frontend = 'auto',
     [switch]$DryRun,
     [switch]$Force,
     [switch]$NoFrontend
@@ -78,6 +85,32 @@ if (-not (Test-Path $adapterEnv)) {
     throw "No existe el adaptador '$Stack'. Disponibles: $avail"
 }
 
+function Resolve-FrontendUi {
+    param([string]$Mode, [string]$DestPath)
+    if ($Mode -ne 'auto') { return $Mode }
+    $hasLivewire = $false
+    $hasReact = $false
+    $composer = Join-Path $DestPath 'composer.json'
+    $composerLock = Join-Path $DestPath 'composer.lock'
+    $pkg = Join-Path $DestPath 'package.json'
+    if ((Test-Path $composer) -and (Select-String -Path $composer -Pattern 'livewire/livewire' -Quiet)) {
+        $hasLivewire = $true
+    }
+    if ((Test-Path $composerLock) -and (Select-String -Path $composerLock -Pattern 'livewire/livewire' -Quiet)) {
+        $hasLivewire = $true
+    }
+    if ((Test-Path $pkg) -and (Select-String -Path $pkg -Pattern '"react"|"@inertiajs/react"' -Quiet)) {
+        $hasReact = $true
+    }
+    if ($hasLivewire -and -not $hasReact) { return 'livewire' }
+    return 'react'
+}
+
+$FrontendUi = $null
+if (-not $NoFrontend) {
+    $FrontendUi = Resolve-FrontendUi -Mode $Frontend -DestPath $Dest
+}
+
 Write-Head "SDD Harness Kit"
 $verFile = Join-Path $KitDir 'VERSION'
 $ver = if (Test-Path $verFile) { (Get-Content $verFile -Raw).Trim() } else { 'dev' }
@@ -86,6 +119,7 @@ Write-Host "  Origen : $KitDir"
 Write-Host "  Destino: $Dest"
 Write-Host "  Stack  : $Stack"
 if ($NoFrontend) { Write-Host "  Frontend: plantilla vacia (-NoFrontend)" }
+else { Write-Host "  Frontend UI: $FrontendUi (-Frontend $Frontend)" }
 if ($DryRun) { Write-Host "  Modo   : simulacion, no se escribe nada" }
 
 function Test-OsJunkName([string]$Name) {
@@ -140,6 +174,8 @@ if ($NoFrontend) {
     $fe = Join-Path $KitDir 'adapters\_template.frontend-standards.md'
     if (-not (Test-Path $fe)) { $fe = Join-Path $KitDir 'adapters\react.frontend-standards.md' }
     Copy-KitFile $fe "docs\frontend-standards.md"
+} elseif ($FrontendUi -eq 'livewire') {
+    Copy-KitFile (Join-Path $KitDir 'adapters\livewire.frontend-standards.md') "docs\frontend-standards.md"
 } else {
     Copy-KitFile (Join-Path $KitDir 'adapters\react.frontend-standards.md') "docs\frontend-standards.md"
 }
@@ -147,6 +183,15 @@ $rules = Join-Path $KitDir "adapters\$Stack.rules.mdc"
 if (Test-Path $rules) { Copy-KitFile $rules ".cursor\rules\30-stack.mdc" }
 $ci = Join-Path $KitDir "adapters\$Stack.ci.yml"
 if (Test-Path $ci) { Copy-KitFile $ci ".github\workflows\ci.yml" }
+if (-not $NoFrontend) {
+    if ($FrontendUi -eq 'livewire') {
+        $feCi = Join-Path $KitDir 'adapters\livewire.ci.yml'
+        if (Test-Path $feCi) { Copy-KitFile $feCi '.github\workflows\frontend.yml' }
+    } else {
+        $feCi = Join-Path $KitDir 'adapters\react.ci.yml'
+        if (Test-Path $feCi) { Copy-KitFile $feCi '.github\workflows\frontend.yml' }
+    }
+}
 $infection = Join-Path $KitDir "adapters\$Stack.infection.json"
 if (Test-Path $infection) {
     $infectionDest = Join-Path $Dest 'infection.json'

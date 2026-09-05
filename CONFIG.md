@@ -11,7 +11,7 @@ Se sitúa así respecto a los demás ficheros de configuración:
 | Fichero | Contiene | Quién lo escribe |
 |---|---|---|
 | `.claude/sdd-harness.env` | Comandos, rutas y guardas, en forma de variables | El adaptador; lo ajustas tú |
-| `.mcp.json` · `.cursor/mcp.json` | Servidores MCP del proyecto (Context7, Playwright) | El kit. Sin secretos |
+| `.mcp.json` · `.cursor/mcp.json` | Servidores MCP del proyecto (Context7, Playwright; Figma opcional) | El kit. Sin secretos |
 | `docs/project-context.md` | Lo mismo en prosa, más los gotchas, para que lo lea el modelo | **Tú** |
 | `docs/backend-standards.md` | Las capas y convenciones del stack | El adaptador; lo ajustas tú |
 | `docs/base-standards.md` | La doctrina invariante | El kit. No lo edites por proyecto |
@@ -194,6 +194,18 @@ instalador la copia a `.cursor/rules/30-stack.mdc`.
 El pipeline de referencia. Se copia a `.github/workflows/ci.yml`. Mantén el criterio del kit: el
 gate duro es el mutation score en los paths críticos, no un porcentaje de cobertura de líneas.
 
+Los tests y la mutación se gatillan con `dorny/paths-filter@v4` **dentro del mismo job** `quality`
+(un solo check required; no partir jobs). Dos filtros:
+
+- `runtime` — allowlist **amplia**: cualquier path que pueda cambiar el comportamiento o la
+  suite (código, rutas, config, migraciones, tests, lockfile, el propio workflow). No uses
+  solo `app/**` + `tests/**`: en Laravel se te cuelan `routes/`, `config/` y `database/`.
+- `business` — `PATH_BUSINESS` más la config de Infection/Stryker y el lockfile. **Sin**
+  `tests/**`: un test HTTP no cambia los mutantes de la capa crítica.
+
+Lint y estático corren siempre. En Laravel, las PRs que sí tocan `business` pasan a Infection
+`--git-diff-base` / `--git-diff-lines`; el push a `main` muta toda la capa.
+
 ### 4b. Frontend
 
 `react.frontend-standards.md` se copia siempre a `docs/frontend-standards.md`, sea cual sea el
@@ -237,15 +249,35 @@ El instalador copia la misma plantilla a `.mcp.json` (Claude Code) y `.cursor/mc
 |---|---|
 | `ai-specs/templates/mcp.json` | Por defecto: Context7 + Playwright (`--isolated`) |
 | `ai-specs/templates/mcp.context7-only.json` | `--no-frontend` / `-NoFrontend`: solo Context7 |
+| `ai-specs/templates/mcp.with-figma.json` | **Referencia, no la aplica el instalador**: Context7 + Playwright + Figma (`https://mcp.figma.com/mcp`) |
 
-Arrancan con `npx` en el momento de usarlos; el kit no instala paquetes globales. Playwright no
-sustituye la suite E2E del proyecto. Context7 no sustituye `docs/project-context.md`.
+Arrancan con `npx` (o HTTP remoto en el caso de Figma) en el momento de usarlos; el kit no instala
+paquetes globales. Playwright no sustituye la suite E2E del proyecto. Context7 no sustituye
+`docs/project-context.md`.
+
+**Figma:** si el equipo diseña en Figma, fusiona a mano la entrada `figma` de `mcp.with-figma.json`
+en tus `.mcp.json` / `.cursor/mcp.json`, o copia la plantilla entera. La primera conexión pide
+autenticación OAuth en el IDE. No pongas tokens en el JSON.
 
 No pongas API keys en el JSON. Si Context7 te rate-limita en anónimo, exporta `CONTEXT7_API_KEY` en
 el entorno de la máquina.
 
 Jira, bases de datos u otros conectores con secretos no viven aquí: cada equipo los añade con
 `claude mcp add` / la UI de Cursor.
+
+### Frontend UI (React vs Livewire)
+
+El instalador elige `docs/frontend-standards.md` y `.github/workflows/frontend.yml` según la UI:
+
+| Flag | Efecto |
+|---|---|
+| `--frontend auto` / `-Frontend auto` (default) | Detecta: Livewire sin React/Inertia → Livewire; si no → React |
+| `--frontend react` / `-Frontend react` | Fuerza standards + CI React |
+| `--frontend livewire` / `-Frontend livewire` | Fuerza standards + CI Livewire |
+| `--no-frontend` / `-NoFrontend` | Plantilla vacía de FE; MCP sin Playwright; no copia `frontend.yml` |
+
+Laravel puede ser **Inertia/React** o **Livewire**; ambos están cubiertos. Adonis/Fastify usan React
+cuando hay frontend.
 
 ---
 
@@ -283,8 +315,9 @@ deriva.
 
 **Los MCP no aparecen como herramientas.** El instalador copia `.mcp.json` (Claude Code) y
 `.cursor/mcp.json` (Cursor) desde `ai-specs/templates/mcp.json` (o `mcp.context7-only.json` si
-`--no-frontend`). El doctor avisa si faltan; no falla. Hay que habilitarlos en el IDE la primera
-vez. No pongas API keys en esos JSON: `CONTEXT7_API_KEY` va en el entorno.
+`--no-frontend`). Figma solo si fusionas `mcp.with-figma.json` a mano. El doctor avisa si faltan;
+no falla. Hay que habilitarlos en el IDE la primera vez. No pongas API keys en esos JSON:
+`CONTEXT7_API_KEY` va en el entorno.
 
 **Editas un hook y no cambia nada.** Los hooks se copian al repositorio en la instalación: el que se
 ejecuta es `<tu-repo>/.claude/hooks/`, no el del kit. Edita ahí para este proyecto, y en el kit si

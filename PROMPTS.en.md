@@ -576,6 +576,9 @@ ACCEPTANCE CRITERIA
 
 > Equivalent skills, in this order: `/show-spec-working <id>` → `/verify-against-spec <id>` →
 > `/adversarial-review <id>`
+>
+> Before applying migrations to a shared environment: `/migration-review`.
+> Before a large design refactor: `/architecture-audit <module>`.
 
 These are three distinct things and are often confused:
 >

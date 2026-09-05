@@ -59,6 +59,11 @@ Dependency direction: {{transport}} → {{business}} → {{persistence}}. Never 
 ## 5. Persistence
 
 - Migrations are the versioned history. Never edit one already applied: create a new one.
+- Zero-downtime schema changes follow **Expand → Backfill → Migrate reads → Contract**. Destructive
+  `DROP`s and renames ship in a **later, separate** migration after readers have moved. Before applying
+  to a shared environment, review the generated SQL (or run `/migration-review`): `DROP COLUMN` /
+  `DROP TABLE`, `UNIQUE` on existing data, truncating `ALTER TYPE`, and renames that are secretly
+  drop-and-add.
 - Avoid N+1.
 - Transactions for any operation writing to more than one table.
 

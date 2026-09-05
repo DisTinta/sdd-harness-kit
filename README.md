@@ -17,6 +17,7 @@ real en Windows**, **doctor de salud** y **gates de secretos en profundidad**.
 ./install.sh --dest /ruta/a/mi-proyecto --dry-run   # mira qué haría
 ./install.sh --dest /ruta/a/mi-proyecto             # instala
 ./install.sh --dest /ruta/a/mi-proyecto --no-frontend
+./install.sh --dest /ruta/a/mi-proyecto --frontend livewire
 bash ./doctor.sh --dest /ruta/a/mi-proyecto
 ```
 
@@ -25,6 +26,7 @@ bash ./doctor.sh --dest /ruta/a/mi-proyecto
 .\install.ps1 -Dest C:\proyectos\mi-proyecto -DryRun
 .\install.ps1 -Dest C:\proyectos\mi-proyecto
 .\install.ps1 -Dest C:\proyectos\mi-proyecto -NoFrontend
+.\install.ps1 -Dest C:\proyectos\mi-proyecto -Frontend livewire
 .\doctor.ps1 -Dest C:\proyectos\mi-proyecto
 ```
 
@@ -42,7 +44,7 @@ en [MANUAL.md](MANUAL.md).
 
 | Ruta en tu repositorio | Qué es |
 |---|---|
-| `ai-specs/skills/` | **27 skills**, fuente canónica. Incluye `/show-spec-working`, `/adversarial-review`, `/privacy-ethics-check`, `/meta-prompt`, `/kit-health` |
+| `ai-specs/skills/` | **29 skills**, fuente canónica. Incluye `/show-spec-working`, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/meta-prompt`, `/kit-health` |
 | `ai-specs/agents/` | **9 subagentes**, fuente canónica. Incluye la trilogía `tdd-test-writer` / `tdd-implementer` / `tdd-refactorer`, un contexto aislado por fase del ciclo |
 | `ai-specs/templates/` | Plantillas de story, ADR, PR, artefactos OpenSpec y `config.yaml.tpl` |
 | `.claude/skills/` · `.cursor/skills/` | Referencias a `ai-specs` (symlink, o copia si el SO no lo permite) |
@@ -55,10 +57,10 @@ en [MANUAL.md](MANUAL.md).
 | `docs/documentation-standards.md` | Reglas de documentación y el gate antes de commit |
 | `docs/openspec-tasks-mandatory-steps.md` | Qué debe contener un `tasks.md` para ser válido |
 | `docs/backend-standards.md` | Capas y convenciones **de tu stack** (del adaptador) |
-| `docs/frontend-standards.md` | Arquitectura de componentes |
+| `docs/frontend-standards.md` | Arquitectura UI (React o Livewire según `--frontend`) |
 | `docs/project-context.md` | **El único fichero que escribes tú.** Sobrevive a las actualizaciones |
 | `.cursor/rules/` | Las mismas reglas para Cursor: núcleo, TDD, OpenSpec y stack |
-| `.github/` | Instrucciones de Copilot, workflows de review y CI, plantilla de PR |
+| `.github/` | Instrucciones de Copilot, workflows de review, CI backend y `frontend.yml`, plantilla de PR |
 | `CLAUDE.md` `AGENTS.md` `GEMINI.md` `codex.md` | Los cuatro apuntan a `docs/base-standards.md` |
 
 ---
@@ -100,9 +102,10 @@ que hay que tocar para que quede completo está en [CONTRIBUTING.md](CONTRIBUTIN
 | Adaptador | Detección automática | Trae |
 |---|---|---|
 | `adonisjs` | `package.json` con `@adonisjs/core` | env, backend-standards, reglas de Cursor, `ci.yml` |
-| `laravel` | `artisan` + `composer.json` | ídem |
+| `laravel` | `artisan` + `composer.json` | ídem; FE React o Livewire (`--frontend`) |
 | `fastify` | `"fastify"` en `package.json` de la raíz o de un paquete del workspace | ídem, más `.dependency-cruiser.js`: monorepo hexagonal, Postgres+pgvector en CI y migraciones reversibles |
 | `_template` | cualquier otro caso | env y standards en blanco, comentados para rellenar |
+| UI `react` / `livewire` | `--frontend` o detección automática | `frontend-standards.md` + `.github/workflows/frontend.yml` |
 
 ---
 
@@ -211,7 +214,7 @@ Lo que este kit añade sobre ese punto de partida:
 | **Soporte real en Windows** | PowerShell de primera clase, copia cuando el SO no permite symlinks |
 | **`doctor`** (`doctor.sh` / `doctor.ps1`) | Diagnosticar una instalación en vez de adivinar por qué no funciona |
 | **Gates de secretos en profundidad** | Bloqueo en el prompt y en la lectura de ficheros, no solo en el commit |
-| **27 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/privacy-ethics-check`, `/kit-health` |
+| **29 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/kit-health` |
 
 El diseño, el afinado y todo lo anterior son trabajo propio. La deuda con `lidr-specboot` es de
 arquitectura y convenciones, y queda declarada aquí y en [CREDITS.md](CREDITS.md).

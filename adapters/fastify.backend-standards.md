@@ -62,8 +62,18 @@ A vertical slice is always implemented in this order, and in these files:
 
 - Migrations are the versioned history. Never edit one already applied: create a new one.
   Every migration is reversible and there is a test that applies and reverts it.
+- Zero-downtime schema changes follow **Expand → Backfill → Migrate reads → Contract**. Destructive
+  `DROP`s and renames ship in a **later, separate** migration after readers have moved. Before
+  applying to a shared environment, review the SQL (or run `/migration-review`): `DROP COLUMN` /
+  `DROP TABLE`, `UNIQUE` on existing data, truncating `ALTER TYPE`, and renames that are secretly
+  drop-and-add.
 - Constraints that protect an invariant belong in the schema, not only in the code. If a
   rule matters, a `CHECK` should make it impossible to violate from any client.
+- Prefer **pgvector** inside Postgres for embeddings and similarity search. Introduce a dedicated
+  vector database only after a measured benchmark shows Postgres is the bottleneck. Embedding
+  dimensions are fixed to the model in use: changing the model means re-embedding and reindexing
+  everything. HNSW (and any other vector index) SQL lives only in `packages/adapters/store-postgres`,
+  like every other query.
 - Avoid N+1: a graph traversal is one recursive query, not a loop of queries.
 - Transactions for any operation writing to more than one table.
 - Indexes are part of the change that needs them, not a later optimisation pass.

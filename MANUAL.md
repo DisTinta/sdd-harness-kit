@@ -11,7 +11,7 @@ entre proyectos vive en `docs/project-context.md`, `docs/backend-standards.md` y
 El kit usa una fuente canónica en `ai-specs/`, doctrina en `docs/base-standards.md`, y los cuatro
 ficheros de memoria apuntando a ella.
 
-Inventario: **27 skills**, **9 subagentes** y **9 hooks**. Las skills y los subagentes se editan
+Inventario: **29 skills**, **9 subagentes** y **9 hooks**. Las skills y los subagentes se editan
 siempre en `ai-specs/`; `.claude/` y `.cursor/` los referencian, y `bash .claude/sync-artifacts.sh`
 reconstruye esas referencias cuando dejan de resolver.
 
@@ -271,7 +271,8 @@ trabajo, no documentación. `docs/openspec-tasks-mandatory-steps.md` lo exige y 
 `validate-tasks` comprueba que el `tasks.md` lo contemple.
 
 **Skills:** `/show-spec-working` (evidencia de ejecución), `/verify-against-spec` (conformidad),
-`/adversarial-review` (revisión hostil con veredicto), `/pr-review`, `/code-auditing`.
+`/adversarial-review` (revisión hostil con veredicto), `/migration-review`, `/architecture-audit`,
+`/pr-review`, `/code-auditing`.
 **Subagente:** `security-reviewer`.
 
 ### F6 · Documentación
@@ -375,6 +376,8 @@ ramas concurrentes.
 | `/tdd-red`, `/tdd-green` | skills | F4 | El ciclo rojo-verde separado en dos turnos |
 | `/verify-against-spec` | skill | F5 | Detectar tanto lo que falta como lo que sobra |
 | `/pr-review` | skill | F5 | Primer pase de revisión, read-only |
+| `/migration-review` | skill | F4-F5 | Auditoría Expand-Contract / SQL destructivo |
+| `/architecture-audit` | skill | F4 | DDD, fronteras, SOLID/CUPID, modo Fowler |
 | `/adr-new` | skill | F6 | Transcribir decisiones, y decir cuándo no hace falta |
 | `/commit`, `/pr-describe` | skills | F7 | Commits atómicos y PR con el «por qué» vacío |
 | `session-context` | hook | F0 | Que el agente arranque sabiendo dónde está |

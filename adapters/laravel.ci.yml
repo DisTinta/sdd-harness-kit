@@ -5,12 +5,49 @@ on:
     branches: [main]
 permissions:
   contents: read
+  pull-requests: read
 jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # runtime: cualquier path que pueda cambiar comportamiento o la propia suite.
+      # Allowlist corta (solo app/ + tests/) se deja fuera routes/, config/, database/.
+      # business: PATH_BUSINESS + config de Infection + tests/** (un cambio de test
+      # también debe re-ejecutar mutación sobre la capa crítica).
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            runtime:
+              - 'app/**'
+              - 'routes/**'
+              - 'config/**'
+              - 'database/**'
+              - 'bootstrap/**'
+              - 'resources/**'
+              - 'lang/**'
+              - 'tests/**'
+              - 'composer.json'
+              - 'composer.lock'
+              - 'phpunit.xml*'
+              - 'phpstan.neon*'
+              - 'pint.json'
+              - 'infection.json'
+              - 'artisan'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'vite.config.*'
+              - '.github/workflows/ci.yml'
+            business:
+              - 'app/Services/**'
+              - 'tests/**'
+              - 'infection.json'
+              - 'composer.lock'
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -69,13 +106,16 @@ jobs:
         run: vendor/bin/phpstan analyse --no-progress
 
       - name: Tests
+        if: steps.changes.outputs.runtime == 'true'
         run: php artisan test --coverage
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: ${{ github.workspace }}/database/database.sqlite
 
       # Requiere infection.json. Sin código en app/Services, se omite (gate activo cuando exista la capa).
+      # En PR solo muta el diff; en push a main, toda la capa. El job no se parte: un solo check required.
       - name: Mutation testing en paths críticos
+        if: steps.changes.outputs.business == 'true'
         run: |
           if [ ! -f infection.json ]; then
             echo "Skipping Infection: infection.json not found"
@@ -85,7 +125,12 @@ jobs:
             echo "Skipping Infection: app/Services has no PHP files yet"
             exit 0
           fi
-          ./vendor/bin/infection run --configuration=infection.json --test-framework=phpunit --min-msi=70 --no-progress --ignore-msi-with-no-mutations
+          DIFF_ARGS=()
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+            DIFF_ARGS=(--git-diff-filter=AM --git-diff-base="origin/${{ github.base_ref }}" --git-diff-lines)
+          fi
+          ./vendor/bin/infection run --configuration=infection.json --test-framework=phpunit --min-msi=70 --no-progress --ignore-msi-with-no-mutations "${DIFF_ARGS[@]}"
         timeout-minutes: 40
         env:
           DB_CONNECTION: sqlite

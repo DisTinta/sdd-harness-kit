@@ -11,7 +11,7 @@ across projects lives in `docs/project-context.md`, `docs/backend-standards.md`,
 The kit uses a canonical source in `ai-specs/`, doctrine in `docs/base-standards.md`, and the four
 memory files pointing to it.
 
-Inventory: **27 skills**, **9 subagents**, and **9 hooks**. Skills and subagents are always edited
+Inventory: **29 skills**, **9 subagents**, and **9 hooks**. Skills and subagents are always edited
 in `ai-specs/`; `.claude/` and `.cursor/` reference them, and `bash .claude/sync-artifacts.sh`
 rebuilds those references when they stop resolving.
 
@@ -271,7 +271,8 @@ work, not documentation. `docs/openspec-tasks-mandatory-steps.md` requires it an
 `validate-tasks` hook checks that `tasks.md` contemplates it.
 
 **Skills:** `/show-spec-working` (execution evidence), `/verify-against-spec` (conformance),
-`/adversarial-review` (hostile review with a verdict), `/pr-review`, `/code-auditing`.
+`/adversarial-review` (hostile review with a verdict), `/migration-review`, `/architecture-audit`,
+`/pr-review`, `/code-auditing`.
 **Subagent:** `security-reviewer`.
 
 ### F6 · Documentation
@@ -375,6 +376,8 @@ concurrent branches.
 | `/tdd-red`, `/tdd-green` | skills | F4 | The red-green cycle split into two turns |
 | `/verify-against-spec` | skill | F5 | Detect both what is missing and what is surplus |
 | `/pr-review` | skill | F5 | First review pass, read-only |
+| `/migration-review` | skill | F4-F5 | Expand-Contract / destructive SQL audit |
+| `/architecture-audit` | skill | F4 | DDD, boundaries, SOLID/CUPID, Fowler mode |
 | `/adr-new` | skill | F6 | Transcribe decisions, and say when they are not needed |
 | `/commit`, `/pr-describe` | skills | F7 | Atomic commits and PR with the «why» left blank |
 | `session-context` | hook | F0 | That the agent starts knowing where it is |

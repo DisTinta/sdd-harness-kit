@@ -22,6 +22,7 @@ markdown checklist ready to paste into the pull request.
 - [ ] Business logic lives in the business layer, not in the transport layer
 - [ ] Static analysis and linter clean
 - [ ] Migration created and its rollback verified, if the schema changed
+- [ ] Pending migrations reviewed with `/migration-review` if the schema changed
 - [ ] Test factories updated if a model gained a field
 - [ ] API specification regenerated if the contract changed
 - [ ] Documentation of the new public symbols

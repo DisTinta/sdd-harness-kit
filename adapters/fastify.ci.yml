@@ -5,6 +5,7 @@ on:
     branches: [main]
 permissions:
   contents: read
+  pull-requests: read
 jobs:
   quality:
     runs-on: ubuntu-latest
@@ -26,6 +27,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # runtime: monorepo completo (PATH_SOURCE = packages), no solo un app/.
+      # business: PATH_BUSINESS (packages/core) + config de Stryker + tests/**.
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            runtime:
+              - 'packages/**'
+              - 'tests/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig*.json'
+              - '.dependency-cruiser.js'
+              - 'vitest.config.*'
+              - 'stryker.config.*'
+              - 'stryker.conf.*'
+              - '.github/workflows/ci.yml'
+            business:
+              - 'packages/core/**'
+              - 'tests/**'
+              - 'stryker.config.*'
+              - 'stryker.conf.*'
+              - 'package-lock.json'
+
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
@@ -46,11 +71,13 @@ jobs:
         run: npx depcruise --config .dependency-cruiser.js packages
 
       - name: Migraciones (aplicar y revertir)
+        if: steps.changes.outputs.runtime == 'true'
         run: npm run db:migrate && npm run db:rollback && npm run db:migrate
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
 
       - name: Tests
+        if: steps.changes.outputs.runtime == 'true'
         run: npx vitest run
         env:
           NODE_ENV: test
@@ -59,4 +86,5 @@ jobs:
       # El gate duro es el mutation score, no la cobertura: exigir un porcentaje de
       # cobertura fabrica tests vacíos. La cobertura se publica como señal.
       - name: Mutation testing en paths críticos
+        if: steps.changes.outputs.business == 'true'
         run: npx stryker run

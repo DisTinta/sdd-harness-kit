@@ -101,7 +101,8 @@ avisará si detecta español en el código.
 no la sigue, ajústalo ahora**: ese fichero es lo que impide que el agente invente una arquitectura
 distinta en cada tarea.
 
-Lo mismo con `docs/frontend-standards.md` si tu frontend no es React.
+Lo mismo con `docs/frontend-standards.md` si tu frontend no es el que detectó el instalador
+(React vs Livewire): usa `--frontend` / `-Frontend` o edita el fichero.
 
 ### 5. Verifica la configuración
 
@@ -146,12 +147,18 @@ pero si el directorio no existía al arrancar hay que reiniciar. Si siguen sin a
 ### 8. Activa los MCP del proyecto
 
 El instalador deja `.mcp.json` (Claude Code) y `.cursor/mcp.json` (Cursor) con **Context7** y, si no
-usaste `--no-frontend` / `-NoFrontend`, **Playwright** en modo aislado.
+usaste `--no-frontend` / `-NoFrontend`, **Playwright** en modo aislado. El frontend UI
+(React o Livewire) se elige con `--frontend auto|react|livewire` / `-Frontend …` (ver
+[CONFIG.md](CONFIG.md)).
 
 No hace falta escribir `use context7` en cada prompt: la doctrina (`docs/base-standards.md` §11) ya
 le dice al agente cuándo consultarlos. La primera vez el IDE suele pedir permiso para arrancar el
 servidor del proyecto: acéptalo. Opcional: `CONTEXT7_API_KEY` en el entorno (nunca en el JSON
 commiteado) si te topas con el rate limit anónimo.
+
+Si el equipo diseña en Figma, hay una plantilla de referencia
+`ai-specs/templates/mcp.with-figma.json` (Context7 + Playwright + Figma). El instalador **no** la
+aplica: fusiónala a mano. Detalle en [CONFIG.md](CONFIG.md).
 
 Jira, bases de datos u otros conectores con secretos **no** van aquí: `claude mcp add …` por equipo.
 

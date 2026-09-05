@@ -32,11 +32,11 @@ escritos para él. Donde coincide una convención, coincide porque se adoptó a 
 |---|---|
 | **Instalable** `install.sh` / `install.ps1`, con `--dry-run` y detección de stack | Montar el harness en un proyecto nuevo sin repetir el trabajo a mano |
 | **9 hooks deterministas** del ciclo de vida | Convertir una convención escrita en una comprobada. Actúan sobre la ruta del fichero, no sobre qué comando lo escribió |
-| **Adaptadores por stack** (`laravel`, `adonisjs`, `fastify`, `react`, plantilla) | El mismo harness en stacks distintos sin tocar una skill ni un hook |
+| **29 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/show-spec-working`, `/kit-health` |
+| **Adaptadores por stack** (`laravel`, `adonisjs`, `fastify`, `react`, `livewire`, plantilla) | El mismo harness en stacks distintos sin tocar una skill ni un hook |
 | **Soporte real en Windows** | PowerShell de primera clase, y copia cuando el sistema no permite symlinks |
 | **`doctor.sh` / `doctor.ps1`** | Diagnosticar una instalación en lugar de adivinar |
 | **Gates de secretos en profundidad** | Bloqueo en el prompt y en la lectura de ficheros, no solo antes del commit |
-| **27 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/privacy-ethics-check`, `/show-spec-working`, `/kit-health` |
 | **Doctrina propia** en `docs/base-standards.md` y `docs/documentation-standards.md` | Los cinco puntos de parada humana y el gate de documentación |
 
 ## Herramientas de terceros
@@ -48,6 +48,7 @@ El kit no las incluye: las configura o las asume instaladas.
 | [OpenSpec](https://www.npmjs.com/package/@fission-ai/openspec) (`@fission-ai/openspec`) | Gobierna `openspec/`: specs y changes. Se instala aparte, a propósito | Ver el paquete |
 | [Context7](https://context7.com) | MCP de documentación de librerías | Ver el proveedor |
 | [Playwright MCP](https://github.com/microsoft/playwright) | Demostración de UI. No sustituye la suite E2E | Apache-2.0 |
+| [Figma MCP](https://developers.figma.com/docs/figma-mcp-server/) | Diseño → contexto de código (plantilla `mcp.with-figma.json`, opcional) | Ver el proveedor |
 
 ## Licencia de este kit
 

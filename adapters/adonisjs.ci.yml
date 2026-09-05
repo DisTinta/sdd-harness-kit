@@ -5,12 +5,41 @@ on:
     branches: [main]
 permissions:
   contents: read
+  pull-requests: read
 jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+
+      # runtime: paths que pueden cambiar comportamiento o la suite.
+      # business: PATH_BUSINESS (app/services) + config de Stryker + tests/**.
+      - uses: dorny/paths-filter@v4
+        id: changes
+        with:
+          filters: |
+            runtime:
+              - 'app/**'
+              - 'start/**'
+              - 'bin/**'
+              - 'config/**'
+              - 'database/**'
+              - 'tests/**'
+              - 'adonisrc.ts'
+              - 'ace.js'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'tsconfig*.json'
+              - 'stryker.config.*'
+              - 'stryker.conf.*'
+              - '.github/workflows/ci.yml'
+            business:
+              - 'app/services/**'
+              - 'tests/**'
+              - 'stryker.config.*'
+              - 'stryker.conf.*'
+              - 'package-lock.json'
 
       - uses: actions/setup-node@v4
         with:
@@ -27,6 +56,7 @@ jobs:
         run: npm run typecheck
 
       - name: Tests
+        if: steps.changes.outputs.runtime == 'true'
         run: node ace test
         env:
           NODE_ENV: test
@@ -34,4 +64,5 @@ jobs:
       # El gate duro es el mutation score, no la cobertura: exigir un porcentaje de
       # cobertura fabrica tests vacíos. La cobertura se publica como señal.
       - name: Mutation testing en paths críticos
+        if: steps.changes.outputs.business == 'true'
         run: npx stryker run
