@@ -113,16 +113,22 @@ INPUTS
 - docs/project-context.md y docs/backend-standards.md.
 
 INSTRUCCIÓN
-Genera la story completa en este orden exacto. El orden importa: el agente lee de arriba abajo, y si
+Antes de escribir la story enriquecida, construye un REALITY MAP buscando en el repositorio.
+El texto del ticket es hipótesis, no evidencia: un ejemplo tipo `/api/courses/:id` no es una ruta
+real hasta que la encuentres. Clasifica cada pieza en Exists (ruta citada), To create (path
+convencional del proyecto, etiquetado to-create) o Ticket examples checked (FOUND / NOT FOUND).
+Incluye rutas HTTP, middleware, traits/helpers reutilizables, controllers/services/validators y el
+test plantilla más cercano. No escribas Enhanced hasta tener el mapa.
+
+Luego genera la story en este orden exacto. El orden importa: el agente lee de arriba abajo, y si
 pones la técnica primero decidirá sobre implementación antes de entender el problema de producto.
 
 1. USER STORY — "Como <rol>, quiero <capacidad>, para <resultado de negocio>".
 2. CRITERIOS DE ACEPTACIÓN en Given/When/Then. Entre 3 y 5 escenarios: camino feliz, al menos un
    caso límite y al menos un caso de error. Cada escenario debe ser traducible a un test
    automático: punto de entrada, entrada concreta, resultado esperado y efectos observables.
-3. CONTEXTO TÉCNICO — busca en el repositorio y cita rutas REALES: dónde encaja, qué entidad toca,
-   qué validación hay que extender, qué regla de autorización aplica y qué test previo sirve de
-   plantilla. Si no encuentras alguno, dilo en lugar de inventar la ruta.
+3. CONTEXTO TÉCNICO — solo paths del Reality map. Exists: dónde encaja y qué extender. To create:
+   dejar claro que es nuevo y qué patrón existente seguir. Prefiere traits/middleware existentes.
 4. NON-GOALS — al menos dos límites explícitos.
 5. ETIQUETAS Y ESTIMACIÓN — etiquetas de área y tipo, y talla S/M/L con una frase de justificación.
 
@@ -130,11 +136,13 @@ Aplica INVEST como filtro de salida. Si la story falla dos o más criterios, o n
 humano-equivalente, márcala como needs-splitting y propón una descomposición en 2-3 stories.
 
 OUTPUT ESPERADO
-Markdown listo para pegar en el gestor de tareas, más una nota final recordando que los criterios
-son un borrador pendiente de validación humana contra el sistema real.
+Markdown con ## Original, ## Reality map (Exists / To create / Ticket examples checked) y
+## Enhanced, más una nota final recordando que los criterios son un borrador pendiente de
+validación humana contra el sistema real.
 
 CRITERIO DE ACEPTACIÓN
-- Todas las rutas de fichero citadas existen. Verifícalas.
+- Reality map presente; ejemplos del ticket verificados (FOUND o NOT FOUND).
+- Paths en contexto técnico solo desde Exists o To create (To create etiquetado; Exists verificados).
 - Cada criterio es verificable: no acepto "el filtro debe funcionar".
 - Hay al menos dos non-goals.
 - Si marcas needs-splitting, la descomposición cubre el 100 % del alcance original.

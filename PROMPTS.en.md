@@ -113,16 +113,22 @@ INPUTS
 - docs/project-context.md and docs/backend-standards.md.
 
 INSTRUCTION
-Generate the full story in this exact order. Order matters: the agent reads top to bottom, and if
+Before writing the enriched story, build a REALITY MAP by searching the repository. Ticket text
+is a hypothesis, not evidence: an example like `/api/courses/:id` is not a real route until you
+find it. Classify each piece as Exists (cited path), To create (conventional project path, labeled
+to-create), or Ticket examples checked (FOUND / NOT FOUND). Cover HTTP routes, middleware,
+reusable traits/helpers, controllers/services/validators, and the closest test template. Do not
+write Enhanced until the map is done.
+
+Then generate the story in this exact order. Order matters: the agent reads top to bottom, and if
 you put technique first it will decide on implementation before understanding the product problem.
 
 1. USER STORY — "As a <role>, I want <capability>, so that <business outcome>".
 2. ACCEPTANCE CRITERIA in Given/When/Then. Between 3 and 5 scenarios: happy path, at least one
    edge case and at least one error case. Each scenario must be translatable into an automated
    test: entry point, concrete input, expected result and observable effects.
-3. TECHNICAL CONTEXT — search the repository and cite REAL paths: where it fits, which entity it
-   touches, which validation must be extended, which authorisation rule applies and which prior
-   test serves as a template. If you cannot find one, say so instead of inventing the path.
+3. TECHNICAL CONTEXT — only paths from the Reality map. Exists: where it fits and what to extend.
+   To create: state it is new and which existing pattern to follow. Prefer existing traits/middleware.
 4. NON-GOALS — at least two explicit boundaries.
 5. LABELS AND ESTIMATE — area and type labels, and S/M/L size with a one-sentence justification.
 
@@ -130,11 +136,13 @@ Apply INVEST as an output filter. If the story fails two or more criteria, or do
 human-equivalent days, mark it as needs-splitting and propose a breakdown into 2-3 stories.
 
 EXPECTED OUTPUT
-Markdown ready to paste into the task tracker, plus a final note reminding that the criteria are
-a draft pending human validation against the real system.
+Markdown with ## Original, ## Reality map (Exists / To create / Ticket examples checked) and
+## Enhanced, plus a final note reminding that the criteria are a draft pending human validation
+against the real system.
 
 ACCEPTANCE CRITERIA
-- Every cited file path exists. Verify them.
+- Reality map present; ticket examples verified (FOUND or NOT FOUND).
+- Paths in technical context only from Exists or To create (To create labeled; Exists verified).
 - Each criterion is verifiable: I do not accept "the filter must work".
 - There are at least two non-goals.
 - If you mark needs-splitting, the breakdown covers 100 % of the original scope.
