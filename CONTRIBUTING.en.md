@@ -34,6 +34,8 @@ half-finished the first time:
 2. `adapters/<stack>.backend-standards.md` — the five questions from [CONFIG.en.md](CONFIG.en.md), with real paths.
 3. `adapters/<stack>.rules.mdc` and `adapters/<stack>.ci.yml` — optional, but the other adapters ship them.
 4. Extra stack config, if needed: `<stack>.infection.json`, `<stack>.dependency-cruiser.js`. Needs a copy block in **both** installers.
+   The a11y scaffold (`react.a11y.smoke.example.tsx` / `livewire.a11y.smoke.example.mjs`) is UI, not
+   backend-stack: it lives next to the frontend `*.frontend-standards.md` and `*.ci.yml`.
 5. `detect_stack()` in `install.sh` **and** the equivalent block in `install.ps1`.
 6. The `-Stack` parameter help in the `install.ps1` header, and `--stack` in the `install.sh` header.
 7. The adapters table in [README.en.md](README.en.md).

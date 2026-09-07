@@ -207,10 +207,17 @@ with `--git-diff-base` / `--git-diff-lines`; a push to `main` mutates the whole 
 
 ### 4b. Frontend
 
-`react.frontend-standards.md` is always copied to `docs/frontend-standards.md`, regardless of the
-backend adapter. If your frontend is not React, write your own and change the corresponding line in
-the installer, or simply replace the file in the project: it is one of those the kit keeps if it
-differs.
+Per `--frontend` (`auto` | `react` | `livewire`) the installer copies:
+
+- `docs/frontend-standards.md` — React or Livewire; with `--no-frontend`, the empty template.
+- `.github/workflows/frontend.yml` — that UI's CI (omitted with `--no-frontend`).
+- `tests/a11y/smoke.example.tsx` (React) or `tests/a11y/smoke.example.mjs` (Livewire), **only if it
+  does not already exist** — the kit does not overwrite a scaffold you already customised (same as
+  `infection.json`).
+
+The scaffold is not the gate: the filename is not picked up by Vitest/Pest, and the kit **does not
+edit** `package.json`. Until the team installs axe-core, renames the file, and adds the `test:a11y`
+script, the workflow only warns. Wiring steps live in `docs/frontend-standards.md`.
 
 ### 5. Automatic detection — optional
 
@@ -271,9 +278,9 @@ The installer chooses `docs/frontend-standards.md` and `.github/workflows/fronte
 | Flag | Effect |
 |---|---|
 | `--frontend auto` / `-Frontend auto` (default) | Detect: Livewire without React/Inertia → Livewire; else → React |
-| `--frontend react` / `-Frontend react` | Force React standards + CI |
-| `--frontend livewire` / `-Frontend livewire` | Force Livewire standards + CI |
-| `--no-frontend` / `-NoFrontend` | Empty FE template; MCP without Playwright; no `frontend.yml` |
+| `--frontend react` / `-Frontend react` | Force React standards + CI + `tests/a11y` scaffold |
+| `--frontend livewire` / `-Frontend livewire` | Force Livewire standards + CI + `tests/a11y` scaffold |
+| `--no-frontend` / `-NoFrontend` | Empty FE template; MCP without Playwright; no `frontend.yml` or a11y scaffold |
 
 Laravel may be **Inertia/React** or **Livewire**; both are first-class. Adonis/Fastify use React
 when frontend is enabled.

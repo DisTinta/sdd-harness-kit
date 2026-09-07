@@ -208,10 +208,16 @@ Lint y estático corren siempre. En Laravel, las PRs que sí tocan `business` pa
 
 ### 4b. Frontend
 
-`react.frontend-standards.md` se copia siempre a `docs/frontend-standards.md`, sea cual sea el
-adaptador de backend. Si tu frontend no es React, escribe el tuyo y cambia la línea correspondiente
-del instalador, o simplemente reemplaza el fichero en el proyecto: es de los que el kit conserva si
-difiere.
+Según `--frontend` (`auto` | `react` | `livewire`) el instalador copia:
+
+- `docs/frontend-standards.md` — React o Livewire; con `--no-frontend`, la plantilla vacía.
+- `.github/workflows/frontend.yml` — el CI de esa UI (omitido con `--no-frontend`).
+- `tests/a11y/smoke.example.tsx` (React) o `tests/a11y/smoke.example.mjs` (Livewire), **solo si no
+  existe** — el kit no pisa un scaffold ya personalizado (igual que `infection.json`).
+
+El scaffold no es el gate: el nombre no dispara Vitest/Pest, y el kit **no edita** `package.json`.
+Hasta que el equipo instale axe-core, renombre el fichero y añada el script `test:a11y`, el workflow
+solo avisa. Cómo cablearlo está en `docs/frontend-standards.md`.
 
 ### 5. Detección automática — opcional
 
@@ -272,9 +278,9 @@ El instalador elige `docs/frontend-standards.md` y `.github/workflows/frontend.y
 | Flag | Efecto |
 |---|---|
 | `--frontend auto` / `-Frontend auto` (default) | Detecta: Livewire sin React/Inertia → Livewire; si no → React |
-| `--frontend react` / `-Frontend react` | Fuerza standards + CI React |
-| `--frontend livewire` / `-Frontend livewire` | Fuerza standards + CI Livewire |
-| `--no-frontend` / `-NoFrontend` | Plantilla vacía de FE; MCP sin Playwright; no copia `frontend.yml` |
+| `--frontend react` / `-Frontend react` | Fuerza standards + CI React + scaffold `tests/a11y` |
+| `--frontend livewire` / `-Frontend livewire` | Fuerza standards + CI Livewire + scaffold `tests/a11y` |
+| `--no-frontend` / `-NoFrontend` | Plantilla vacía de FE; MCP sin Playwright; no copia `frontend.yml` ni el scaffold a11y |
 
 Laravel puede ser **Inertia/React** o **Livewire**; ambos están cubiertos. Adonis/Fastify usan React
 cuando hay frontend.

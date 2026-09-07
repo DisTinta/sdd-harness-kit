@@ -103,7 +103,8 @@ Also review the same day:
 
 - `.claude/sdd-harness.env` — run `CMD_TEST` by hand (if it is slow, point it at the fast suite). If `CMD_STATIC` / `CMD_MUTATION` or `ci.yml` point at binaries that are not in the manifest (typical: PHPStan and Infection on Laravel), do not treat them as real commands: see [USAGE.md — Common problems](USAGE.md#common-problems).
 - `docs/backend-standards.md` — adjust if your architecture is not the adapter’s.
-- `docs/frontend-standards.md` — if it is not React, start from `adapters/_template.frontend-standards.md` in the kit.
+- `docs/frontend-standards.md` — if it is not React or Livewire, start from `adapters/_template.frontend-standards.md` in the kit.
+- `tests/a11y/smoke.example.*` — axe-core scaffold; wire `test:a11y` when you want the gate (see `docs/frontend-standards.md`).
 
 ---
 

@@ -189,6 +189,20 @@ if [[ $NO_FRONTEND -eq 0 ]]; then
   elif [[ -f "$KIT_DIR/adapters/react.ci.yml" ]]; then
     copy_file "$KIT_DIR/adapters/react.ci.yml" ".github/workflows/frontend.yml"
   fi
+  if [[ "$FRONTEND_UI" == "livewire" ]]; then
+    a11y_src="$KIT_DIR/adapters/livewire.a11y.smoke.example.mjs"
+    a11y_rel="tests/a11y/smoke.example.mjs"
+  else
+    a11y_src="$KIT_DIR/adapters/react.a11y.smoke.example.tsx"
+    a11y_rel="tests/a11y/smoke.example.tsx"
+  fi
+  if [[ -f "$a11y_src" ]]; then
+    if [[ -f "$DEST/$a11y_rel" ]]; then
+      skip "$a11y_rel ya existe — conservado"
+    else
+      copy_file "$a11y_src" "$a11y_rel"
+    fi
+  fi
 fi
 if [[ -f "$KIT_DIR/adapters/$STACK.infection.json" ]]; then
   if [[ -f "$DEST/infection.json" ]]; then
@@ -295,13 +309,14 @@ cat <<STEPS
   1. Completa docs/project-context.md (<200 líneas). Es el paso de mayor ROI del kit.
   2. Revisa .claude/sdd-harness.env (comandos reales + BRANCH_PREFIX). Los hooks los ejecutan tal cual.
   3. Revisa docs/backend-standards.md si tu arquitectura no es la del adaptador.
-  4. Activa los MCP del proyecto en Claude Code / Cursor (Context7; Playwright si hay frontend).
+  4. Si hay frontend: cablea tests/a11y (deps + rename + script test:a11y). Ver docs/frontend-standards.md.
+  5. Activa los MCP del proyecto en Claude Code / Cursor (Context7; Playwright si hay frontend).
      Si Cursor pide permiso la primera vez, acéptalo. Opcional: CONTEXT7_API_KEY en el entorno.
-  5. Inicializa OpenSpec:  openspec init
+  6. Inicializa OpenSpec:  openspec init
      Luego cablea openspec/config.yaml con ai-specs/templates/openspec/config.yaml.tpl
-  6. Revisa .claude/hooks/ antes de confiar en ellos: ejecutan código con tus permisos.
-  7. Abre una sesión y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
-  8. Vuelve a pasar el doctor:  bash $DEST/.claude/doctor.sh --dest $DEST
+  7. Revisa .claude/hooks/ antes de confiar en ellos: ejecutan código con tus permisos.
+  8. Abre una sesión y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
+  9. Vuelve a pasar el doctor:  bash $DEST/.claude/doctor.sh --dest $DEST
 
   NO ejecutes /init: los cuatro ficheros raíz apuntan a docs/base-standards.md y /init
   escribiría a través de ellos. Para el contexto del proyecto usa el prompt P0.

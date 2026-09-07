@@ -58,6 +58,18 @@ alwaysApply: true
 - Every user-visible `#### Scenario:` in a delta spec that belongs to the UI maps to a test.
 - Run `{{test:a11y}}` on UI touched by the change before calling the work done.
 
+### Wiring `{{test:a11y}}`
+
+React and Livewire adapters copy `tests/a11y/smoke.example.*` (not auto-discovered). This template
+does not. When you pick a stack, add an equivalent scaffold, then:
+
+1. Install axe-core (or the stack equivalent) as a devDependency.
+2. Rename the example so the test runner discovers it (or point a Node script at it).
+3. Add a `package.json` script named **`test:a11y`** — CI looks for that exact name.
+4. Point it at a **real** UI surface, not a placeholder.
+
+Do not add a no-op script that always exits 0. The kit never edits `package.json`.
+
 ## 5. Definition of done for a frontend change
 
 - Matches the scenarios in the OpenSpec change (or the story acceptance criteria).

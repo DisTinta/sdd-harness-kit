@@ -49,6 +49,28 @@ alwaysApply: true
 - Arrange-Act-Assert, the three blocks separated and commented.
 - Run `npm run test:a11y` or the project's documented a11y command on UI touched by the change.
 
+### Wiring `test:a11y`
+
+The installer copies `tests/a11y/smoke.example.mjs` if that path does not already exist. It is a
+scaffold, not a Pest / PHPUnit test, and the kit never edits `package.json`.
+
+To turn the frontend CI job into a real gate:
+
+1. `npm i -D axe-core jsdom`.
+2. Rename the scaffold to `tests/a11y/smoke.mjs`.
+3. Add this script to `package.json`:
+
+```json
+"test:a11y": "node tests/a11y/smoke.mjs"
+```
+
+4. Replace `FIXTURE_HTML` with markup from a real Livewire / Blade view, or switch the script to
+   Playwright + `@axe-core/playwright` against a running app.
+
+Do not add a no-op script that always exits 0. Livewire `frontend.yml` runs `npm run test:a11y` only
+when that script exists; otherwise it logs a warning and continues. A green run on the kit
+placeholder is wiring, not coverage.
+
 ## 5. Definition of done for a frontend change
 
 - Loading, empty, error and success (or equivalent) states implemented and visually checked.

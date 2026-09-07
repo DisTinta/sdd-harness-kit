@@ -35,7 +35,8 @@ repository, query Context7 for the current docs — do not invent component APIs
   each control, landmarks, and any contrast or focus risks introduced by the change.
 - **Performance**: whether the change touches an LCP path, hero assets, or heavy client work; if so,
   note the expected Core Web Vitals impact (LCP / INP / CLS) and how it will be checked.
-- **Tests**: which behaviours get a component / Livewire / UI test, whether `test:a11y` applies, and
+- **Tests**: which behaviours get a component / Livewire / UI test, whether `test:a11y` applies
+  (`tests/a11y/` scaffold plus the `package.json` script in `docs/frontend-standards.md`), and
   whether any journey justifies end-to-end.
 
 And at the end: existing files to be modified, assumptions that might be wrong, and open questions.

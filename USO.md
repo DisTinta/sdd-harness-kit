@@ -104,6 +104,10 @@ distinta en cada tarea.
 Lo mismo con `docs/frontend-standards.md` si tu frontend no es el que detectó el instalador
 (React vs Livewire): usa `--frontend` / `-Frontend` o edita el fichero.
 
+Si hay UI, el instalador deja `tests/a11y/smoke.example.*`. **No es un test todavía** y no toca
+`package.json`. Para que CI ejecute accesibilidad: instala axe-core, renombra el fichero y añade el
+script `test:a11y` (pasos en `docs/frontend-standards.md`). Hasta entonces el workflow solo avisa.
+
 ### 5. Verifica la configuración
 
 ```bash

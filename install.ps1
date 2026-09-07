@@ -187,9 +187,21 @@ if (-not $NoFrontend) {
     if ($FrontendUi -eq 'livewire') {
         $feCi = Join-Path $KitDir 'adapters\livewire.ci.yml'
         if (Test-Path $feCi) { Copy-KitFile $feCi '.github\workflows\frontend.yml' }
+        $a11ySrc = Join-Path $KitDir 'adapters\livewire.a11y.smoke.example.mjs'
+        $a11yRel = 'tests\a11y\smoke.example.mjs'
     } else {
         $feCi = Join-Path $KitDir 'adapters\react.ci.yml'
         if (Test-Path $feCi) { Copy-KitFile $feCi '.github\workflows\frontend.yml' }
+        $a11ySrc = Join-Path $KitDir 'adapters\react.a11y.smoke.example.tsx'
+        $a11yRel = 'tests\a11y\smoke.example.tsx'
+    }
+    if (Test-Path -LiteralPath $a11ySrc) {
+        $a11yDest = Join-Path $Dest $a11yRel
+        if (Test-Path -LiteralPath $a11yDest) {
+            Write-Skip "$($a11yRel.Replace('\','/')) ya existe - conservado"
+        } else {
+            Copy-KitFile $a11ySrc $a11yRel
+        }
     }
 }
 $infection = Join-Path $KitDir "adapters\$Stack.infection.json"
@@ -293,14 +305,15 @@ Write-Head "Siguientes pasos"
   1. Completa docs/project-context.md (<200 lineas). Es el paso de mayor ROI del kit.
   2. Revisa .claude/sdd-harness.env (comandos reales + BRANCH_PREFIX). Los hooks los ejecutan tal cual.
   3. Revisa docs/backend-standards.md si tu arquitectura no es la del adaptador.
-  4. Activa los MCP del proyecto en Claude Code / Cursor (Context7; Playwright si hay frontend).
+  4. Si hay frontend: cablea tests/a11y (deps + rename + script test:a11y). Ver docs/frontend-standards.md.
+  5. Activa los MCP del proyecto en Claude Code / Cursor (Context7; Playwright si hay frontend).
      Si Cursor pide permiso la primera vez, aceptalo. Opcional: CONTEXT7_API_KEY en el entorno.
-  5. Inicializa OpenSpec:  openspec init
+  6. Inicializa OpenSpec:  openspec init
      Luego cablea openspec/config.yaml con ai-specs/templates/openspec/config.yaml.tpl
-  6. Revisa .claude/hooks/ antes de confiar en ellos: ejecutan codigo con tus permisos.
-  7. Anade el secreto ANTHROPIC_API_KEY al repo si usas los workflows de review.
-  8. Abre una sesion y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
-  9. Vuelve a pasar el doctor:  powershell -File $Dest\.claude\doctor.ps1 -Dest $Dest
+  7. Revisa .claude/hooks/ antes de confiar en ellos: ejecutan codigo con tus permisos.
+  8. Anade el secreto ANTHROPIC_API_KEY al repo si usas los workflows de review.
+  9. Abre una sesion y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
+  10. Vuelve a pasar el doctor:  powershell -File $Dest\.claude\doctor.ps1 -Dest $Dest
 
   NO ejecutes /init: los cuatro ficheros raiz apuntan a docs/base-standards.md y /init
   escribiria a traves de ellos. Para el contexto del proyecto usa el prompt P0.

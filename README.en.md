@@ -58,6 +58,7 @@ doctrine act on the file path, not on which command wrote it. Correspondence tab
 | `docs/openspec-tasks-mandatory-steps.md` | What a `tasks.md` must contain to be valid |
 | `docs/backend-standards.md` | Layers and conventions **of your stack** (from the adapter) |
 | `docs/frontend-standards.md` | UI architecture (React or Livewire per `--frontend`) |
+| `tests/a11y/smoke.example.*` | axe-core scaffold (not a test until `test:a11y` is wired) |
 | `docs/project-context.md` | **The only file you write.** Survives updates |
 | `.cursor/rules/` | The same rules for Cursor: core, TDD, OpenSpec, and stack |
 | `.github/` | Copilot instructions, review and CI workflows, backend CI and `frontend.yml`, PR template |
@@ -85,6 +86,7 @@ do not load: the kit detects that and fixes it with copies + sync.
 | `docs/openspec-tasks-mandatory-steps.md` | The kit | Replaced |
 | `docs/backend-standards.md` | The adapter; you adjust it | Kept if it differs |
 | `docs/project-context.md` | **You** | Never touched |
+| `tests/a11y/smoke.example.*` | Kit the first time; then **you** | Not overwritten if it already exists |
 
 That way a kit update does not wipe your work, and a hook warns you if you try to edit doctrine
 per project.
@@ -104,7 +106,7 @@ places to touch is in [CONTRIBUTING.en.md](CONTRIBUTING.en.md).
 | `laravel` | `artisan` + `composer.json` | same; FE React or Livewire (`--frontend`) |
 | `fastify` | `"fastify"` in root or workspace-package `package.json` | same, plus `.dependency-cruiser.js`: hexagonal monorepo, Postgres+pgvector in CI, reversible migrations |
 | `_template` | any other case | blank env and standards, commented to fill in |
-| UI `react` / `livewire` | `--frontend` or auto-detect | `frontend-standards.md` + `.github/workflows/frontend.yml` |
+| UI `react` / `livewire` | `--frontend` or auto-detect | `frontend-standards.md` + `.github/workflows/frontend.yml` + `tests/a11y/smoke.example.*` |
 
 ---
 

@@ -36,6 +36,8 @@ medias la primera vez:
    adaptadores los traen.
 4. Configuración extra del stack, si la necesita: `<stack>.infection.json`,
    `<stack>.dependency-cruiser.js`. Requiere su bloque de copia en **los dos** instaladores.
+   El scaffold a11y (`react.a11y.smoke.example.tsx` / `livewire.a11y.smoke.example.mjs`) es de UI,
+   no de stack backend: vive junto a `*.frontend-standards.md` y `*.ci.yml` de frontend.
 5. `detect_stack()` en `install.sh` **y** el bloque equivalente en `install.ps1`.
 6. La ayuda del parámetro `-Stack` en la cabecera de `install.ps1`, y la de `--stack` en la
    de `install.sh`.

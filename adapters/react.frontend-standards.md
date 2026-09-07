@@ -55,6 +55,27 @@ alwaysApply: true
 - Run `npm run test:a11y` (or the project's equivalent) on UI touched by the change before calling
   the work done.
 
+### Wiring `test:a11y`
+
+The installer copies `tests/a11y/smoke.example.tsx` if that path does not already exist. It is a
+scaffold, not a test: Vitest will not discover it, and the kit never edits `package.json`.
+
+To turn the frontend CI job into a real gate:
+
+1. `npm i -D axe-core vitest @testing-library/react jsdom` (skip packages you already have).
+2. Rename the scaffold to `tests/a11y/smoke.a11y.test.tsx`.
+3. Add this script to `package.json`:
+
+```json
+"test:a11y": "vitest run tests/a11y"
+```
+
+4. Replace `ExampleSurface` in that file with a real page or component from this app.
+
+Do not add a no-op script that always exits 0. `frontend.yml` runs `npm run test:a11y` only when that
+script exists; otherwise it logs a warning and continues. A green run on the kit placeholder is
+wiring, not coverage.
+
 ## 5. Definition of done for a frontend change
 
 - Loading, empty, error and success states all implemented and visually checked.

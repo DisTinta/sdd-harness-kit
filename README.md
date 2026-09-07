@@ -58,6 +58,7 @@ en [MANUAL.md](MANUAL.md).
 | `docs/openspec-tasks-mandatory-steps.md` | Qué debe contener un `tasks.md` para ser válido |
 | `docs/backend-standards.md` | Capas y convenciones **de tu stack** (del adaptador) |
 | `docs/frontend-standards.md` | Arquitectura UI (React o Livewire según `--frontend`) |
+| `tests/a11y/smoke.example.*` | Scaffold axe-core (no es un test hasta cablear `test:a11y`) |
 | `docs/project-context.md` | **El único fichero que escribes tú.** Sobrevive a las actualizaciones |
 | `.cursor/rules/` | Las mismas reglas para Cursor: núcleo, TDD, OpenSpec y stack |
 | `.github/` | Instrucciones de Copilot, workflows de review, CI backend y `frontend.yml`, plantilla de PR |
@@ -85,6 +86,7 @@ skills no cargan: el kit lo detecta y lo arregla con copias + sync.
 | `docs/openspec-tasks-mandatory-steps.md` | El kit | Se sustituye |
 | `docs/backend-standards.md` | El adaptador, ajústalo | Se conserva si difiere |
 | `docs/project-context.md` | **Tú** | Nunca se toca |
+| `tests/a11y/smoke.example.*` | Kit la primera vez; luego **tú** | No se pisa si ya existe |
 
 Así una actualización del kit no te borra el trabajo, y un hook te avisa si intentas editar doctrina
 por proyecto.
@@ -105,7 +107,7 @@ que hay que tocar para que quede completo está en [CONTRIBUTING.md](CONTRIBUTIN
 | `laravel` | `artisan` + `composer.json` | ídem; FE React o Livewire (`--frontend`) |
 | `fastify` | `"fastify"` en `package.json` de la raíz o de un paquete del workspace | ídem, más `.dependency-cruiser.js`: monorepo hexagonal, Postgres+pgvector en CI y migraciones reversibles |
 | `_template` | cualquier otro caso | env y standards en blanco, comentados para rellenar |
-| UI `react` / `livewire` | `--frontend` o detección automática | `frontend-standards.md` + `.github/workflows/frontend.yml` |
+| UI `react` / `livewire` | `--frontend` o detección automática | `frontend-standards.md` + `.github/workflows/frontend.yml` + `tests/a11y/smoke.example.*` |
 
 ---
 

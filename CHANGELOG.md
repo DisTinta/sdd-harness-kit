@@ -12,6 +12,21 @@ Versionado semántico: la versión viva está en [`VERSION`](VERSION).
 
 ---
 
+## [1.3.1]
+
+### Añadido
+
+- Scaffold de accesibilidad por UI: `tests/a11y/smoke.example.tsx` (React) /
+  `tests/a11y/smoke.example.mjs` (Livewire). El instalador lo copia solo si no existe; no edita
+  `package.json`. Cómo cablear `test:a11y` (axe-core) está en `docs/frontend-standards.md`.
+
+### Cambiado
+
+- `frontend.yml` (React y Livewire): si no existe el script `test:a11y`, avisa y continúa en lugar
+  de fallar. El filtro de paths incluye `tests/a11y/**`.
+
+---
+
 ## [1.3.0]
 
 ### Añadido
