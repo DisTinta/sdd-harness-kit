@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# SessionStart — inyecta el estado real del repositorio al arrancar la sesión.
-# Evita que el agente pregunte lo que puede leer, y que lo suponga si no pregunta.
+# SessionStart — injects the real repository state when the session starts.
+# Prevents the agent from asking what it can read, and from assuming it if it doesn't ask.
 set -uo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -8,11 +8,11 @@ INPUT=$(cat)
 SOURCE=$(field "$INPUT" '.source')
 [[ "$SOURCE" == "startup" || "$SOURCE" == "resume" ]] || exit 0
 
-BRANCH=$(git branch --show-current 2>/dev/null || echo "desconocida")
-LAST_COMMIT=$(git log -1 --oneline 2>/dev/null || echo "sin commits")
+BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")
+LAST_COMMIT=$(git log -1 --oneline 2>/dev/null || echo "no commits")
 DIRTY=$(git status --short 2>/dev/null | wc -l | tr -d ' ')
 
-ACTIVE_CHANGES="ninguno"
+ACTIVE_CHANGES="none"
 PENDING_TASKS="0"
 if [[ -d "$PROJECT_DIR/openspec/changes" ]]; then
   FOUND=$(find "$PROJECT_DIR/openspec/changes" -maxdepth 1 -mindepth 1 -type d \
@@ -22,35 +22,38 @@ if [[ -d "$PROJECT_DIR/openspec/changes" ]]; then
     --include='tasks.md' 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-CONTEXT="Estado del repositorio
-- Stack configurado: ${STACK}
-- Branch: ${BRANCH} (prefijo esperado: ${BRANCH_PREFIX})
-- Último commit: ${LAST_COMMIT}
-- Ficheros modificados sin commitear: ${DIRTY}
-- Changes OpenSpec activos: ${ACTIVE_CHANGES}
-- Tasks pendientes en changes activos: ${PENDING_TASKS}
+CONTEXT="Repository state
+- Configured stack: ${STACK}
+- Branch: ${BRANCH} (expected prefix: ${BRANCH_PREFIX})
+- Last commit: ${LAST_COMMIT}
+- Uncommitted modified files: ${DIRTY}
+- Active OpenSpec changes: ${ACTIVE_CHANGES}
+- Pending tasks in active changes: ${PENDING_TASKS}
 
-Comandos del proyecto
-- Tests: ${CMD_TEST:-no configurado}
-- Lint: ${CMD_LINT:-no configurado}
-- Análisis estático: ${CMD_STATIC:-no configurado}
+Project commands
+- Tests: ${CMD_TEST:-not configured}
+- Lint: ${CMD_LINT:-not configured}
+- Static analysis: ${CMD_STATIC:-not configured}
 
-Contexto de proyecto (léelo; no inventes)
-- docs/project-context.md — gotchas, comandos reales, convenciones
-- docs/backend-standards.md / docs/frontend-standards.md — capas del stack
-- .claude/sdd-harness.env — contrato de comandos y rutas (BRANCH_PREFIX, PATH_*)
+Project context (read it; don't make it up — in Claude Code only CLAUDE.md is auto-loaded)
+- docs/project-context.md — gotchas, real commands, conventions
+- docs/backend-standards.md / docs/frontend-standards.md — stack layers
+- .claude/sdd-harness.env — command and path contract (BRANCH_PREFIX, PATH_*)
+- docs/openspec-tasks-mandatory-steps.md — READ IT before creating or editing any tasks.md; its
+  mandatory steps are enforced by the validate-tasks hook (it will block you if they are missing)
+- docs/documentation-standards.md — documentation gate before committing (docs-gate hook)
 
-Recordatorios de flujo
-- TDD: el test se escribe y se ve fallar antes de la implementación.
-- Orden de capas: ${LAYER_ORDER:-consulta docs/backend-standards.md}.
-- La lógica de negocio vive en ${PATH_BUSINESS:-la capa indicada en project-context}.
-- OpenSpec: CREAR artefactos en propose/sync es normal. REESCRIBIR specs existentes
-  para que encajen con un atajo de código está prohibido (regla 7 / protect-specs).
-  Marcar tasks en tasks.md y escribir reports/ es siempre libre.
-- Secretos: nunca pegues tokens ni leas .env al contexto. Usa /privacy-ethics-check
-  si la unidad toca PII, auth o logging de datos personales.
-- MCP: Context7 para docs de librerías (no esperes a que te digan «use context7»).
-  Playwright MCP para demostrar una UI real en /show-spec-working. Si un servidor
-  está desactivado, dilo y continúa."
+Workflow reminders
+- TDD: the test is written and seen to fail before the implementation.
+- Layer order: ${LAYER_ORDER:-see docs/backend-standards.md}.
+- Business logic lives in ${PATH_BUSINESS:-the layer indicated in project-context}.
+- OpenSpec: CREATING artifacts in propose/sync is normal. REWRITING existing specs
+  to fit a code shortcut is forbidden (rule 7 / protect-specs).
+  Marking tasks in tasks.md and writing reports/ is always free.
+- Secrets: never paste tokens or read .env into the context. Use /privacy-ethics-check
+  if the unit touches PII, auth or logging of personal data.
+- MCP: Context7 for library docs (don't wait for someone to tell you «use context7»).
+  Playwright MCP to demonstrate a real UI in /show-spec-working. If a server
+  is disabled, say so and continue."
 
 inject "SessionStart" "$CONTEXT"

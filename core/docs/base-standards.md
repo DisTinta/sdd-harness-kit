@@ -17,6 +17,13 @@ Everything specific to this project lives in:
 - [OpenSpec Tasks: Mandatory Steps](./openspec-tasks-mandatory-steps.md) — required checklist and
   execution rules when creating or updating OpenSpec `tasks.md` files
 
+> **Loading note.** In Claude Code only this file auto-loads (it is the target of `CLAUDE.md` /
+> `AGENTS.md`). The documents above are **not** pulled into context by these Markdown links — read them
+> on demand. The `SessionStart` banner lists which one to read and when (for example
+> `openspec-tasks-mandatory-steps.md` before writing any `tasks.md`), and the hooks name the exact file
+> in their block messages. In Cursor, the `alwaysApply` front-matter loads the `.cursor/rules`, not
+> these docs.
+
 ## 1. Core Principles
 
 - **Small tasks, one at a time**: Always work in baby steps, one at a time. Never go forward more
@@ -40,6 +47,10 @@ Everything specific to this project lives in:
     - Git commit messages
     - Test names and descriptions
 - Conversation with the user may happen in any language. The artifacts may not.
+- **Operational exception, `tasks.md` only**: the checklist headings of an OpenSpec `tasks.md` may
+  mirror the team's working language (the `validate-tasks` hook accepts English or Spanish headings).
+  English is still recommended. Everything else — code, tests, commit messages, tickets, schemas,
+  ADRs, API docs — stays English-only without exception.
 
 ### Git branches and commit messages
 
@@ -92,6 +103,10 @@ enforces it; the rest depend on you.
   requires them.
 - Skills are procedures. If you find yourself repeating the same instructions in chat, that is a
   skill waiting to be written. Use the `writing-skills` skill.
+- **TDD has two surfaces with the same red → green → refactor contract; do not mix them for the same
+  phase.** The `/tdd-red`, `/tdd-green`, `/tdd-refactor` **skills** are for a human driving one phase
+  per turn interactively. The `tdd-test-writer`, `tdd-implementer`, `tdd-refactorer` **subagents** are
+  for delegating a phase from an orchestrating turn through the Task tool. Same rules, different driver.
 
 ## 5. Planning Model Requirement
 
@@ -100,9 +115,12 @@ applies to: `enrich-us`, OpenSpec propose / explore / ff (`opsx:propose`, `opsx:
 `opsx:ff`), the kit's planning subagents (`product-analyst`, `backend-planner`,
 `frontend-planner`, `spec-auditor`), and any explicit planning turn.
 
-Before starting any of these workflows, verify the session is using it. If it is not, **self-correct**
-by setting the model in the local session settings and continue — do not stop and ask the user. Return
-to a balanced model for implementation steps.
+Before starting any of these workflows, verify the session is using it. If you can change the session
+model yourself (the `/model` command or the local session settings), switch to the strongest one and
+continue without asking. If you cannot change it from where you are, say so in one line — name the
+model to switch to and why — and continue; do not silently plan on a weak model. Return to a balanced
+model for implementation steps. The kit's planning subagents already pin `model:` in their frontmatter,
+so this requirement is about the main session and any explicit planning turn.
 
 ## 6. Artifact Portability Across Agents
 

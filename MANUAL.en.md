@@ -61,6 +61,11 @@ wrote it.
 | Verify | `/opsx:verify` (extended workflow) | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review` |
 | Close | `/opsx:archive` | — |
 
+> OpenSpec's default profile ships `/opsx:explore`, `/opsx:propose`, `/opsx:apply` and
+> `/opsx:archive`. The `/opsx:new`, `/opsx:continue`, `/opsx:ff` and `/opsx:verify` commands belong to
+> the **extended** profile: enable them with `openspec config profile` and `openspec update`. If your
+> install does not have them, use the kit path in the right-hand column.
+
 What does **not** change between the two paths: `validate-tasks` still requires step 0 and the
 mandatory steps in any `tasks.md`, `protect-specs-and-tests` still prompts on any rewrite of an
 artefact that already exists (whether `/opsx:apply` is fixing its own work or you do it by hand),

@@ -61,6 +61,11 @@ escribió.
 | Verificar | `/opsx:verify` (workflow ampliado) | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review` |
 | Cerrar | `/opsx:archive` | — |
 
+> El perfil por defecto de OpenSpec trae `/opsx:explore`, `/opsx:propose`, `/opsx:apply` y
+> `/opsx:archive`. Los comandos `/opsx:new`, `/opsx:continue`, `/opsx:ff` y `/opsx:verify` son del
+> perfil **ampliado**: se activan con `openspec config profile` y `openspec update`. Si tu instalación
+> no los tiene, usa el camino del kit de la columna derecha.
+
 Lo que **no** cambia entre los dos caminos: `validate-tasks` sigue exigiendo el paso 0 y los pasos
 obligatorios en cualquier `tasks.md`, `protect-specs-and-tests` sigue preguntando ante cualquier
 reescritura de un artefacto que ya existe (lo haga `/opsx:apply` arreglando su propio trabajo o lo

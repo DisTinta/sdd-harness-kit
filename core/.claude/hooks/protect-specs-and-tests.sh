@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# PreToolUse (Edit|Write) — protege los artefactos que el agente no debe reescribir:
-#   1. Los specs de OpenSpec, que son input del flujo y no output.
-#   2. Los tests existentes, que son la especificación firmada.
-#   3. Las migraciones ya versionadas.
-#   4. Los ficheros de entorno.
+# PreToolUse (Edit|Write) — protects the artifacts the agent must not rewrite:
+#   1. The OpenSpec specs, which are input to the flow, not output.
+#   2. The existing tests, which are the signed specification.
+#   3. The already-versioned migrations.
+#   4. The environment files.
 set -uo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -13,69 +13,71 @@ FILE=$(field "$INPUT" '.tool_input.file_path')
 
 # Path traversal.
 case "$FILE" in
-  *..*) deny "Ruta con '..' rechazada: ${FILE}" ;;
+  *..*) deny "Path with '..' rejected: ${FILE}" ;;
 esac
 
-# 1. openspec/: la distinción que importa es CREAR frente a REESCRIBIR.
-#    Crear los artefactos de una propuesta es el flujo normal (fase propose).
-#    Reescribir un artefacto que ya existe puede ser legítimo —la regla 7 de
-#    base-standards.md exige actualizar la especificación ANTES de tocar código cuando
-#    llega un cambio— o puede ser el agente haciendo que la spec encaje con lo que ya
-#    implementó. Solo un humano distingue esos dos casos, así que se pregunta.
+# 1. openspec/: the distinction that matters is CREATE versus REWRITE.
+#    Creating the artifacts of a proposal is the normal flow (propose phase).
+#    Rewriting an artifact that already exists can be legitimate —rule 7 of
+#    base-standards.md requires updating the specification BEFORE touching code when
+#    a change arrives— or it can be the agent making the spec fit what it already
+#    implemented. Only a human can tell those two cases apart, so we ask.
 case "$FILE" in
   */openspec/*|openspec/*)
     case "$FILE" in
-      */tasks.md) : ;;                 # marcar tasks completadas
-      */reports/*) : ;;                # informes de verificación obligatorios
-      */openspec/templates/*) : ;;     # plantillas del kit
+      */tasks.md) : ;;                 # marking tasks completed
+      */reports/*) : ;;                # mandatory verification reports
+      */openspec/templates/*) : ;;     # kit templates
       *)
         if [[ -f "$FILE" ]]; then
-          ask "Vas a REESCRIBIR un artefacto de especificación que ya existe (${FILE}).
+          ask "You are about to REWRITE a specification artifact that already exists (${FILE}).
 
-Esto es normal y frecuente si trabajas con el flujo fluido de OpenSpec: /opsx:apply arregla un
-artefacto y sigue, /opsx:sync vuelca un delta sobre el spec principal. No es una alarma por sí sola.
+This is normal and frequent when working with the fluid OpenSpec flow: /opsx:apply fixes an
+artifact and moves on, /opsx:sync dumps a delta onto the main spec. It is not an alarm on its own.
 
-Legítimo: ha llegado un cambio de alcance, o el diseño resultó estar mal, y estás actualizando la
-especificación ANTES de (o mientras) tocas el código — la regla 7 de docs/base-standards.md.
+Legitimate: a scope change arrived, or the design turned out to be wrong, and you are updating the
+specification BEFORE (or while) touching the code — rule 7 of docs/base-standards.md.
 
-Ilegítimo: estás ajustando la especificación para que encaje con código que ya has escrito sin que
-el diseño haya cambiado. Eso invierte la dirección del flujo y deja el cambio sin revisar.
+Illegitimate: you are adjusting the specification to fit code you already wrote without
+the design having changed. That reverses the flow direction and leaves the change unreviewed.
 
-Confirma si es el primer caso."
+Confirm if it is the first case."
         fi
         ;;
     esac
     ;;
 esac
 
-# 1b. La doctrina de docs/ la sustituye el kit al actualizarse: editarla por proyecto
-#     significa perder el cambio en la siguiente actualización.
+# 1b. The docs/ doctrine is replaced by the kit on update: editing it per project
+#     means losing the change on the next update.
 case "$FILE" in
   */docs/base-standards.md|docs/base-standards.md|\
   */docs/documentation-standards.md|docs/documentation-standards.md|\
   */docs/openspec-tasks-mandatory-steps.md|docs/openspec-tasks-mandatory-steps.md)
-    ask "Vas a editar doctrina del kit (${FILE}). El kit la sustituye al actualizarse, así que el cambio se perdería. Lo específico de este proyecto va en docs/project-context.md o en docs/backend-standards.md. Confirma solo si de verdad quieres divergir del kit."
+    ask "You are about to edit kit doctrine (${FILE}). The kit replaces it on update, so the change would be lost. What is specific to this project goes in docs/project-context.md or docs/backend-standards.md. Confirm only if you really want to diverge from the kit."
     ;;
 esac
 
-# 2. Tests: crear uno nuevo es libre; modificar uno existente exige confirmación.
+# 2. Tests: creating a new one is free; modifying an existing one requires confirmation.
 if under "$FILE" "$PATH_TESTS" && [[ -f "$FILE" ]]; then
-  ask "Vas a MODIFICAR un test existente (${FILE}). Los tests son la especificación firmada del proyecto: confirma que este cambio es intencionado y no un atajo para poner la suite en verde."
+  ask "You are about to MODIFY an existing test (${FILE}). Tests are the project's signed specification: confirm that this change is intentional and not a shortcut to make the suite green."
 fi
 
-# 3. Migraciones ya versionadas en git.
+# 3. Migrations already versioned in git.
 if [[ -n "$PATH_MIGRATIONS" ]] && under "$FILE" "$PATH_MIGRATIONS" && [[ -f "$FILE" ]]; then
   if git -C "$PROJECT_DIR" ls-files --error-unmatch "$FILE" >/dev/null 2>&1; then
-    ask "Estás modificando una migración ya versionada (${FILE}). Lo correcto es crear una migración nueva. Confirma si realmente quieres editarla."
+    ask "You are modifying an already-versioned migration (${FILE}). The correct approach is to create a new migration. Confirm if you really want to edit it."
   fi
 fi
 
-# 4. Entorno y secretos.
+# 4. Environment and secrets.
+#    The kit contract is asked about (not denied): it goes BEFORE the *.env pattern,
+#    which would otherwise capture it first and leave the confirmation branch dead.
 case "$FILE" in
+  */.claude/sdd-harness.env|.claude/sdd-harness.env)
+    ask "You are about to modify the SDD Harness Kit configuration. Confirm the change." ;;
   *.env|*.env.*|*/.env|.env)
-    deny "No se editan ficheros de entorno desde el agente: ${FILE}" ;;
-  */.claude/sdd-harness.env)
-    ask "Vas a modificar la configuración del SDD Harness Kit. Confirma el cambio." ;;
+    deny "Environment files are not edited from the agent: ${FILE}" ;;
 esac
 
 exit 0
