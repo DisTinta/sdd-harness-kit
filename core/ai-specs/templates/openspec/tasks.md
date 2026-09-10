@@ -1,17 +1,17 @@
 # Tasks
 
-<!-- Regla de tamaño: cada task debe caber en un solo turno de agente. Si una task es
-     "implementar el módulo", divídela. Si es "crear la migración", está bien. -->
+<!-- Size rule: each task must fit in a single agent turn. If a task is
+     "implement the module", split it. If it is "create the migration", it is fine. -->
 
-## Implementación
+## Implementation
 - [ ] 1.1
 - [ ] 1.2
 
 ## Tests
-<!-- Una task por cada #### Scenario: del delta spec. -->
+<!-- One task per #### Scenario: in the delta spec. -->
 - [ ] 2.1
 - [ ] 2.2
 
-## Documentación
-- [ ] 3.1 ADR si la decisión lo merece
-- [ ] 3.2 Contrato de API regenerado si cambió
+## Documentation
+- [ ] 3.1 ADR if the decision warrants one
+- [ ] 3.2 API contract regenerated if it changed

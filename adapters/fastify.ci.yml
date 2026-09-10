@@ -27,8 +27,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # runtime: monorepo completo (PATH_SOURCE = packages), no solo un app/.
-      # business: PATH_BUSINESS (packages/core) + config de Stryker + tests/**.
+      # runtime: full monorepo (PATH_SOURCE = packages), not just an app/.
+      # business: PATH_BUSINESS (packages/core) + Stryker config + tests/**.
       - uses: dorny/paths-filter@v4
         id: changes
         with:
@@ -59,18 +59,18 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint y formato
+      - name: Lint and format
         run: npm run lint
 
-      - name: Comprobación de tipos
+      - name: Type check
         run: npm run typecheck
 
-      # La regla de dependencias es la afirmación central de una arquitectura
-      # hexagonal. Sin este paso es una promesa; con él, es una restricción.
-      - name: Regla de dependencias (core no importa infraestructura)
+      # The dependency rule is the central assertion of a hexagonal
+      # architecture. Without this step it is a promise; with it, it is a constraint.
+      - name: Dependency rule (core does not import infrastructure)
         run: npx depcruise --config .dependency-cruiser.js packages
 
-      - name: Migraciones (aplicar y revertir)
+      - name: Migrations (apply and roll back)
         if: steps.changes.outputs.runtime == 'true'
         run: npm run db:migrate && npm run db:rollback && npm run db:migrate
         env:
@@ -83,8 +83,8 @@ jobs:
           NODE_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/test
 
-      # El gate duro es el mutation score, no la cobertura: exigir un porcentaje de
-      # cobertura fabrica tests vacíos. La cobertura se publica como señal.
-      - name: Mutation testing en paths críticos
+      # The hard gate is the mutation score, not coverage: requiring a coverage
+      # percentage fabricates empty tests. Coverage is published as a signal.
+      - name: Mutation testing on critical paths
         if: steps.changes.outputs.business == 'true'
         run: npx stryker run

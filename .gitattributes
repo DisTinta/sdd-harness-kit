@@ -1,0 +1,7 @@
+# SDD Harness Kit — line endings
+# The shell hooks run through Git Bash (via invoke.cjs). A CRLF ending breaks the
+# shebang and yields "bad interpreter", so shell scripts are pinned to LF.
+*.sh text eol=lf
+
+# PowerShell scripts are Windows-side; keep them CRLF.
+*.ps1 text eol=crlf

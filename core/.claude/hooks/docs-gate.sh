@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# PreToolUse (Bash) con filtro sobre git commit — el gate de documentación de
-# docs/documentation-standards.md: no se commitea código que deja la documentación mintiendo.
+# PreToolUse (Bash) filtered on git commit — the documentation gate from
+# docs/documentation-standards.md: don't commit code that leaves the documentation lying.
 set -uo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -10,7 +10,7 @@ printf '%s' "$COMMAND" | grep -qE 'git[[:space:]]+commit' || exit 0
 
 cd "$PROJECT_DIR" 2>/dev/null || exit 0
 
-# Qué hay preparado para commitear.
+# What is staged for commit.
 STAGED=$(git diff --cached --name-only 2>/dev/null || true)
 [[ -n "$STAGED" ]] || exit 0
 
@@ -31,16 +31,16 @@ done <<< "$STAGED"
 
 REASONS=""
 if [[ $touches_schema -eq 1 && $touches_docs -eq 0 ]]; then
-  REASONS+="  - Cambia el esquema de datos y no se actualiza ninguna documentación."$'\n'
+  REASONS+="  - The data schema changes and no documentation is updated."$'\n'
 fi
 if [[ $touches_contract -eq 1 && $touches_docs -eq 0 ]]; then
-  REASONS+="  - Cambia la capa de interfaz y no se regenera ni actualiza el contrato de API."$'\n'
+  REASONS+="  - The interface layer changes and the API contract is not regenerated or updated."$'\n'
 fi
 
 if [[ -n "$REASONS" ]]; then
-  ask "Gate de documentación (docs/documentation-standards.md):
+  ask "Documentation gate (docs/documentation-standards.md):
 ${REASONS}
-Ejecuta la skill /update-docs antes de commitear, o confirma que la documentación ya estaba al día."
+Run the /update-docs skill before committing, or confirm the documentation was already up to date."
 fi
 
 exit 0

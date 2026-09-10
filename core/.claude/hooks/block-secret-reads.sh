@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# PreToolUse (Read) — impide que el agente lea ficheros de secretos al contexto.
-# Complementa block-secrets.sh (que solo mira el prompt del usuario).
+# PreToolUse (Read) — prevents the agent from reading secret files into the context.
+# Complements block-secrets.sh (which only looks at the user's prompt).
 set -uo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -16,7 +16,7 @@ case "$TOOL" in
 esac
 
 if is_secret_path "$FILE"; then
-  deny "Lectura bloqueada: ${FILE} parece un fichero de secretos o credenciales. No cargues .env, claves privadas ni credentials.json en el contexto del modelo. Usa variables de entorno del shell o un secret manager. Si necesitas la FORMA de la config, pide al humano un ejemplo redactado."
+  deny "Read blocked: ${FILE} looks like a secrets or credentials file. Do not load .env, private keys or credentials.json into the model's context. Use shell environment variables or a secret manager. If you need the SHAPE of the config, ask the human for a redacted example."
 fi
 
 exit 0

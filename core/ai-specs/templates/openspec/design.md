@@ -1,20 +1,20 @@
 ## Context
-<!-- El estado actual del sistema en la zona que se va a tocar. Con nombres reales. -->
+<!-- The current state of the system in the area to be touched. With real names. -->
 
 ## Goals / Non-Goals
 Goals:
 Non-goals:
 
 ## Decisions
-<!-- Aquí es donde se impide que el agente improvise arquitectura. Cada decisión, cerrada:
-     dónde se valida y por qué ahí, qué abstracción se reutiliza, cómo se garantiza el
-     aislamiento por sujeto, qué forma exacta tiene la respuesta, qué se persiste. -->
+<!-- This is where the agent is prevented from improvising architecture. Every decision, settled:
+     where it is validated and why there, which abstraction is reused, how isolation
+     per subject is guaranteed, what exact shape the response has, what is persisted. -->
 -
 
 ## Risks / Trade-offs
-<!-- Incluida la deuda que se acepta a sabiendas. -->
+<!-- Including debt that is knowingly accepted. -->
 -
 
 ## Open Questions
-<!-- Lo que no sabes todavía. Escribirlo aquí es preferible a resolverlo inventando. -->
+<!-- What you do not know yet. Writing it here is preferable to resolving it by inventing. -->
 -

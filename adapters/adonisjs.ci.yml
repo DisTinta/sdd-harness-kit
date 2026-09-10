@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # runtime: paths que pueden cambiar comportamiento o la suite.
-      # business: PATH_BUSINESS (app/services) + config de Stryker + tests/**.
+      # runtime: paths that can change behavior or the suite.
+      # business: PATH_BUSINESS (app/services) + Stryker config + tests/**.
       - uses: dorny/paths-filter@v4
         id: changes
         with:
@@ -49,10 +49,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint y formato
+      - name: Lint and format
         run: npm run lint
 
-      - name: Comprobación de tipos
+      - name: Type check
         run: npm run typecheck
 
       - name: Tests
@@ -61,8 +61,8 @@ jobs:
         env:
           NODE_ENV: test
 
-      # El gate duro es el mutation score, no la cobertura: exigir un porcentaje de
-      # cobertura fabrica tests vacíos. La cobertura se publica como señal.
-      - name: Mutation testing en paths críticos
+      # The hard gate is the mutation score, not coverage: requiring a coverage
+      # percentage fabricates empty tests. Coverage is published as a signal.
+      - name: Mutation testing on critical paths
         if: steps.changes.outputs.business == 'true'
         run: npx stryker run

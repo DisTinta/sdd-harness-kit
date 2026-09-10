@@ -1,30 +1,30 @@
 # Delta for <Capability>
 
-<!-- Esto es un DELTA: el diff que aplica sobre la especificación viva, no la especificación
-     completa del sistema. Es el equivalente a un commit de Git, pero para requisitos. -->
+<!-- This is a DELTA: the diff that applies on top of the living specification, not the full
+     specification of the system. It is the equivalent of a Git commit, but for requirements. -->
 
 ## ADDED Requirements
 
-### Requirement: <Nombre del requisito>
-The system MUST <comportamiento esperado, en lenguaje RFC-2119>.
+### Requirement: <Requirement name>
+The system MUST <expected behavior, in RFC-2119 language>.
 
-#### Scenario: <nombre del escenario>
-- GIVEN <contexto previo>
-- WHEN <acción que ocurre>
-- THEN <resultado observable>
-- AND <resultado adicional>
+#### Scenario: <scenario name>
+- GIVEN <prior context>
+- WHEN <action that occurs>
+- THEN <observable result>
+- AND <additional result>
 
 ## MODIFIED Requirements
 
-### Requirement: <Nombre del requisito existente>
-The system SHALL <nuevo comportamiento>.
-(Previously: <comportamiento previo>)
+### Requirement: <Name of existing requirement>
+The system SHALL <new behavior>.
+(Previously: <previous behavior>)
 
-#### Scenario: <nombre>
+#### Scenario: <name>
 - GIVEN ...
 - WHEN ...
 - THEN ...
 
 ## REMOVED Requirements
 
-### Requirement: <Nombre> (Deprecated en favor de <X>)
+### Requirement: <Name> (Deprecated in favor of <X>)

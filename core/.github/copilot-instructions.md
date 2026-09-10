@@ -1,16 +1,16 @@
-# Instrucciones para GitHub Copilot
+# Instructions for GitHub Copilot
 
-La fuente de verdad de comandos, convenciones y restricciones de este repositorio es `AGENTS.md`.
-Los valores concretos del stack están en `.claude/sdd-harness.env`. Consúltalos antes de sugerir nada.
+The source of truth for this repository's commands, conventions and constraints is `AGENTS.md`.
+The concrete stack values live in `.claude/sdd-harness.env`. Consult them before suggesting anything.
 
-Reglas que aplican siempre:
+Rules that always apply:
 
-- **TDD.** Propón el test antes que la implementación y no modifiques tests existentes.
-- **Capas.** La lógica de negocio no vive en la capa de transporte ni en los ficheros de rutas. La
-  capa de negocio no conoce HTTP.
-- **Validación.** Toda entrada externa pasa por la capa de validación del proyecto.
-- **Salida.** Nunca devuelvas una entidad de persistencia directamente: serializa explícitamente
-  los campos que salen.
-- **Dependencias.** No sugieras paquetes que no estén ya en el manifiesto sin advertirlo de forma
-  explícita: casi uno de cada cinco paquetes que recomiendan los modelos no existe.
-- **Secretos.** Nunca escribas credenciales en el código, ni siquiera de ejemplo.
+- **TDD.** Propose the test before the implementation and do not modify existing tests.
+- **Layers.** Business logic does not live in the transport layer or in the route files. The
+  business layer does not know about HTTP.
+- **Validation.** All external input passes through the project's validation layer.
+- **Output.** Never return a persistence entity directly: serialise explicitly the fields that go
+  out.
+- **Dependencies.** Do not suggest packages that are not already in the manifest without warning
+  about it explicitly: nearly one in five packages that models recommend does not exist.
+- **Secrets.** Never write credentials in the code, not even example ones.

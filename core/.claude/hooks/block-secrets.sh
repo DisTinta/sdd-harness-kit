@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# UserPromptSubmit — impide que una credencial entre en el contexto del modelo.
-# Requisito transversal: nunca secretos ni PII en el contexto del agente.
+# UserPromptSubmit — prevents a credential from entering the model's context.
+# Cross-cutting requirement: never secrets or PII in the agent's context.
 set -uo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -21,7 +21,7 @@ PATTERNS+='|-----BEGIN [A-Z ]*PRIVATE KEY-----'
 PATTERNS+='|(APP_KEY|SECRET_KEY|DB_PASSWORD|API_SECRET)[[:space:]]*=[[:space:]]*[^[:space:]]{8,})'
 
 if printf '%s' "$PROMPT" | grep -qE "$PATTERNS"; then
-  block_prompt "Se ha detectado un posible token, clave privada o contraseña en el prompt. No compartas credenciales con el asistente: usa variables de entorno o un servidor MCP. Si es un falso positivo, reformula sin pegar el valor."
+  block_prompt "A possible token, private key or password was detected in the prompt. Do not share credentials with the assistant: use environment variables or an MCP server. If this is a false positive, rephrase without pasting the value."
 fi
 
 exit 0

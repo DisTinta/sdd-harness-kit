@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Lanza un hook .sh con un bash que no sea el de WSL en Windows.
-// Claude Code con `"command": "bash"` suele resolver C:\Windows\System32\bash.exe (WSL).
-// Este proceso es Node de Windows; aquí se elige Git Bash si existe.
+// Launches a .sh hook with a bash that is not WSL's on Windows.
+// Claude Code with `"command": "bash"` usually resolves C:\Windows\System32\bash.exe (WSL).
+// This process is Windows Node; here we pick Git Bash if it exists.
 'use strict'
 
 const { spawnSync } = require('child_process')
@@ -9,7 +9,7 @@ const fs = require('fs')
 
 const script = process.argv[2]
 if (!script) {
-  process.stderr.write('invoke.cjs: falta el script del hook\n')
+  process.stderr.write('invoke.cjs: missing hook script\n')
   process.exit(1)
 }
 
@@ -40,7 +40,7 @@ const result = spawnSync(bash, [script], {
 })
 
 if (result.error) {
-  process.stderr.write(`invoke.cjs: no se pudo ejecutar ${bash}: ${result.error.message}\n`)
+  process.stderr.write(`invoke.cjs: could not run ${bash}: ${result.error.message}\n`)
   process.exit(1)
 }
 

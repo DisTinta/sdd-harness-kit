@@ -1,29 +1,29 @@
 ---
-description: Cómo trabajar con changes de OpenSpec en este repositorio
+description: How to work with OpenSpec changes in this repository
 globs: ["openspec/**", "app/**", "src/**", "tests/**"]
 alwaysApply: false
 ---
 
 # OpenSpec
 
-Cuando se te pida implementar un change de `openspec/changes/<id>/`:
+When you are asked to implement a change from `openspec/changes/<id>/`:
 
-1. Lee, en este orden y sin excepción: `proposal.md`, `design.md`, `specs/**/*.md`, `tasks.md`.
-2. Antes de escribir código, produce la tabla `Requisito → Escenario → fichero de test`.
-   Si un escenario no se puede traducir a un test verificable, detente: la especificación tiene un
-   hueco.
-3. Implementa task a task, en el orden de `tasks.md`. Una task equivale a un turno.
-4. Cada `#### Scenario:` del delta spec se traduce a **un test**.
-5. Marca `- [x]` una task solo cuando su test esté en verde.
-6. Si necesitas desviarte de `specs/` o de `design.md`, **detente y pregunta**. No improvises
-   arquitectura.
-7. **OpenSpec artifacts — dirección del cambio:**
-   - **Permitido:** crear artefactos en la fase propose; marcar tasks en `tasks.md`; escribir
-     `reports/`; actualizar specs/design **antes** (o mientras) de tocar código cuando el diseño
-     estaba mal o llega un cambio de alcance (regla 7 de `docs/base-standards.md`); sincronizar
-     deltas con `opsx:sync`.
-   - **Prohibido:** reescribir la spec *después* para que deje de contradecir un atajo de
-     implementación. El hook `protect-specs-and-tests` pedirá confirmación humana al reescribir
-     un artefacto ya existente por exactamente esa razón.
-8. Al terminar el change, archívalo: si quedan changes activos sin archivar, la siguiente propuesta
-   no tendrá el contexto correcto de lo que ya está implementado.
+1. Read, in this order and without exception: `proposal.md`, `design.md`, `specs/**/*.md`, `tasks.md`.
+2. Before writing code, produce the `Requirement → Scenario → test file` table.
+   If a scenario cannot be translated into a verifiable test, stop: the specification has a
+   gap.
+3. Implement task by task, in the order of `tasks.md`. One task equals one turn.
+4. Each `#### Scenario:` in the delta spec translates to **one test**.
+5. Mark a task `- [x]` only when its test is green.
+6. If you need to deviate from `specs/` or from `design.md`, **stop and ask**. Do not improvise
+   architecture.
+7. **OpenSpec artifacts — direction of change:**
+   - **Allowed:** creating artifacts in the propose phase; marking tasks in `tasks.md`; writing
+     `reports/`; updating specs/design **before** (or while) touching code when the design was
+     wrong or a scope change arrives (Rule 7 of `docs/base-standards.md`); synchronising
+     deltas with `opsx:sync`.
+   - **Prohibited:** rewriting the spec *afterwards* so it stops contradicting an implementation
+     shortcut. The `protect-specs-and-tests` hook will ask for human confirmation when rewriting
+     an already existing artifact for exactly that reason.
+8. When you finish the change, archive it: if active changes remain unarchived, the next proposal
+   will not have the correct context of what is already implemented.
