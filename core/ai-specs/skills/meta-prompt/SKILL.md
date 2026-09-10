@@ -1,6 +1,6 @@
 ---
 name: meta-prompt
-description: Use when the user asks to improve, rewrite, structure, or "meta-prompt" a prompt; when a vague request should become an executable prompt before launching an agent; or when they say "ayúdame a pedírselo bien a la IA". Rewrites into role / objective / context / constraints / success criteria / non-goals — without over-prompting reasoning models.
+description: Use when the user asks to improve, rewrite, structure, or "meta-prompt" a prompt; when a vague request should become an executable prompt before launching an agent; or when they say "help me ask the AI for this properly". Rewrites into role / objective / context / constraints / success criteria / non-goals — without over-prompting reasoning models.
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [the raw prompt to rewrite, or paste after the slash command]

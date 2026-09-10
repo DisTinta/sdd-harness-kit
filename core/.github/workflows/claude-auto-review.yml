@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      # El checkout es necesario para que .claude/skills/ esté disponible en el runner.
+      # The checkout is required so that .claude/skills/ is available on the runner.
       - uses: actions/checkout@v4
       - uses: anthropics/claude-code-action@v1
         with:

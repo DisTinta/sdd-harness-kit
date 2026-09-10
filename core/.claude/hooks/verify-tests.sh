@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Stop — no se cierra el turno con la suite en rojo.
-# Escape: KIT_SKIP_STOP_TESTS=1 o KIT_ALLOW_WIP=1 en sdd-harness.env
-# (solo para spikes locales; no uses esto en el flujo de entrega).
+# Stop — the turn does not close with the suite in the red.
+# Escape: KIT_SKIP_STOP_TESTS=1 or KIT_ALLOW_WIP=1 in sdd-harness.env
+# (only for local spikes; don't use this in the delivery flow).
 set -uo pipefail
 source "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
@@ -20,8 +20,8 @@ done
 git -C "$PROJECT_DIR" diff --quiet HEAD -- $WATCH 2>/dev/null && exit 0
 
 if OUT=$(run_cmd "$CMD_TEST" 2>&1); then
-  notify "Suite en verde. Antes de dar por cerrada la tarea: marca las tasks completadas en tasks.md, comprueba si la decisión merece un ADR en ${PATH_ADR} y confirma que la documentación de la API sigue al día. Si tocas datos personales o auth, ejecuta /privacy-ethics-check."
+  notify "Suite is green. Before considering the task closed: mark the completed tasks in tasks.md, check whether the decision warrants an ADR in ${PATH_ADR} and confirm the API documentation is still up to date. If you touch personal data or auth, run /privacy-ethics-check."
   exit 0
 fi
 
-block "La suite de tests falla. No puedes cerrar el turno todavía. Salida de \`${CMD_TEST}\`:"$'\n'"$(printf '%s' "$OUT" | tail -30)"$'\n\nSi estás en un spike local y necesitas salir a medias, pon KIT_ALLOW_WIP=1 en .claude/sdd-harness.env (quítalo antes del PR).'
+block "The test suite fails. You cannot close the turn yet. Output of \`${CMD_TEST}\`:"$'\n'"$(printf '%s' "$OUT" | tail -30)"$'\n\nIf you are in a local spike and need to leave partway, set KIT_ALLOW_WIP=1 in .claude/sdd-harness.env (remove it before the PR).'

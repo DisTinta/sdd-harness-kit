@@ -1,20 +1,20 @@
 /**
- * dependency-cruiser — regla de dependencias del monorepo hexagonal.
+ * dependency-cruiser — dependency rule for the hexagonal monorepo.
  *
- * Instalado por el SDD Harness Kit (adaptador `fastify`). Es la contrapartida en
- * CI de la guarda GUARD_HTTP_IN_BUSINESS del hook post-edit-quality: el hook
- * avisa al guardar un fichero, esto falla el build. Una es rápida y local, la
- * otra es la autoridad y no se puede saltar.
+ * Installed by the SDD Harness Kit (`fastify` adapter). It is the CI counterpart
+ * to the GUARD_HTTP_IN_BUSINESS guard in the post-edit-quality hook: the hook
+ * warns when saving a file, this fails the build. One is fast and local, the
+ * other is the authority and cannot be skipped.
  *
- * Ajusta los nombres de paquete si tu monorepo no usa packages/<nombre>.
+ * Adjust the package names if your monorepo does not use packages/<name>.
  */
 module.exports = {
   forbidden: [
     {
       name: 'core-no-infra',
       comment:
-        'packages/core es el dominio: define puertos y no conoce a quien los implementa. ' +
-        'Si necesitas algo de un adaptador, lo que falta es un puerto.',
+        'packages/core is the domain: it defines ports and does not know who implements them. ' +
+        'If you need something from an adapter, what is missing is a port.',
       severity: 'error',
       from: { path: '^packages/core' },
       to: { path: '^packages/(adapters|analyzers|api|cli|web)' },
@@ -22,8 +22,8 @@ module.exports = {
     {
       name: 'core-no-transport',
       comment:
-        'packages/core no conoce el transporte: ni fastify, ni HTTP, ni códigos de estado. ' +
-        'Lanza errores de dominio y deja que la capa HTTP los traduzca.',
+        'packages/core does not know the transport: not fastify, not HTTP, not status codes. ' +
+        'Throw domain errors and let the HTTP layer translate them.',
       severity: 'error',
       from: { path: '^packages/core' },
       to: { dependencyTypes: ['npm', 'npm-dev'], path: '^(fastify|@fastify/|node:http)' },
@@ -31,9 +31,9 @@ module.exports = {
     {
       name: 'analyzers-are-siblings',
       comment:
-        'Un analizador implementa AnalyzerPort y no sabe de los demás. Que el analizador de ' +
-        'TypeScript no pueda importar del de PHP es lo que hace comprobable la independencia ' +
-        'del lenguaje.',
+        'An analyzer implements AnalyzerPort and knows nothing about the others. That the TypeScript ' +
+        'analyzer cannot import from the PHP one is what makes language independence ' +
+        'testable.',
       severity: 'error',
       from: { path: '^packages/analyzers/([^/]+)/' },
       to: { path: '^packages/analyzers/(?!$1)([^/]+)/' },
@@ -41,7 +41,7 @@ module.exports = {
     {
       name: 'api-no-sql',
       comment:
-        'La capa HTTP valida, delega y serializa. El acceso a datos vive en store-postgres.',
+        'The HTTP layer validates, delegates and serializes. Data access lives in store-postgres.',
       severity: 'error',
       from: { path: '^packages/api' },
       to: { dependencyTypes: ['npm'], path: '^(pg|postgres|drizzle-orm|knex)$' },

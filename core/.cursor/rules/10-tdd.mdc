@@ -1,22 +1,21 @@
 ---
-description: Política TDD obligatoria del proyecto
+description: Mandatory TDD policy of the project
 globs: ["**/*"]
 alwaysApply: true
 ---
 
 # TDD Policy
 
-- Sigue siempre el ciclo Red → Green → Refactor.
-- Escribe el test más simple que falle primero, y **confirma que falla** antes de implementar.
-- Implementa solo el código mínimo para pasar el test. Se permite devolver un valor fijo
-  (*Fake It*) si con un caso basta, pero dilo explícitamente para que se añada el test de
-  triangulación.
-- Nunca modifiques ni desactives tests existentes sin aprobación explícita del humano.
-- Un test a la vez. Commits frecuentes.
-- Nombres que expliquen comportamiento observable, no implementación.
-- Patrón Arrange-Act-Assert en cada test, con los tres bloques separados.
-- Los datos de prueba se crean con las factories o helpers del proyecto, no a mano.
-- Dobles de prueba solo en fronteras reales: HTTP saliente, servicios de terceros, reloj,
-  aleatoriedad. Sobre-mockear es tan grave como no mockear.
-- La cobertura es una señal, no un objetivo. Para el código crítico, lo que vale es romper la
-  implementación a propósito y comprobar que algún test se pone en rojo.
+- Always follow the Red → Green → Refactor cycle.
+- Write the simplest failing test first, and **confirm that it fails** before implementing.
+- Implement only the minimal code to pass the test. Returning a fixed value (*Fake It*) is allowed
+  if a single case is enough, but state it explicitly so the triangulation test gets added.
+- Never modify or disable existing tests without explicit human approval.
+- One test at a time. Frequent commits.
+- Names that explain observable behaviour, not implementation.
+- Arrange-Act-Assert pattern in every test, with the three blocks separated.
+- Test data is created with the project's factories or helpers, not by hand.
+- Test doubles only at real boundaries: outbound HTTP, third-party services, the clock,
+  randomness. Over-mocking is as serious as not mocking.
+- Coverage is a signal, not a target. For critical code, what matters is breaking the
+  implementation on purpose and checking that some test turns red.

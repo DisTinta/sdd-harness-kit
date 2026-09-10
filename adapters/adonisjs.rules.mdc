@@ -1,29 +1,29 @@
 ---
-description: Convenciones de capas del backend AdonisJS
+description: Layer conventions for the AdonisJS backend
 globs: ["app/**/*.ts", "start/**/*.ts", "database/**/*.ts", "tests/**/*.ts"]
 alwaysApply: false
 ---
 
 # Backend AdonisJS
 
-## Orden de una unidad vertical
-1. `tests/functional/<capability>/<accion>.spec.ts` — el test primero, en rojo.
-2. `app/validators/<recurso>.ts` — VineJS. Única fuente de verdad de la forma del input.
-3. `app/models/<recurso>.ts` — Lucid: columnas, relaciones, scopes.
-4. `app/services/<recurso>_service.ts` — lógica de negocio.
-5. `app/controllers/<recursos>_controller.ts` — valida, delega, serializa.
-6. `start/routes.ts` — registro de la ruta con su middleware.
+## Order of a vertical unit
+1. `tests/functional/<capability>/<action>.spec.ts` — the test first, red.
+2. `app/validators/<resource>.ts` — VineJS. Single source of truth for the input shape.
+3. `app/models/<resource>.ts` — Lucid: columns, relations, scopes.
+4. `app/services/<resource>_service.ts` — business logic.
+5. `app/controllers/<resources>_controller.ts` — validate, delegate, serialize.
+6. `start/routes.ts` — route registration with its middleware.
 
-## Reglas duras
-- El controller NO contiene lógica de negocio ni consultas.
-- El service NO importa `HttpContext` ni devuelve códigos HTTP; lanza excepciones de dominio.
-- Nada de `any` ni `as unknown as`. Tipos de retorno explícitos en los métodos públicos.
-- Ficheros en snake_case, clases en PascalCase.
-- Imports con subpath imports (`#services/...`), nunca rutas relativas largas.
-- Las consultas reutilizables son scopes de Lucid, no `where()` sueltos.
-- Todo listado usa `.paginate()` y se devuelve con `.serialize()`.
+## Hard rules
+- The controller does NOT contain business logic or queries.
+- The service does NOT import `HttpContext` or return HTTP codes; it throws domain exceptions.
+- No `any` or `as unknown as`. Explicit return types on public methods.
+- Files in snake_case, classes in PascalCase.
+- Imports via subpath imports (`#services/...`), never long relative paths.
+- Reusable queries are Lucid scopes, not loose `where()` calls.
+- Every listing uses `.paginate()` and is returned with `.serialize()`.
 
-## Prohibido
-- SQL crudo si Lucid puede expresarlo.
-- Añadir dependencias sin ADR previo.
-- Modificar ficheros bajo `openspec/` o migraciones ya aplicadas.
+## Forbidden
+- Raw SQL if Lucid can express it.
+- Adding dependencies without a prior ADR.
+- Modifying files under `openspec/` or migrations that have already been applied.

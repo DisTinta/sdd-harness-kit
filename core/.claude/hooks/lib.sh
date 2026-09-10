@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# lib.sh — utilidades comunes de los hooks del SDD Harness Kit.
+# lib.sh — common utilities for the SDD Harness Kit hooks.
 #
-# Todos los hooks hacen `source` de este fichero. Aquí vive:
-#   · la carga SEGURA de .claude/sdd-harness.env (solo KEY=valor, sin eval de shell)
-#   · run_cmd: ejecuta CMD_* sin `eval` (array + bash -c con argv)
-#   · los emisores de decisiones en el formato JSON que espera Claude Code
-#   · las degradaciones seguras cuando falta jq o falta configuración
+# Every hook `source`s this file. Here lives:
+#   · the SAFE loading of .claude/sdd-harness.env (only KEY=value, no shell eval)
+#   · run_cmd: runs CMD_* without `eval` (array + bash -c with argv)
+#   · the decision emitters in the JSON format Claude Code expects
+#   · the safe degradations when jq is missing or configuration is missing
 #
-# Principio: un hook nunca debe romper la sesión. Ante la duda, sale con 0.
+# Principle: a hook must never break the session. When in doubt, exit with 0.
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Raíz del proyecto. En Windows, Claude Code puede pasar CLAUDE_PROJECT_DIR con
-# backslashes que bash interpreta como escapes (C:\laragon → C:laragon). Si la
-# ruta parece rota, caemos a git toplevel o PWD.
+# Project root. On Windows, Claude Code may pass CLAUDE_PROJECT_DIR with
+# backslashes that bash interprets as escapes (C:\laragon → C:laragon). If the
+# path looks broken, we fall back to git toplevel or PWD.
 _project_root() {
   local d="${1:-}"
   d="${d//\\//}"
@@ -34,8 +34,8 @@ PROJECT_DIR="$(_project_root "${CLAUDE_PROJECT_DIR:-}")"
 export CLAUDE_PROJECT_DIR="$PROJECT_DIR"
 ENV_FILE="$PROJECT_DIR/.claude/sdd-harness.env"
 
-# Valores por defecto: el kit funciona aunque el proyecto no configure nada.
-STACK="sin configurar"
+# Default values: the kit works even if the project configures nothing.
+STACK="not configured"
 CMD_TEST=""; CMD_TEST_FILTER=""; CMD_LINT=""; CMD_FORMAT_FILE=""
 CMD_STATIC_FILE=""; CMD_STATIC=""; CMD_MUTATION=""; CMD_DOCS_COVERAGE=""
 CMD_DEV=""; CMD_MIGRATE=""
@@ -44,12 +44,12 @@ PATH_HTTP=""; PATH_MIGRATIONS=""; PATH_ADR="docs/adr"
 GUARD_HTTP_IN_BUSINESS=""; GUARD_DB_IN_HTTP=""; GUARD_DANGEROUS_CMD=""
 LAYER_ORDER=""; MIN_MUTATION_SCORE="70"
 BRANCH_PREFIX="feature/"
-# Escape hatches (documentados en CONFIG.md / GUIA-PASO-A-PASO.md)
+# Escape hatches (documented in CONFIG.md / GUIA-PASO-A-PASO.md)
 KIT_SKIP_STOP_TESTS="0"
 KIT_ALLOW_WIP="0"
 
-# Carga KEY="valor" o KEY=valor sin ejecutar el fichero como shell.
-# Rechaza líneas con sustitución de comandos, backticks o $(...).
+# Loads KEY="value" or KEY=value without executing the file as shell.
+# Rejects lines with command substitution, backticks or $(...).
 load_env_safe() {
   local file="$1" line key val
   [[ -f "$file" ]] || return 0
@@ -57,7 +57,7 @@ load_env_safe() {
     [[ "$line" =~ ^[[:space:]]*# ]] && continue
     [[ -z "${line//[[:space:]]/}" ]] && continue
     if [[ "$line" =~ \$\(|\`|\$\{ ]]; then
-      printf 'sdd-harness: línea peligrosa ignorada en sdd-harness.env (posible command substitution)\n' >&2
+      printf 'sdd-harness: dangerous line ignored in sdd-harness.env (possible command substitution)\n' >&2
       continue
     fi
     if [[ "$line" =~ ^[[:space:]]*([A-Za-z_][A-Za-z0-9_]*)[[:space:]]*=[[:space:]]*\"(.*)\"[[:space:]]*$ ]]; then
@@ -84,21 +84,21 @@ load_env_safe() {
 
 load_env_safe "$ENV_FILE"
 
-# jq es la única dependencia externa. Sin ella, los hooks se desactivan solos
-# en lugar de fallar en cada turno.
+# jq is the only external dependency. Without it, the hooks disable themselves
+# instead of failing on every turn.
 has_jq() { command -v jq >/dev/null 2>&1; }
 
-# Lee el JSON de stdin y devuelve un campo. Uso: field "$INPUT" '.tool_name'
+# Reads the JSON from stdin and returns a field. Usage: field "$INPUT" '.tool_name'
 field() {
   has_jq || { printf ''; return 0; }
   printf '%s' "$1" | jq -r "$2 // empty" 2>/dev/null || printf ''
 }
 
-# Ejecuta un comando configurado en sdd-harness.env SIN eval.
-# Uso: run_cmd "$CMD_TEST"
-#      run_cmd "$CMD_FORMAT_FILE" "$FILE"
-# El valor de CMD_* se interpreta como línea de shell simple (espacios = argv).
-# Los argumentos extra se pasan como "$1", "$2"... al proceso vía entorno posicional.
+# Runs a command configured in sdd-harness.env WITHOUT eval.
+# Usage: run_cmd "$CMD_TEST"
+#        run_cmd "$CMD_FORMAT_FILE" "$FILE"
+# The CMD_* value is interpreted as a simple shell line (spaces = argv).
+# Extra arguments are passed as "$1", "$2"... to the process via positional args.
 run_cmd() {
   local cmdline="$1"; shift || true
   [[ -n "$cmdline" ]] || return 0
@@ -106,7 +106,7 @@ run_cmd() {
   ( cd "$PROJECT_DIR" && bash -c -- "$cmdline \"\$@\"" _ "$@" )
 }
 
-# ── Emisores de decisión ─────────────────────────────────────────────────────
+# ── Decision emitters ────────────────────────────────────────────────────────
 deny() {
   has_jq || { printf '%s\n' "$1" >&2; exit 2; }
   jq -nc --arg r "$1" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$r}}'
@@ -131,8 +131,8 @@ block_prompt() {
   exit 0
 }
 
-# Stop no admite additionalContext (Claude Code valida el JSON y falla el hook).
-# systemMessage se muestra al usuario sin bloquear el cierre del turno.
+# Stop does not accept additionalContext (Claude Code validates the JSON and fails the hook).
+# systemMessage is shown to the user without blocking the turn from closing.
 notify() {
   has_jq || { printf '%s\n' "$1" >&2; exit 0; }
   jq -nc --arg m "$1" '{systemMessage:$m}'
@@ -141,7 +141,7 @@ notify() {
 
 inject() {
   has_jq || exit 0
-  # Stop: ver notify(). SessionStart / PostToolUse sí usan additionalContext.
+  # Stop: see notify(). SessionStart / PostToolUse do use additionalContext.
   if [[ "$1" == "Stop" ]]; then
     jq -nc --arg m "$2" '{systemMessage:$m}'
   else
@@ -150,11 +150,11 @@ inject() {
   exit 0
 }
 
-# ── Utilidades ───────────────────────────────────────────────────────────────
+# ── Utilities ────────────────────────────────────────────────────────────────
 under() {
   local file="$1" dir="$2"
   [[ -n "$dir" ]] || return 1
-  # Normaliza barras para Windows (Git Bash).
+  # Normalize slashes for Windows (Git Bash).
   file="${file//\\//}"
   dir="${dir//\\//}"
   case "$file" in
@@ -174,9 +174,15 @@ is_source() {
   return 1
 }
 
-# ¿La ruta parece un fichero de secretos / entorno?
+# Does the path look like a secrets / environment file?
 is_secret_path() {
   local file="${1//\\//}"
+  # The kit contract is NOT a secret: the doctrine, the SessionStart banner and
+  # several subagents require reading it. It is excepted BEFORE the *.env pattern so
+  # that a Read on it is not denied. It only holds STACK/CMD_*/PATH_*/BRANCH_PREFIX.
+  case "$file" in
+    */.claude/sdd-harness.env|.claude/sdd-harness.env|sdd-harness.env) return 1 ;;
+  esac
   case "$file" in
     *.env|*.env.*|*/.env|.env|*/.env.*|\
     */secrets/*|*/.secrets/*|*/credentials.json|*/credentials.*|\
