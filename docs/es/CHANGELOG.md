@@ -12,6 +12,27 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 ---
 
+## [1.4.1]
+
+### Fixed
+
+- El instalador ejecuta `sync-artifacts --force` / `-Force` al final, para que en Windows las
+  copias bajo `.claude/skills` y `.cursor/skills` no queden en `DIVERGES` tras actualizar
+  `ai-specs/`.
+
+---
+
+## [1.4.0]
+
+### Changed
+
+- Instalador: por defecto **actualiza siempre lo kit-owned** (doctrina, hooks, skills del kit,
+  reglas Cursor del núcleo, doctor, sync…). **Project-owned** (env, MCP, standards/CI de stack,
+  scaffolds) se conserva. `--force` / `-Force` pasa a significar “también pisa project-owned”.
+  `docs/project-context.md` sigue sin pisarse nunca.
+
+---
+
 ## [1.3.2]
 
 ### Añadido

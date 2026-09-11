@@ -330,20 +330,28 @@ Restart the agent session → sync → confirm that `SKILL.md` is in `ai-specs/s
 3. From the **new kit** folder, reinstall over the project:
 
 ```bash
-./install.sh --dest /ruta/a/mi-api          # respects files that differ
-# only if you consciously want to overwrite kit artifacts:
-./install.sh --dest /ruta/a/mi-api --force
+./install.sh --dest /path/to/my-api          # updates kit-owned; keeps project-owned
+# only if you also want to overwrite env / MCP / stack standards:
+./install.sh --dest /path/to/my-api --force
 ```
 
 ```powershell
-.\install.ps1 -Dest C:\proyectos\mi-api
-.\install.ps1 -Dest C:\proyectos\mi-api -Force
+.\install.ps1 -Dest C:\projects\my-api
+.\install.ps1 -Dest C:\projects\my-api -Force
 ```
 
-1. `docs/project-context.md` is **never overwritten** (it is yours).
-2. Doctrine (`base-standards`, documentation-standards, mandatory-steps) **is** replaced: that is why you do not keep customizations there.
-3. `backend-standards` / `frontend-standards` / `sdd-harness.env`: if they differ, the installer usually keeps them — review the report.
-4. After updating: `bash .claude/sync-artifacts.sh`, re-apply `config.yaml.tpl` if the template changed, and run `/kit-health` or the doctor.
+1. **Kit-owned** (doctrine, hooks, kit skills/agents/templates, core Cursor rules, doctor,
+   sync-artifacts, kit review workflows…) **always updates** when different.
+2. **Project-owned** is kept unless `--force`: `.claude/sdd-harness.env`, `.mcp.json` /
+   `.cursor/mcp.json`, `docs/backend-standards.md`, `docs/frontend-standards.md`,
+   `.cursor/rules/30-stack.mdc`, stack CI (`ci.yml` / `frontend.yml`), `infection.json`,
+   `.dependency-cruiser.js`, a11y scaffolds.
+3. `docs/project-context.md` is **never overwritten** (not even with `--force`).
+4. Extra skills/agents/hooks that exist only in the project are not deleted (the installer only
+   copies kit paths).
+5. After updating: the installer already runs `sync-artifacts --force` (refreshes copies on
+   Windows). Re-apply `config.yaml.tpl` if the template changed, and run `/kit-health` or the
+   doctor.
 
 ---
 

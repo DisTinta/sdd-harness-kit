@@ -82,15 +82,16 @@ skills no cargan: el kit lo detecta y lo arregla con copias + sync.
 
 | Fichero | Quién lo escribe | Qué pasa al actualizar el kit |
 |---|---|---|
-| `docs/base-standards.md` | El kit | Se sustituye |
-| `docs/documentation-standards.md` | El kit | Se sustituye |
-| `docs/openspec-tasks-mandatory-steps.md` | El kit | Se sustituye |
-| `docs/backend-standards.md` | El adaptador, ajústalo | Se conserva si difiere |
+| `docs/base-standards.md` | El kit | Se sustituye (kit-owned) |
+| `docs/documentation-standards.md` | El kit | Se sustituye (kit-owned) |
+| `docs/openspec-tasks-mandatory-steps.md` | El kit | Se sustituye (kit-owned) |
+| Hooks, skills del kit, reglas Cursor del núcleo | El kit | Se sustituyen (kit-owned) |
+| `docs/backend-standards.md` / `frontend-standards.md` / `sdd-harness.env` / MCP | El adaptador o tú | Se conservan; `--force` los pisa |
 | `docs/project-context.md` | **Tú** | Nunca se toca |
-| `tests/a11y/smoke.example.*` | Kit la primera vez; luego **tú** | No se pisa si ya existe |
+| `tests/a11y/smoke.example.*` | Kit la primera vez; luego **tú** | Se conserva; `--force` lo pisa |
 
-Así una actualización del kit no te borra el trabajo, y un hook te avisa si intentas editar doctrina
-por proyecto.
+Así una actualización del kit trae correcciones del harness sin borrar el cableado del proyecto.
+Un hook te avisa si intentas editar doctrina por proyecto.
 
 ### 3. Núcleo agnóstico, adaptador por stack
 

@@ -5,7 +5,11 @@
 .DESCRIPTION
     Copia la fuente canónica (ai-specs), los hooks, la doctrina de docs/ y los standards
     del stack; enlaza .claude y .cursor a ai-specs; y genera docs/project-context.md.
-    Es idempotente: al reejecutarlo conserva lo que ya existe salvo que uses -Force.
+
+    Update semantics:
+    - kit-owned (doctrine, hooks, skills, core rules...) always overwrite when different
+    - project-owned (env, MCP, stack standards/CI, scaffolds) kept unless -Force
+    - docs/project-context.md is never overwritten
 
 .PARAMETER Dest
     Repositorio destino. Por defecto, el directorio actual.
@@ -19,7 +23,8 @@
     Muestra lo que haría sin escribir nada.
 
 .PARAMETER Force
-    Sobrescribe los ficheros que ya existan.
+    Also overwrite project-owned files (env, MCP, stack standards/CI, scaffolds).
+    Does not overwrite docs/project-context.md.
 
 .PARAMETER NoFrontend
     No copia standards de frontend; usa la plantilla vacía y omite Playwright MCP y frontend.yml.
@@ -35,6 +40,8 @@
     .\install.ps1 -Dest C:\proyectos\mi-api -NoFrontend
 .EXAMPLE
     .\install.ps1 -Stack laravel -Frontend livewire
+.EXAMPLE
+    .\install.ps1 -Dest C:\proyectos\mi-api -Force
 #>
 [CmdletBinding()]
 param(
@@ -121,29 +128,64 @@ Write-Host "  Stack  : $Stack"
 if ($NoFrontend) { Write-Host "  Frontend: plantilla vacia (-NoFrontend)" }
 else { Write-Host "  Frontend UI: $FrontendUi (-Frontend $Frontend)" }
 if ($DryRun) { Write-Host "  Modo   : simulacion, no se escribe nada" }
+if ($Force) { Write-Host "  Force  : tambien sobrescribe project-owned (env, MCP, stack...)" }
+else { Write-Host "  Update : kit-owned se actualiza; project-owned se conserva (usa -Force para pisarlos)" }
 
 function Test-OsJunkName([string]$Name) {
     $n = $Name.ToLowerInvariant()
     return $n -eq 'desktop.ini' -or $n -eq 'thumbs.db' -or $n -eq '.ds_store'
 }
 
+function Test-ProjectOwned([string]$Rel) {
+    $n = ($Rel -replace '\\', '/').TrimStart('/')
+    $owned = @(
+        '.claude/sdd-harness.env',
+        '.mcp.json',
+        '.cursor/mcp.json',
+        'docs/backend-standards.md',
+        'docs/frontend-standards.md',
+        '.cursor/rules/30-stack.mdc',
+        '.github/workflows/ci.yml',
+        '.github/workflows/frontend.yml',
+        'infection.json',
+        '.dependency-cruiser.js',
+        'tests/a11y/smoke.example.mjs',
+        'tests/a11y/smoke.example.tsx',
+        'docs/project-context.md'
+    )
+    return $owned -contains $n
+}
+
 function Copy-KitFile($Src, $Rel) {
     if (Test-OsJunkName ([System.IO.Path]::GetFileName($Src))) { return }
     $dst = Join-Path $Dest $Rel
-    if ((Test-Path -LiteralPath $dst) -and -not $Force) {
+    $existed = Test-Path -LiteralPath $dst
+    if ($existed) {
         $same = $false
         try {
             $same = (Get-FileHash -LiteralPath $Src).Hash -eq (Get-FileHash -LiteralPath $dst).Hash
         } catch { $same = $false }
-        if ($same) { Write-Skip "$Rel (identico)" }
-        else { Write-Warn "$Rel ya existe y difiere - conservado (usa -Force para sobrescribir)" }
+        if ($same) { Write-Skip "$Rel (identico)"; return }
+        $norm = ($Rel -replace '\\', '/')
+        if ($norm -eq 'docs/project-context.md') {
+            Write-Warn "$Rel ya existe - conservado (es tuyo, el kit no lo pisa)"
+            return
+        }
+        if ((Test-ProjectOwned $Rel) -and -not $Force) {
+            Write-Warn "$Rel ya existe y difiere - conservado (project-owned; usa -Force para sobrescribir)"
+            return
+        }
+    }
+    if ($DryRun) {
+        if ($existed) { Write-Ok "$Rel (simulado: actualizado)" }
+        else { Write-Ok "$Rel (simulado)" }
         return
     }
-    if ($DryRun) { Write-Ok "$Rel (simulado)"; return }
     $dir = Split-Path -Parent $dst
     if ($dir -and -not (Test-Path -LiteralPath $dir)) { New-Item -ItemType Directory -Path $dir -Force | Out-Null }
     Copy-Item -LiteralPath $Src -Destination $dst -Force
-    Write-Ok $Rel
+    if ($existed) { Write-Ok "$Rel (actualizado)" }
+    else { Write-Ok $Rel }
 }
 
 Write-Head "1. Fuente canonica: ai-specs/ y configuracion de agente"
@@ -196,31 +238,16 @@ if (-not $NoFrontend) {
         $a11yRel = 'tests\a11y\smoke.example.tsx'
     }
     if (Test-Path -LiteralPath $a11ySrc) {
-        $a11yDest = Join-Path $Dest $a11yRel
-        if (Test-Path -LiteralPath $a11yDest) {
-            Write-Skip "$($a11yRel.Replace('\','/')) ya existe - conservado"
-        } else {
-            Copy-KitFile $a11ySrc $a11yRel
-        }
+        Copy-KitFile $a11ySrc $a11yRel
     }
 }
 $infection = Join-Path $KitDir "adapters\$Stack.infection.json"
 if (Test-Path $infection) {
-    $infectionDest = Join-Path $Dest 'infection.json'
-    if (Test-Path -LiteralPath $infectionDest) {
-        Write-Skip "infection.json ya existe - conservado"
-    } else {
-        Copy-KitFile $infection 'infection.json'
-    }
+    Copy-KitFile $infection 'infection.json'
 }
 $depcruise = Join-Path $KitDir "adapters\$Stack.dependency-cruiser.js"
 if (Test-Path $depcruise) {
-    $depcruiseDest = Join-Path $Dest '.dependency-cruiser.js'
-    if (Test-Path -LiteralPath $depcruiseDest) {
-        Write-Skip ".dependency-cruiser.js ya existe - conservado"
-    } else {
-        Copy-KitFile $depcruise '.dependency-cruiser.js'
-    }
+    Copy-KitFile $depcruise '.dependency-cruiser.js'
 }
 
 Write-Head "4. Plantillas del proyecto"
@@ -271,7 +298,7 @@ if ($DryRun) {
 } else {
     Push-Location $Dest
     $env:CLAUDE_PROJECT_DIR = $Dest
-    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Dest '.claude\sync-artifacts.ps1')
+    & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $Dest '.claude\sync-artifacts.ps1') -Force
     Pop-Location
 }
 
@@ -302,6 +329,9 @@ if (-not $DryRun) {
 
 Write-Head "Siguientes pasos"
 @"
+  Update: kit-owned se actualiza siempre; project-owned (env, MCP, stack) solo con -Force.
+  docs/project-context.md nunca se pisa.
+
   1. Completa docs/project-context.md (<200 lineas). Es el paso de mayor ROI del kit.
   2. Revisa .claude/sdd-harness.env (comandos reales + BRANCH_PREFIX). Los hooks los ejecutan tal cual.
   3. Revisa docs/backend-standards.md si tu arquitectura no es la del adaptador.

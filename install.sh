@@ -9,6 +9,7 @@
 #   ./install.sh --frontend livewire   fuerza standards/CI Livewire
 #   ./install.sh --frontend react      fuerza standards/CI React
 #   ./install.sh --frontend auto       detecta Livewire vs React (default)
+#   ./install.sh --force               también sobrescribe project-owned (env, MCP, stack…)
 #
 # Estructura que deja:
 #   ai-specs/          fuente canónica de skills, agents y plantillas
@@ -16,7 +17,10 @@
 #   docs/              doctrina del kit + los standards del stack + tu contexto
 #   CLAUDE.md AGENTS.md → docs/base-standards.md
 #
-# Es idempotente: si vuelves a ejecutarlo, respeta lo que ya hay salvo --force.
+# Update semantics:
+#   kit-owned (doctrine, hooks, skills, core rules…) → always overwrite when different
+#   project-owned (env, MCP, stack standards/CI, scaffolds) → keep unless --force
+#   docs/project-context.md → never overwritten
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 
@@ -46,7 +50,7 @@ while [[ $# -gt 0 ]]; do
     --dry-run)     DRY_RUN=1; shift ;;
     --force)       FORCE=1; shift ;;
     --no-frontend) NO_FRONTEND=1; shift ;;
-    -h|--help) sed -n '2,20p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,26p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) die "Opción desconocida: $1" ;;
   esac
 done
@@ -122,8 +126,13 @@ else
   say "  Frontend UI: $FRONTEND_UI (--frontend $FRONTEND)"
 fi
 [[ $DRY_RUN -eq 1 ]] && say "  Modo   : simulación, no se escribe nada"
+if [[ $FORCE -eq 1 ]]; then
+  say "  Force  : también sobrescribe project-owned (env, MCP, stack…)"
+else
+  say "  Update : kit-owned se actualiza; project-owned se conserva (usa --force para pisarlos)"
+fi
 
-# ── Copia idempotente ────────────────────────────────────────────────────────
+# ── Copia: kit-owned by default; project-owned solo con --force ──────────────
 is_os_junk() {
   case "$(basename "$1")" in
     [Dd][Ee][Ss][Kk][Tt][Oo][Pp].[Ii][Nn][Ii]|[Tt][Hh][Uu][Mm][Bb][Ss].[Dd][Bb]|.DS_Store|.ds_store) return 0 ;;
@@ -131,19 +140,58 @@ is_os_junk() {
   esac
 }
 
+# Normalize to forward slashes for denylist matching.
+norm_rel() { printf '%s' "${1//\\//}"; }
+
+is_project_owned() {
+  case "$(norm_rel "$1")" in
+    .claude/sdd-harness.env|\
+    .mcp.json|\
+    .cursor/mcp.json|\
+    docs/backend-standards.md|\
+    docs/frontend-standards.md|\
+    .cursor/rules/30-stack.mdc|\
+    .github/workflows/ci.yml|\
+    .github/workflows/frontend.yml|\
+    infection.json|\
+    .dependency-cruiser.js|\
+    tests/a11y/smoke.example.mjs|\
+    tests/a11y/smoke.example.tsx|\
+    docs/project-context.md)
+      return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 copy_file() {
-  local src="$1" rel="$2" dst="$DEST/$2"
+  local src="$1" rel="$2" dst="$DEST/$2" existed=0
   is_os_junk "$src" && return
-  if [[ -e "$dst" && $FORCE -eq 0 ]]; then
-    if cmp -s "$src" "$dst"; then skip "$rel (idéntico)"
-    else warn "$rel ya existe y difiere — conservado (usa --force para sobrescribir)"; fi
+  if [[ -e "$dst" ]]; then
+    existed=1
+    if cmp -s "$src" "$dst"; then
+      skip "$rel (idéntico)"
+      return
+    fi
+    # project-context is sacred: never overwrite, even with --force
+    if [[ "$(norm_rel "$rel")" == "docs/project-context.md" ]]; then
+      warn "$rel ya existe — conservado (es tuyo, el kit no lo pisa)"
+      return
+    fi
+    if is_project_owned "$rel" && [[ $FORCE -eq 0 ]]; then
+      warn "$rel ya existe y difiere — conservado (project-owned; usa --force para sobrescribir)"
+      return
+    fi
+  fi
+  if [[ $DRY_RUN -eq 1 ]]; then
+    if [[ $existed -eq 1 ]]; then ok "$rel (simulado: actualizado)"
+    else ok "$rel (simulado)"; fi
     return
   fi
-  if [[ $DRY_RUN -eq 1 ]]; then ok "$rel (simulado)"; return; fi
   mkdir -p "$(dirname "$dst")"
   cp "$src" "$dst"
   case "$rel" in *.sh) chmod +x "$dst" ;; esac
-  ok "$rel"
+  if [[ $existed -eq 1 ]]; then ok "$rel (actualizado)"
+  else ok "$rel"; fi
 }
 
 head_ "1. Fuente canónica: ai-specs/"
@@ -196,28 +244,12 @@ if [[ $NO_FRONTEND -eq 0 ]]; then
     a11y_src="$KIT_DIR/adapters/react.a11y.smoke.example.tsx"
     a11y_rel="tests/a11y/smoke.example.tsx"
   fi
-  if [[ -f "$a11y_src" ]]; then
-    if [[ -f "$DEST/$a11y_rel" ]]; then
-      skip "$a11y_rel ya existe — conservado"
-    else
-      copy_file "$a11y_src" "$a11y_rel"
-    fi
-  fi
+  [[ -f "$a11y_src" ]] && copy_file "$a11y_src" "$a11y_rel"
 fi
-if [[ -f "$KIT_DIR/adapters/$STACK.infection.json" ]]; then
-  if [[ -f "$DEST/infection.json" ]]; then
-    skip "infection.json ya existe — conservado"
-  else
-    copy_file "$KIT_DIR/adapters/$STACK.infection.json" "infection.json"
-  fi
-fi
-if [[ -f "$KIT_DIR/adapters/$STACK.dependency-cruiser.js" ]]; then
-  if [[ -f "$DEST/.dependency-cruiser.js" ]]; then
-    skip ".dependency-cruiser.js ya existe — conservado"
-  else
-    copy_file "$KIT_DIR/adapters/$STACK.dependency-cruiser.js" ".dependency-cruiser.js"
-  fi
-fi
+[[ -f "$KIT_DIR/adapters/$STACK.infection.json" ]] && \
+  copy_file "$KIT_DIR/adapters/$STACK.infection.json" "infection.json"
+[[ -f "$KIT_DIR/adapters/$STACK.dependency-cruiser.js" ]] && \
+  copy_file "$KIT_DIR/adapters/$STACK.dependency-cruiser.js" ".dependency-cruiser.js"
 
 head_ "5. Plantillas del proyecto"
 copy_file "$KIT_DIR/core/ai-specs/templates/pull_request_template.md" ".github/pull_request_template.md"
@@ -278,7 +310,7 @@ head_ "8. Referencias de skills y agents"
 if [[ $DRY_RUN -eq 1 ]]; then
   ok ".claude/{skills,agents} y .cursor/{skills,agents} → ai-specs (simulado)"
 else
-  ( cd "$DEST" && CLAUDE_PROJECT_DIR="$DEST" bash .claude/sync-artifacts.sh ) | sed 's/^/  /'
+  ( cd "$DEST" && CLAUDE_PROJECT_DIR="$DEST" bash .claude/sync-artifacts.sh --force ) | sed 's/^/  /'
 fi
 
 head_ "8b. Doctor del harness (copia local en el proyecto)"
@@ -306,6 +338,9 @@ fi
 
 head_ "Siguientes pasos"
 cat <<STEPS
+  Update: kit-owned se actualiza siempre; project-owned (env, MCP, stack) solo con --force.
+  docs/project-context.md nunca se pisa.
+
   1. Completa docs/project-context.md (<200 líneas). Es el paso de mayor ROI del kit.
   2. Revisa .claude/sdd-harness.env (comandos reales + BRANCH_PREFIX). Los hooks los ejecutan tal cual.
   3. Revisa docs/backend-standards.md si tu arquitectura no es la del adaptador.

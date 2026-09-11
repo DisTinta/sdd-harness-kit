@@ -82,15 +82,16 @@ do not load: the kit detects that and fixes it with copies + sync.
 
 | File | Who writes it | What happens when the kit updates |
 |---|---|---|
-| `docs/base-standards.md` | The kit | Replaced |
-| `docs/documentation-standards.md` | The kit | Replaced |
-| `docs/openspec-tasks-mandatory-steps.md` | The kit | Replaced |
-| `docs/backend-standards.md` | The adapter; you adjust it | Kept if it differs |
+| `docs/base-standards.md` | The kit | Replaced (kit-owned) |
+| `docs/documentation-standards.md` | The kit | Replaced (kit-owned) |
+| `docs/openspec-tasks-mandatory-steps.md` | The kit | Replaced (kit-owned) |
+| Hooks, kit skills, core Cursor rules | The kit | Replaced (kit-owned) |
+| `docs/backend-standards.md` / `frontend-standards.md` / `sdd-harness.env` / MCP | Adapter or you | Kept; `--force` overwrites them |
 | `docs/project-context.md` | **You** | Never touched |
-| `tests/a11y/smoke.example.*` | Kit the first time; then **you** | Not overwritten if it already exists |
+| `tests/a11y/smoke.example.*` | Kit the first time; then **you** | Kept; `--force` overwrites |
 
-That way a kit update does not wipe your work, and a hook warns you if you try to edit doctrine
-per project.
+That way a kit update brings harness fixes without wiping project wiring. A hook warns you if you
+try to edit doctrine per project.
 
 ### 3. Agnostic core, per-stack adapter
 

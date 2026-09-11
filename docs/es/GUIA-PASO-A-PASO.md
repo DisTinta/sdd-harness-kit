@@ -330,8 +330,8 @@ Reinicia la sesión del agente → sync → confirma que el `SKILL.md` está en 
 3. Desde la carpeta del **kit nuevo**, reinstala sobre el proyecto:
 
 ```bash
-./install.sh --dest /ruta/a/mi-api          # respeta ficheros que difieren
-# solo si quieres pisar artefactos del kit a conciencia:
+./install.sh --dest /ruta/a/mi-api          # actualiza kit-owned; conserva project-owned
+# solo si quieres pisar también env / MCP / standards de stack:
 ./install.sh --dest /ruta/a/mi-api --force
 ```
 
@@ -340,10 +340,18 @@ Reinicia la sesión del agente → sync → confirma que el `SKILL.md` está en 
 .\install.ps1 -Dest C:\proyectos\mi-api -Force
 ```
 
-1. **Nunca se pisa** `docs/project-context.md` (es tuyo).
-2. La doctrina (`base-standards`, documentation-standards, mandatory-steps) **sí** se sustituye: por eso no guardes custom ahí.
-3. `backend-standards` / `frontend-standards` / `sdd-harness.env`: si difieren, el instalador suele conservarlos — revisa el informe.
-4. Tras actualizar: `bash .claude/sync-artifacts.sh`, vuelve a aplicar `config.yaml.tpl` si el template cambió, y corre `/kit-health` o el doctor.
+1. **Kit-owned** (doctrina, hooks, skills/agents/templates del kit, reglas Cursor del núcleo,
+   doctor, sync-artifacts, workflows de review del kit…) **se actualiza siempre** si difiere.
+2. **Project-owned** se conserva salvo `--force`: `.claude/sdd-harness.env`, `.mcp.json` /
+   `.cursor/mcp.json`, `docs/backend-standards.md`, `docs/frontend-standards.md`,
+   `.cursor/rules/30-stack.mdc`, CI de stack (`ci.yml` / `frontend.yml`), `infection.json`,
+   `.dependency-cruiser.js`, scaffolds a11y.
+3. **Nunca se pisa** `docs/project-context.md` (ni con `--force`).
+4. Skills/agents/hooks **extra** que solo existen en el proyecto no se borran (el instalador solo
+   copia rutas del kit).
+5. Tras actualizar: el instalador ya ejecuta `sync-artifacts --force` (refresca copias en
+   Windows). Vuelve a aplicar `config.yaml.tpl` si el template cambió, y corre `/kit-health`
+   o el doctor.
 
 ---
 

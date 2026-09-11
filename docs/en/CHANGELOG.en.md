@@ -11,6 +11,27 @@ Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 ---
 
+## [1.4.1]
+
+### Fixed
+
+- The installer runs `sync-artifacts --force` / `-Force` at the end, so on Windows the copies
+  under `.claude/skills` and `.cursor/skills` do not stay `DIVERGES` after `ai-specs/` is
+  updated.
+
+---
+
+## [1.4.0]
+
+### Changed
+
+- Installer: by default **always updates kit-owned** artefacts (doctrine, hooks, kit skills,
+  core Cursor rules, doctor, sync…). **Project-owned** (env, MCP, stack standards/CI, scaffolds)
+  is kept. `--force` / `-Force` now means “also overwrite project-owned”.
+  `docs/project-context.md` is still never overwritten.
+
+---
+
 ## [1.3.2]
 
 ### Added
