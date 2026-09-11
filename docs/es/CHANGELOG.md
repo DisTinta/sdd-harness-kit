@@ -14,6 +14,12 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 ## [1.3.2]
 
+### Añadido
+
+- `AGENTS.md` y `CLAUDE.md` en la raíz del **repositorio del kit** (normas de mantenedores;
+  no son los punteros que el instalador crea en un proyecto). Incluyen la regla de idioma:
+  español solo en `docs/es/` y el `README.md` raíz; inglés en el resto.
+
 ### Eliminado
 
 - El instalador ya no crea `GEMINI.md` ni `codex.md`. Solo deja `CLAUDE.md` y `AGENTS.md`
@@ -23,6 +29,7 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 - La documentación humana del kit pasa a `docs/es/` y `docs/en/` (el `README.md` español
   sigue en la raíz).
+- Convención de idioma alineada en `CONTRIBUTING` (es/en) con esos ficheros de memoria.
 
 ---
 

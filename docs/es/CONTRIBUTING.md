@@ -55,9 +55,14 @@ adaptador que no se ha instalado nunca en un repositorio de prueba no está term
 
 ## Convenciones de contenido
 
-- Documentación humana (`README` en la raíz + resto en `docs/es/` y `docs/en/`): **bilingüe y
-  emparejada** (español + inglés). Un PR de docs actualiza las dos lenguas en el mismo cambio.
-- Código, skills, agents, standards y plantillas que lee el agente: **inglés**.
+- **Español solo en** `docs/es/**/*.md` y el `README.md` de la raíz (landing; par en
+  `docs/en/README.en.md`). No añadir más español fuera de esos sitios.
+- **Inglés en todo lo demás**: skills, agents, hooks, adapters, `core/docs/`, plantillas,
+  scripts, `docs/en/`, `AGENTS.md` / `CLAUDE.md` del kit, mensajes de commit.
+- Documentación humana emparejada: un cambio en `docs/es/` actualiza el par en `docs/en/` (y al
+  revés) en el mismo PR.
+- Las normas de trabajo de **este repositorio** (no del proyecto instalado) están en
+  [`AGENTS.md`](../../AGENTS.md) / [`CLAUDE.md`](../../CLAUDE.md).
 - Prioriza cambios didácticos concretos y accionables.
 - Evita introducir tooling de build o frameworks no solicitados.
 

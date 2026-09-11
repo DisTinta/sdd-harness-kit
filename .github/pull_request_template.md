@@ -1,21 +1,21 @@
-## ¿Qué cambia?
-<!-- Resume en 1-3 frases el cambio principal de este PR. -->
+## What changes?
+<!-- Summarise the main change in this PR in 1–3 sentences. -->
 
-## ¿Por qué?
-<!-- Contexto de negocio o técnico. Enlaza issue/tarea si aplica. -->
+## Why?
+<!-- Business or technical context. Link the issue/ticket if applicable. -->
 
-## ¿Cómo probarlo?
-<!-- Pasos numerados, reproducibles y concretos. -->
+## How to test it?
+<!-- Numbered, reproducible, concrete steps. -->
 1.
 2.
 
-## Decisiones y trade-offs
-<!-- Solo si aplica: alternativas consideradas y por qué se descartaron. -->
+## Decisions and trade-offs
+<!-- Only if applicable: alternatives considered and why they were discarded. -->
 
-## Trazabilidad
-| Escenario de la especificación | Test que lo cubre |
+## Traceability
+| Specification scenario | Test that covers it |
 |---|---|
 |  |  |
 
-## Origen
+## Origin
 <!-- human | human+copilot | agent | agent+human-review -->

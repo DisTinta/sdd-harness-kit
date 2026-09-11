@@ -4,6 +4,7 @@
 
 Versión en [`VERSION`](VERSION), cambios en [CHANGELOG.md](docs/es/CHANGELOG.md). Arranque guiado: [GUIA-PASO-A-PASO.md](docs/es/GUIA-PASO-A-PASO.md).
 Guía de colaboración: [CONTRIBUTING.md](docs/es/CONTRIBUTING.md). Origen y créditos: [CREDITS.md](docs/es/CREDITS.md).
+Normas de este repositorio (mantenedores del kit, no del proyecto instalado): [`AGENTS.md`](AGENTS.md) / [`CLAUDE.md`](CLAUDE.md).
 
 Artefactos portátiles de IA —subagentes, skills, hooks, standards y plantillas— para aplicar
 **Spec-Driven Development** con un harness determinista en cualquier proyecto.

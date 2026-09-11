@@ -52,9 +52,14 @@ adapter that has never been installed into a test repository is not finished.
 
 ## Content conventions
 
-- Human documentation (`README` at the root + the rest under `docs/es/` and `docs/en/`):
-  **bilingual and paired** (Spanish + English). A docs PR updates both languages in the same change.
-- Code, skills, agents, standards, and templates the agent reads: **English**.
+- **Spanish only in** `docs/es/**/*.md` and the root `README.md` (landing; pair:
+  `docs/en/README.en.md`). Do not add Spanish anywhere else.
+- **English everywhere else**: skills, agents, hooks, adapters, `core/docs/`, templates,
+  scripts, `docs/en/`, this kit’s `AGENTS.md` / `CLAUDE.md`, commit messages.
+- Human docs are paired: a change under `docs/es/` updates the matching file under `docs/en/`
+  (and the reverse) in the same PR.
+- Working rules for **this repository** (not the installed project) live in
+  [`AGENTS.md`](../../AGENTS.md) / [`CLAUDE.md`](../../CLAUDE.md).
 - Prefer concrete, actionable didactic changes.
 - Do not introduce unsolicited build tooling or frameworks.
 

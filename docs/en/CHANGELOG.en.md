@@ -13,6 +13,12 @@ Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 ## [1.3.2]
 
+### Added
+
+- Root `AGENTS.md` and `CLAUDE.md` for the **kit repository** (maintainer rules; not the
+  pointers the installer creates in a project). Include the language rule: Spanish only in
+  `docs/es/` and the root `README.md`; English everywhere else.
+
 ### Removed
 
 - The installer no longer creates `GEMINI.md` or `codex.md`. It only leaves `CLAUDE.md` and
@@ -22,6 +28,7 @@ Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 - Kit human documentation now lives under `docs/es/` and `docs/en/` (the Spanish `README.md`
   stays at the repository root).
+- Language convention in `CONTRIBUTING` (es/en) aligned with those memory files.
 
 ---
 

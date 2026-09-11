@@ -4,6 +4,7 @@
 
 Version in [`VERSION`](../../VERSION), changes in [CHANGELOG.en.md](CHANGELOG.en.md). Guided setup: [STEP-BY-STEP.md](STEP-BY-STEP.md).
 Contribution guide: [CONTRIBUTING.en.md](CONTRIBUTING.en.md). Origin and credits: [CREDITS.en.md](CREDITS.en.md).
+Working rules for this repository (kit maintainers, not the installed project): [`AGENTS.md`](../../AGENTS.md) / [`CLAUDE.md`](../../CLAUDE.md).
 
 Portable AI artefacts —subagents, skills, hooks, standards, and templates— to apply
 **Spec-Driven Development** with a deterministic harness in any project.
