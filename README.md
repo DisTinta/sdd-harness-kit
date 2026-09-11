@@ -1,9 +1,9 @@
 # SDD Harness Kit
 
-**Idioma:** Español · [English](README.en.md)
+**Idioma:** Español · [English](docs/README.en.md)
 
-Versión en [`VERSION`](VERSION), cambios en [CHANGELOG.md](CHANGELOG.md). Arranque guiado: [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md).
-Guía de colaboración: [CONTRIBUTING.md](CONTRIBUTING.md). Origen y créditos: [CREDITS.md](CREDITS.md).
+Versión en [`VERSION`](VERSION), cambios en [CHANGELOG.md](docs/CHANGELOG.md). Arranque guiado: [GUIA-PASO-A-PASO.md](docs/GUIA-PASO-A-PASO.md).
+Guía de colaboración: [CONTRIBUTING.md](docs/CONTRIBUTING.md). Origen y créditos: [CREDITS.md](docs/CREDITS.md).
 
 Artefactos portátiles de IA —subagentes, skills, hooks, standards y plantillas— para aplicar
 **Spec-Driven Development** con un harness determinista en cualquier proyecto.
@@ -31,12 +31,12 @@ bash ./doctor.sh --dest /ruta/a/mi-proyecto
 ```
 
 Después: `openspec init` + cablear `config.yaml` con la plantilla del kit. Y **no ejecutes `/init`** —
-ver [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md) / [USO.md](USO.md).
+ver [GUIA-PASO-A-PASO.md](docs/GUIA-PASO-A-PASO.md) / [USO.md](docs/USO.md).
 
 Funciona igual si trabajas con los comandos nativos de OpenSpec (`/opsx:explore`, `/opsx:propose`,
 `/opsx:apply`, `/opsx:sync`, `/opsx:archive`), con los del kit, o con ambos a la vez: los **9 hooks** y la
 doctrina actúan sobre la ruta del fichero, no sobre qué comando lo escribió. Tabla de correspondencia
-en [MANUAL.md](MANUAL.md).
+en [MANUAL.md](docs/MANUAL.md).
 
 ---
 
@@ -99,7 +99,7 @@ comando escrito dentro.**
 
 Para soportar un stack nuevo no tocas ni una skill ni un hook: copias `_template.env`, rellenas las
 24 variables del contrato, escribes `<stack>.backend-standards.md`, y ya está. La lista de sitios
-que hay que tocar para que quede completo está en [CONTRIBUTING.md](CONTRIBUTING.md).
+que hay que tocar para que quede completo está en [CONTRIBUTING.md](docs/CONTRIBUTING.md).
 
 | Adaptador | Detección automática | Trae |
 |---|---|---|
@@ -146,25 +146,25 @@ En Windows: `winget install jqlang.jq`.
 
 ### Por dónde leer (orden recomendado)
 
-1. **[GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md)** — arrancar: prerrequisitos, instalar, OpenSpec, doctor, troubleshooting (Windows/Unix).
-2. **[USO.md](USO.md)** — qué ejecutar el día 1, qué en cada ticket y problemas frecuentes.
-3. **Cuando ya estés trabajando:** [MANUAL.md](MANUAL.md) (flujo F0–F8, matriz de artefactos, reglas) + [PROMPTS.md](PROMPTS.md) (prompts P0–P15 listos para copiar).
+1. **[GUIA-PASO-A-PASO.md](docs/GUIA-PASO-A-PASO.md)** — arrancar: prerrequisitos, instalar, OpenSpec, doctor, troubleshooting (Windows/Unix).
+2. **[USO.md](docs/USO.md)** — qué ejecutar el día 1, qué en cada ticket y problemas frecuentes.
+3. **Cuando ya estés trabajando:** [MANUAL.md](docs/MANUAL.md) (flujo F0–F8, matriz de artefactos, reglas) + [PROMPTS.md](docs/PROMPTS.md) (prompts P0–P15 listos para copiar).
 4. **Solo si quieres el procedimiento fino de una herramienta:** el `SKILL.md` de esa skill en [`core/ai-specs/skills/`](core/ai-specs/skills/) (o, tras instalar, `ai-specs/skills/<nombre>/SKILL.md` en tu proyecto). Igual con los agents en [`core/ai-specs/agents/`](core/ai-specs/agents/).
 
 ### Índice de documentos
 
 | Documento | Español | English |
 |---|---|---|
-| Arranque | [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md) | [STEP-BY-STEP.md](STEP-BY-STEP.md) |
-| Uso cotidiano | [USO.md](USO.md) | [USAGE.md](USAGE.md) |
-| Manual (F0–F8) | [MANUAL.md](MANUAL.md) | [MANUAL.en.md](MANUAL.en.md) |
-| Prompts P0–P15 | [PROMPTS.md](PROMPTS.md) | [PROMPTS.en.md](PROMPTS.en.md) |
-| Config / adaptadores | [CONFIG.md](CONFIG.md) | [CONFIG.en.md](CONFIG.en.md) |
-| Ejemplo extremo a extremo | [EJEMPLO.md](EJEMPLO.md) | [EXAMPLE.md](EXAMPLE.md) |
-| Briefing para Producto | [presentacion.md](presentacion.md) | [presentation.md](presentation.md) |
-| Changelog | [CHANGELOG.md](CHANGELOG.md) | [CHANGELOG.en.md](CHANGELOG.en.md) |
-| Contribuir | [CONTRIBUTING.md](CONTRIBUTING.md) | [CONTRIBUTING.en.md](CONTRIBUTING.en.md) |
-| Créditos | [CREDITS.md](CREDITS.md) | [CREDITS.en.md](CREDITS.en.md) |
+| Arranque | [GUIA-PASO-A-PASO.md](docs/GUIA-PASO-A-PASO.md) | [STEP-BY-STEP.md](docs/STEP-BY-STEP.md) |
+| Uso cotidiano | [USO.md](docs/USO.md) | [USAGE.md](docs/USAGE.md) |
+| Manual (F0–F8) | [MANUAL.md](docs/MANUAL.md) | [MANUAL.en.md](docs/MANUAL.en.md) |
+| Prompts P0–P15 | [PROMPTS.md](docs/PROMPTS.md) | [PROMPTS.en.md](docs/PROMPTS.en.md) |
+| Config / adaptadores | [CONFIG.md](docs/CONFIG.md) | [CONFIG.en.md](docs/CONFIG.en.md) |
+| Ejemplo extremo a extremo | [EJEMPLO.md](docs/EJEMPLO.md) | [EXAMPLE.md](docs/EXAMPLE.md) |
+| Briefing para Producto | [presentacion.md](docs/presentacion.md) | [presentation.md](docs/presentation.md) |
+| Changelog | [CHANGELOG.md](docs/CHANGELOG.md) | [CHANGELOG.en.md](docs/CHANGELOG.en.md) |
+| Contribuir | [CONTRIBUTING.md](docs/CONTRIBUTING.md) | [CONTRIBUTING.en.md](docs/CONTRIBUTING.en.md) |
+| Créditos | [CREDITS.md](docs/CREDITS.md) | [CREDITS.en.md](docs/CREDITS.en.md) |
 
 ---
 
@@ -174,11 +174,12 @@ Las skills, los agents, los standards y las plantillas están **en inglés**, po
 `base-standards.md` §2 exige inglés en todo artefacto técnico y el agente no puede leer una regla en
 inglés y una instrucción en español sin incoherencia.
 
-La documentación humana de la raíz —este fichero, la guía de arranque, el uso, el manual, los
-prompts, la config, el ejemplo, el briefing para Producto, el changelog, contribuir y créditos—
-está **en español y en inglés**, emparejada. Elige el idioma en la barra superior de cada documento
-o en la tabla de arriba. Los prompts en [PROMPTS.en.md](PROMPTS.en.md) se pegan en inglés; los
-artefactos que produzcan (código, specs, commits) siguen en inglés.
+La documentación humana —[`README.md`](README.md) en la raíz y el resto en [`docs/`](docs/)
+(incluyendo este README en inglés, guía de arranque, uso, manual, prompts, config, ejemplo,
+briefing para Producto, changelog, contribuir y créditos)— está **en español y en inglés**,
+emparejada. Elige el idioma en la barra superior de cada documento o en la tabla de arriba. Los
+prompts en [PROMPTS.en.md](docs/PROMPTS.en.md) se pegan en inglés; los artefactos que produzcan
+(código, specs, commits) siguen en inglés.
 
 ---
 
@@ -219,7 +220,7 @@ Lo que este kit añade sobre ese punto de partida:
 | **29 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/kit-health` |
 
 El diseño, el afinado y todo lo anterior son trabajo propio. La deuda con `lidr-specboot` es de
-arquitectura y convenciones, y queda declarada aquí y en [CREDITS.md](CREDITS.md).
+arquitectura y convenciones, y queda declarada aquí y en [CREDITS.md](docs/CREDITS.md).
 
 ## Licencia
 

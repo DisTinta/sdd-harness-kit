@@ -323,6 +323,6 @@ cat <<STEPS
 
   Edita siempre ai-specs/ y ejecuta 'bash .claude/sync-artifacts.sh' para propagar.
 
-  Guía paso a paso: $KIT_DIR/GUIA-PASO-A-PASO.md
-  Uso / Manual / Prompts: USO.md · MANUAL.md · PROMPTS.md
+  Guía paso a paso: $KIT_DIR/docs/GUIA-PASO-A-PASO.md
+  Uso / Manual / Prompts: docs/USO.md · docs/MANUAL.md · docs/PROMPTS.md
 STEPS

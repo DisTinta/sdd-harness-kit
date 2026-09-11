@@ -3,7 +3,7 @@
 **Idioma:** Español · [English](CHANGELOG.en.md)
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
-Versionado semántico: la versión viva está en [`VERSION`](VERSION).
+Versionado semántico: la versión viva está en [`VERSION`](../VERSION).
 
 > **Por qué existe este fichero.** El kit **reemplaza sus propios ficheros** de `docs/`,
 > `ai-specs/` y `.claude/` cuando se actualiza un proyecto ya instalado. Quien actualiza

@@ -3,7 +3,7 @@
 **Language:** [Español](CHANGELOG.md) · English
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-Semantic versioning: the live version is in [`VERSION`](VERSION).
+Semantic versioning: the live version is in [`VERSION`](../VERSION).
 
 > **Why this file exists.** The kit **replaces its own files** under `docs/`, `ai-specs/`, and
 > `.claude/` when updating an already-installed project. Whoever updates needs to know what will

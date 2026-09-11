@@ -52,8 +52,8 @@ adapter that has never been installed into a test repository is not finished.
 
 ## Content conventions
 
-- Human documentation at the root: **bilingual and paired** (Spanish + English). A docs PR updates
-  both languages in the same change.
+- Human documentation (`README` at the root + the rest under `docs/`): **bilingual and paired**
+  (Spanish + English). A docs PR updates both languages in the same change.
 - Code, skills, agents, standards, and templates the agent reads: **English**.
 - Prefer concrete, actionable didactic changes.
 - Do not introduce unsolicited build tooling or frameworks.
