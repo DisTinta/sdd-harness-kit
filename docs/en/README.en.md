@@ -1,8 +1,8 @@
 # SDD Harness Kit
 
-**Language:** [Español](../README.md) · English
+**Language:** [Español](../../README.md) · English
 
-Version in [`VERSION`](../VERSION), changes in [CHANGELOG.en.md](CHANGELOG.en.md). Guided setup: [STEP-BY-STEP.md](STEP-BY-STEP.md).
+Version in [`VERSION`](../../VERSION), changes in [CHANGELOG.en.md](CHANGELOG.en.md). Guided setup: [STEP-BY-STEP.md](STEP-BY-STEP.md).
 Contribution guide: [CONTRIBUTING.en.md](CONTRIBUTING.en.md). Origin and credits: [CREDITS.en.md](CREDITS.en.md).
 
 Portable AI artefacts —subagents, skills, hooks, standards, and templates— to apply
@@ -148,22 +148,22 @@ On Windows: `winget install jqlang.jq`.
 1. **[STEP-BY-STEP.md](STEP-BY-STEP.md)** — get started: prerequisites, install, OpenSpec, doctor, troubleshooting (Windows/Unix).
 2. **[USAGE.md](USAGE.md)** — what to run on day 1, what on each ticket, and common problems.
 3. **Once you are working:** [MANUAL.en.md](MANUAL.en.md) (flow F0–F8, artefact matrix, rules) + [PROMPTS.en.md](PROMPTS.en.md) (prompts P0–P15 ready to paste).
-4. **Only if you need the fine procedure of one tool:** that skill’s `SKILL.md` under [`core/ai-specs/skills/`](../core/ai-specs/skills/) (or, after install, `ai-specs/skills/<name>/SKILL.md` in your project). Same for agents under [`core/ai-specs/agents/`](../core/ai-specs/agents/).
+4. **Only if you need the fine procedure of one tool:** that skill’s `SKILL.md` under [`core/ai-specs/skills/`](../../core/ai-specs/skills/) (or, after install, `ai-specs/skills/<name>/SKILL.md` in your project). Same for agents under [`core/ai-specs/agents/`](../../core/ai-specs/agents/).
 
 ### Document index
 
 | Document | Español | English |
 |---|---|---|
-| Setup | [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md) | [STEP-BY-STEP.md](STEP-BY-STEP.md) |
-| Day-to-day use | [USO.md](USO.md) | [USAGE.md](USAGE.md) |
-| Manual (F0–F8) | [MANUAL.md](MANUAL.md) | [MANUAL.en.md](MANUAL.en.md) |
-| Prompts P0–P15 | [PROMPTS.md](PROMPTS.md) | [PROMPTS.en.md](PROMPTS.en.md) |
-| Config / adapters | [CONFIG.md](CONFIG.md) | [CONFIG.en.md](CONFIG.en.md) |
-| End-to-end example | [EJEMPLO.md](EJEMPLO.md) | [EXAMPLE.md](EXAMPLE.md) |
-| Product briefing | [presentacion.md](presentacion.md) | [presentation.md](presentation.md) |
-| Changelog | [CHANGELOG.md](CHANGELOG.md) | [CHANGELOG.en.md](CHANGELOG.en.md) |
-| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) | [CONTRIBUTING.en.md](CONTRIBUTING.en.md) |
-| Credits | [CREDITS.md](CREDITS.md) | [CREDITS.en.md](CREDITS.en.md) |
+| Setup | [GUIA-PASO-A-PASO.md](../es/GUIA-PASO-A-PASO.md) | [STEP-BY-STEP.md](STEP-BY-STEP.md) |
+| Day-to-day use | [USO.md](../es/USO.md) | [USAGE.md](USAGE.md) |
+| Manual (F0–F8) | [MANUAL.md](../es/MANUAL.md) | [MANUAL.en.md](MANUAL.en.md) |
+| Prompts P0–P15 | [PROMPTS.md](../es/PROMPTS.md) | [PROMPTS.en.md](PROMPTS.en.md) |
+| Config / adapters | [CONFIG.md](../es/CONFIG.md) | [CONFIG.en.md](CONFIG.en.md) |
+| End-to-end example | [EJEMPLO.md](../es/EJEMPLO.md) | [EXAMPLE.md](EXAMPLE.md) |
+| Product briefing | [presentacion.md](../es/presentacion.md) | [presentation.md](presentation.md) |
+| Changelog | [CHANGELOG.md](../es/CHANGELOG.md) | [CHANGELOG.en.md](CHANGELOG.en.md) |
+| Contributing | [CONTRIBUTING.md](../es/CONTRIBUTING.md) | [CONTRIBUTING.en.md](CONTRIBUTING.en.md) |
+| Credits | [CREDITS.md](../es/CREDITS.md) | [CREDITS.en.md](CREDITS.en.md) |
 
 ---
 
@@ -173,12 +173,12 @@ Skills, agents, standards, and templates are **in English**, because `base-stand
 English in every technical artefact and the agent cannot read a rule in English and an instruction
 in Spanish without inconsistency.
 
-Human documentation —[`README.md`](../README.md) at the root and the rest under [`docs/`](.)
-(including this English README, setup guide, usage, the manual, prompts, config, the example, the
-Product briefing, the changelog, contributing, and credits)— is **in Spanish and in English**,
-paired. Pick the language in each document’s top bar or in the table above. Prompts in
-[PROMPTS.en.md](PROMPTS.en.md) are pasted in English; the artefacts they produce (code, specs,
-commits) remain in English.
+Human documentation —[`README.md`](../../README.md) at the root, Spanish under
+[`docs/es/`](../es/), English under [`docs/en/`](.) (including this English README, setup guide,
+usage, the manual, prompts, config, the example, the Product briefing, the changelog, contributing,
+and credits)— is **in Spanish and in English**, paired. Pick the language in each document’s top
+bar or in the table above. Prompts in [PROMPTS.en.md](PROMPTS.en.md) are pasted in English; the
+artefacts they produce (code, specs, commits) remain in English.
 
 ---
 
@@ -224,4 +224,4 @@ architecture and conventions, and it is declared here and in [CREDITS.en.md](CRE
 
 ## Licence
 
-[MIT](../LICENSE).
+[MIT](../../LICENSE).

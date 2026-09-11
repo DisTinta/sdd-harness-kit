@@ -44,7 +44,7 @@ PATH_HTTP=""; PATH_MIGRATIONS=""; PATH_ADR="docs/adr"
 GUARD_HTTP_IN_BUSINESS=""; GUARD_DB_IN_HTTP=""; GUARD_DANGEROUS_CMD=""
 LAYER_ORDER=""; MIN_MUTATION_SCORE="70"
 BRANCH_PREFIX="feature/"
-# Escape hatches (documented in docs/CONFIG.md / docs/GUIA-PASO-A-PASO.md)
+# Escape hatches (documented in docs/es/CONFIG.md / docs/es/GUIA-PASO-A-PASO.md)
 KIT_SKIP_STOP_TESTS="0"
 KIT_ALLOW_WIP="0"
 

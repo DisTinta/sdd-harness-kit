@@ -1,6 +1,6 @@
 # Contributing to `sdd-harness-kit`
 
-**Language:** [Español](CONTRIBUTING.md) · English
+**Language:** [Español](../es/CONTRIBUTING.md) · English
 
 Thanks for contributing. This repository uses a simple flow to keep quality and traceability.
 
@@ -39,7 +39,7 @@ half-finished the first time:
 5. `detect_stack()` in `install.sh` **and** the equivalent block in `install.ps1`.
 6. The `-Stack` parameter help in the `install.ps1` header, and `--stack` in the `install.sh` header.
 7. The adapters table in [README.en.md](README.en.md).
-8. `VERSION` and [CHANGELOG.md](CHANGELOG.md) **and** [CHANGELOG.en.md](CHANGELOG.en.md) (same entry in both).
+8. `VERSION` and [CHANGELOG.md](../es/CHANGELOG.md) **and** [CHANGELOG.en.md](CHANGELOG.en.md) (same entry in both).
 
 And actually try it, with the four commands in the “Try it” section of [CONFIG.en.md](CONFIG.en.md). An
 adapter that has never been installed into a test repository is not finished.
@@ -52,8 +52,8 @@ adapter that has never been installed into a test repository is not finished.
 
 ## Content conventions
 
-- Human documentation (`README` at the root + the rest under `docs/`): **bilingual and paired**
-  (Spanish + English). A docs PR updates both languages in the same change.
+- Human documentation (`README` at the root + the rest under `docs/es/` and `docs/en/`):
+  **bilingual and paired** (Spanish + English). A docs PR updates both languages in the same change.
 - Code, skills, agents, standards, and templates the agent reads: **English**.
 - Prefer concrete, actionable didactic changes.
 - Do not introduce unsolicited build tooling or frameworks.

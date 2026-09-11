@@ -1,6 +1,6 @@
 # SDD Harness Kit — briefing para Producto
 
-**Idioma:** Español · [English](presentation.md)
+**Idioma:** Español · [English](../en/presentation.md)
 
 Documento interno para explicar el kit a perfiles no técnicos. No es una guía de instalación.
 

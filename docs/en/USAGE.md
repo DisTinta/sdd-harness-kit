@@ -1,6 +1,6 @@
 # How to use
 
-**Language:** [Español](USO.md) · English
+**Language:** [Español](../es/USO.md) · English
 
 > Start with [STEP-BY-STEP.md](STEP-BY-STEP.md) if this is your first setup.
 

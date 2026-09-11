@@ -1,6 +1,6 @@
 # SDD Harness Kit Manual
 
-**Language:** [Español](MANUAL.md) · English
+**Language:** [Español](../es/MANUAL.md) · English
 
 The workflow implemented by the kit’s artefacts, and why each piece sits where it sits.
 

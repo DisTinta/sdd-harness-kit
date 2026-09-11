@@ -1,6 +1,6 @@
 # A unit of work, end to end
 
-**Language:** [Español](EJEMPLO.md) · English
+**Language:** [Español](../es/EJEMPLO.md) · English
 
 A full walkthrough of the flow on a generic unit, so you can see how the pieces fit together. It is
 not a tutorial for any framework: names go in `<brackets>` and the mapping to your stack comes from

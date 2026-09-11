@@ -1,6 +1,6 @@
 # `sdd-harness.env` reference
 
-**Language:** [Español](CONFIG.md) · English
+**Language:** [Español](../es/CONFIG.md) · English
 
 The kit's configuration contract. It is the only file that changes between projects: hooks load it
 safely at startup (key allowlist, no `source` or `eval` of the file) and skills read it as dynamic

@@ -320,6 +320,6 @@ Write-Head "Siguientes pasos"
 
   Edita siempre ai-specs/ y ejecuta '.claude\sync-artifacts.ps1' para propagar.
 
-  Guia paso a paso: $KitDir\docs\GUIA-PASO-A-PASO.md
-  Uso / Manual / Prompts: docs\USO.md · docs\MANUAL.md · docs\PROMPTS.md
+  Guia paso a paso: $KitDir\docs\es\GUIA-PASO-A-PASO.md
+  Uso / Manual / Prompts: docs\es\USO.md · docs\es\MANUAL.md · docs\es\PROMPTS.md
 "@ | Write-Host

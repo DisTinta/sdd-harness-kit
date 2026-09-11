@@ -1,6 +1,6 @@
 # Origen y créditos
 
-**Idioma:** Español · [English](CREDITS.en.md)
+**Idioma:** Español · [English](../en/CREDITS.en.md)
 
 ## Punto de partida
 

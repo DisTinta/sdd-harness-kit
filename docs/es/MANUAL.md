@@ -1,6 +1,6 @@
 # Manual del SDD Harness Kit
 
-**Idioma:** Español · [English](MANUAL.en.md)
+**Idioma:** Español · [English](../en/MANUAL.en.md)
 
 El flujo de trabajo que implementan los artefactos del kit, y por qué cada pieza está donde está.
 

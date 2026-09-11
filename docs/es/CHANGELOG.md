@@ -1,9 +1,9 @@
 # Changelog
 
-**Idioma:** Español · [English](CHANGELOG.en.md)
+**Idioma:** Español · [English](../en/CHANGELOG.en.md)
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
-Versionado semántico: la versión viva está en [`VERSION`](../VERSION).
+Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 > **Por qué existe este fichero.** El kit **reemplaza sus propios ficheros** de `docs/`,
 > `ai-specs/` y `.claude/` cuando se actualiza un proyecto ya instalado. Quien actualiza
@@ -18,6 +18,11 @@ Versionado semántico: la versión viva está en [`VERSION`](../VERSION).
 
 - El instalador ya no crea `GEMINI.md` ni `codex.md`. Solo deja `CLAUDE.md` y `AGENTS.md`
   apuntando a `docs/base-standards.md`.
+
+### Cambiado
+
+- La documentación humana del kit pasa a `docs/es/` y `docs/en/` (el `README.md` español
+  sigue en la raíz).
 
 ---
 

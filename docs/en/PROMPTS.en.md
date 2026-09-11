@@ -1,6 +1,6 @@
 # Prompt sequence
 
-**Language:** [Español](PROMPTS.md) · English
+**Language:** [Español](../es/PROMPTS.md) · English
 
 Sixteen prompts, one per step of the cycle. Stack-agnostic: commands and paths come from
 `docs/project-context.md`, `docs/backend-standards.md` and `.claude/sdd-harness.env`, so they work the

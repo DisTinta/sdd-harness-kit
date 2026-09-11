@@ -1,9 +1,9 @@
 # Changelog
 
-**Language:** [Español](CHANGELOG.md) · English
+**Language:** [Español](../es/CHANGELOG.md) · English
 
 Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
-Semantic versioning: the live version is in [`VERSION`](../VERSION).
+Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 > **Why this file exists.** The kit **replaces its own files** under `docs/`, `ai-specs/`, and
 > `.claude/` when updating an already-installed project. Whoever updates needs to know what will
@@ -17,6 +17,11 @@ Semantic versioning: the live version is in [`VERSION`](../VERSION).
 
 - The installer no longer creates `GEMINI.md` or `codex.md`. It only leaves `CLAUDE.md` and
   `AGENTS.md` pointing to `docs/base-standards.md`.
+
+### Changed
+
+- Kit human documentation now lives under `docs/es/` and `docs/en/` (the Spanish `README.md`
+  stays at the repository root).
 
 ---
 

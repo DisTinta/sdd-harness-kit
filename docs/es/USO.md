@@ -1,6 +1,6 @@
 # Cómo se usa
 
-**Idioma:** Español · [English](USAGE.md)
+**Idioma:** Español · [English](../en/USAGE.md)
 
 > Empieza por [GUIA-PASO-A-PASO.md](GUIA-PASO-A-PASO.md) si es tu primer arranque.
 

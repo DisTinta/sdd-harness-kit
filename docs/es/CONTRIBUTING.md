@@ -1,6 +1,6 @@
 # Contribuir a `sdd-harness-kit`
 
-**Idioma:** Español · [English](CONTRIBUTING.en.md)
+**Idioma:** Español · [English](../en/CONTRIBUTING.en.md)
 
 Gracias por contribuir. Este repositorio usa un flujo simple para mantener calidad y trazabilidad.
 
@@ -41,8 +41,8 @@ medias la primera vez:
 5. `detect_stack()` en `install.sh` **y** el bloque equivalente en `install.ps1`.
 6. La ayuda del parámetro `-Stack` en la cabecera de `install.ps1`, y la de `--stack` en la
    de `install.sh`.
-7. La tabla de adaptadores del [README.md](../README.md).
-8. `VERSION` y [CHANGELOG.md](CHANGELOG.md) **y** [CHANGELOG.en.md](CHANGELOG.en.md) (misma entrada en ambos).
+7. La tabla de adaptadores del [README.md](../../README.md).
+8. `VERSION` y [CHANGELOG.md](CHANGELOG.md) **y** [CHANGELOG.en.md](../en/CHANGELOG.en.md) (misma entrada en ambos).
 
 Y pruébalo de verdad, con los cuatro comandos de la sección «Pruébalo» de [CONFIG.md](CONFIG.md). Un
 adaptador que no se ha instalado nunca en un repositorio de prueba no está terminado.
@@ -55,8 +55,8 @@ adaptador que no se ha instalado nunca en un repositorio de prueba no está term
 
 ## Convenciones de contenido
 
-- Documentación humana (`README` en la raíz + resto en `docs/`): **bilingüe y emparejada**
-  (español + inglés). Un PR de docs actualiza las dos lenguas en el mismo cambio.
+- Documentación humana (`README` en la raíz + resto en `docs/es/` y `docs/en/`): **bilingüe y
+  emparejada** (español + inglés). Un PR de docs actualiza las dos lenguas en el mismo cambio.
 - Código, skills, agents, standards y plantillas que lee el agente: **inglés**.
 - Prioriza cambios didácticos concretos y accionables.
 - Evita introducir tooling de build o frameworks no solicitados.

@@ -1,6 +1,6 @@
 # Origin and credits
 
-**Language:** [Español](CREDITS.md) · English
+**Language:** [Español](../es/CREDITS.md) · English
 
 ## Starting point
 
