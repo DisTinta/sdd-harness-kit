@@ -12,6 +12,15 @@ Versionado semántico: la versión viva está en [`VERSION`](../VERSION).
 
 ---
 
+## [1.3.2]
+
+### Eliminado
+
+- El instalador ya no crea `GEMINI.md` ni `codex.md`. Solo deja `CLAUDE.md` y `AGENTS.md`
+  apuntando a `docs/base-standards.md`.
+
+---
+
 ## [1.3.1]
 
 ### Añadido

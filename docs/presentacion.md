@@ -74,7 +74,7 @@ El kit es el **arnés** alrededor de OpenSpec y de los copilotos: la disciplina 
 
 Instalado una vez por proyecto, deja:
 
-- Las mismas reglas para Cursor, Claude Code, Copilot y Gemini (una doctrina, varias herramientas).
+- Las mismas reglas para Cursor, Claude Code y Copilot (una doctrina, varias herramientas).
 - 27 “skills”: procedimientos reutilizables (`enriquecer la historia`, `implementar`, `verificar`, `abrir el PR`…).
 - 9 subagentes: roles especializados (explorar, auditar la spec, escribir el test, revisar seguridad…).
 - 9 **hooks**: reglas que no se interpretan, se **ejecutan**. Son el cinturón de seguridad.

@@ -252,7 +252,7 @@ if (Test-Path -LiteralPath $ctxPath) {
 }
 
 Write-Head "6. Memoria multi-agente"
-foreach ($name in @('CLAUDE.md','AGENTS.md','GEMINI.md','codex.md')) {
+foreach ($name in @('CLAUDE.md','AGENTS.md')) {
     $mp = Join-Path $Dest $name
     if (Test-Path -LiteralPath $mp) { Write-Skip "$name ya existe"; continue }
     if ($DryRun) { Write-Ok "$name -> docs/base-standards.md (simulado)"; continue }
@@ -315,7 +315,7 @@ Write-Head "Siguientes pasos"
   9. Abre una sesion y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
   10. Vuelve a pasar el doctor:  powershell -File $Dest\.claude\doctor.ps1 -Dest $Dest
 
-  NO ejecutes /init: los cuatro ficheros raiz apuntan a docs/base-standards.md y /init
+  NO ejecutes /init: CLAUDE.md y AGENTS.md apuntan a docs/base-standards.md y /init
   escribiria a traves de ellos. Para el contexto del proyecto usa el prompt P0.
 
   Edita siempre ai-specs/ y ejecuta '.claude\sync-artifacts.ps1' para propagar.

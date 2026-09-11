@@ -1,5 +1,5 @@
 ---
-description: This document contains all development rules and guidelines for this project, applicable to all AI agents (Claude, Cursor, Codex, Gemini, etc.).
+description: This document contains all development rules and guidelines for this project, applicable to all AI agents (Claude, Cursor, Copilot, etc.).
 alwaysApply: true
 ---
 

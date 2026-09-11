@@ -91,8 +91,8 @@ te propone el contenido señalando qué ha tenido que inferir.
 Escríbelo **en inglés**: `base-standards.md` §2 lo exige para todo artefacto técnico, y un hook te
 avisará si detecta español en el código.
 
-> ⚠️ **No ejecutes `/init`.** Los cuatro ficheros de memoria (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`,
-> `codex.md`) apuntan a `docs/base-standards.md`. `/init` escribiría a través de ellos y se llevaría la
+> ⚠️ **No ejecutes `/init`.** Los ficheros de memoria (`CLAUDE.md`, `AGENTS.md`) apuntan a
+> `docs/base-standards.md`. `/init` escribiría a través de ellos y se llevaría la
 > doctrina por delante. Para el contexto del proyecto usa P0.
 
 ### 4. Ajusta los standards del stack
@@ -169,7 +169,7 @@ Jira, bases de datos u otros conectores con secretos **no** van aquí: `claude m
 ### 9. Commitea el kit
 
 ```bash
-git add ai-specs .claude .cursor .github docs CLAUDE.md AGENTS.md GEMINI.md codex.md .mcp.json
+git add ai-specs .claude .cursor .github docs CLAUDE.md AGENTS.md .mcp.json
 git commit -m "chore: add SDD Harness Kit"
 ```
 

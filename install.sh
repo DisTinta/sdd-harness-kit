@@ -14,7 +14,7 @@
 #   ai-specs/          fuente canónica de skills, agents y plantillas
 #   .claude/ .cursor/  referencias a ai-specs (symlink, o copia si el SO no lo permite)
 #   docs/              doctrina del kit + los standards del stack + tu contexto
-#   CLAUDE.md AGENTS.md GEMINI.md codex.md → docs/base-standards.md
+#   CLAUDE.md AGENTS.md → docs/base-standards.md
 #
 # Es idempotente: si vuelves a ejecutarlo, respeta lo que ya hay salvo --force.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -260,8 +260,8 @@ PY
 fi
 
 head_ "7. Memoria multi-agente"
-# Los cuatro ficheros raíz apuntan a la misma doctrina.
-for name in CLAUDE.md AGENTS.md GEMINI.md codex.md; do
+# Los ficheros de memoria raíz apuntan a la misma doctrina.
+for name in CLAUDE.md AGENTS.md; do
   if [[ -e "$DEST/$name" ]]; then
     skip "$name ya existe"
   elif [[ $DRY_RUN -eq 1 ]]; then
@@ -318,7 +318,7 @@ cat <<STEPS
   8. Abre una sesión y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
   9. Vuelve a pasar el doctor:  bash $DEST/.claude/doctor.sh --dest $DEST
 
-  NO ejecutes /init: los cuatro ficheros raíz apuntan a docs/base-standards.md y /init
+  NO ejecutes /init: CLAUDE.md y AGENTS.md apuntan a docs/base-standards.md y /init
   escribiría a través de ellos. Para el contexto del proyecto usa el prompt P0.
 
   Edita siempre ai-specs/ y ejecuta 'bash .claude/sync-artifacts.sh' para propagar.

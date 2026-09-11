@@ -19,8 +19,8 @@ Ideas de arquitectura y convenciones de organización, no una copia del contenid
   repositorio, referenciada después desde las carpetas de cada copiloto.
 - Los **estándares en `docs/`** como documento que el agente lee para no reinventar la
   arquitectura en cada tarea.
-- Los **cuatro ficheros de memoria** por copiloto —`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`,
-  `codex.md`— apuntando todos a una doctrina única en lugar de duplicarla.
+- Los **ficheros de memoria** por copiloto —`CLAUDE.md` y `AGENTS.md`— apuntando a una doctrina
+  única en lugar de duplicarla.
 - El enfoque general de **Spec-Driven Development** sobre OpenSpec.
 
 Las skills, los subagentes, los estándares, las plantillas y los hooks de este kit están

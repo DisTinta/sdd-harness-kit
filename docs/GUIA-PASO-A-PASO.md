@@ -234,7 +234,7 @@ Si saltas un gate, el resto del kit amplifica el error en lugar de salvarte.
 
 | No                                                                                 | Por qué                                                                                                                |
 | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `/init` en el repo con el kit                                                      | Los `CLAUDE.md` / `AGENTS.md` / … apuntan a `docs/base-standards.md`; `/init` escribiría encima y destroza la doctrina |
+| `/init` en el repo con el kit                                                      | `CLAUDE.md` / `AGENTS.md` apuntan a `docs/base-standards.md`; `/init` escribiría encima y destroza la doctrina |
 | **Editar doctrina por proyecto** (`docs/base-standards.md`, mandatory-steps, etc.) | Se pierde o se pisa al actualizar el kit. Hechos → `project-context`; arquitectura de stack → `*-standards.md`         |
 | **Secretos o PII reales en el chat / fixtures / PR**                               | Entran en contexto del modelo y en el historial. Usa env vars, MCP, datos sintéticos                                   |
 | **Instalar paquetes solo porque lo dijo el modelo**                                | Riesgo de slopsquatting — verifica en el registry (`/privacy-ethics-check`)                                            |

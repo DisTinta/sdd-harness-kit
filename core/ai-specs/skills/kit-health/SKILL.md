@@ -51,7 +51,7 @@ Whether the doctor ran or not, ensure the report covers these cracks:
 | **`CMD_TEST` broken** | Command in `sdd-harness.env` fails when run manually | Fix the command; Stop hook otherwise blocks every coding turn. |
 | **MCP configs missing** | No `.mcp.json` or `.cursor/mcp.json` | Re-run the kit installer. Context7 (and Playwright unless `--no-frontend`) should be declared. Doctor warns; it does not fail. |
 | **MCP servers disabled in the IDE** | Config files exist but tools never appear | Enable the project MCP in Cursor / Claude Code (first-run permission). Optional: `CONTEXT7_API_KEY` in the environment, never in the JSON. |
-| **Doctrina pointers broken** | `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` / `codex.md` do not resolve to `docs/base-standards.md` | Restore symlink or `@docs/base-standards.md` import. |
+| **Doctrina pointers broken** | `CLAUDE.md` / `AGENTS.md` do not resolve to `docs/base-standards.md` | Restore symlink or `@docs/base-standards.md` import. |
 | **Doctor / kit version unknown** | No `VERSION` in kit source; project missing expected files | Re-install or sync from `sdd-harness-kit`. |
 
 ### Step 3 — Report format

@@ -91,8 +91,8 @@ proposes the content while flagging what it had to infer.
 Write it **in English**: `base-standards.md` §2 requires that for every technical artifact, and a hook will
 warn you if it detects Spanish in the code.
 
-> ⚠️ **Do not run `/init`.** The four memory files (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`,
-> `codex.md`) point to `docs/base-standards.md`. `/init` would write through them and wipe the
+> ⚠️ **Do not run `/init`.** The memory files (`CLAUDE.md`, `AGENTS.md`) point to
+> `docs/base-standards.md`. `/init` would write through them and wipe the
 > doctrine. For project context use P0.
 
 ### 4. Adjust the stack standards
@@ -168,7 +168,7 @@ Jira, databases, or other connectors with secrets do **not** go here: `claude mc
 ### 9. Commit the kit
 
 ```bash
-git add ai-specs .claude .cursor .github docs CLAUDE.md AGENTS.md GEMINI.md codex.md .mcp.json
+git add ai-specs .claude .cursor .github docs CLAUDE.md AGENTS.md .mcp.json
 git commit -m "chore: add SDD Harness Kit"
 ```
 

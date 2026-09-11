@@ -8,9 +8,9 @@ Guía de colaboración: [CONTRIBUTING.md](docs/CONTRIBUTING.md). Origen y crédi
 Artefactos portátiles de IA —subagentes, skills, hooks, standards y plantillas— para aplicar
 **Spec-Driven Development** con un harness determinista en cualquier proyecto.
 
-Fuente canónica en `ai-specs/`, doctrina en `docs/base-standards.md`, y los cuatro ficheros de
-memoria apuntando a ella. Incluye **hooks deterministas**, **adaptadores por stack**, **soporte
-real en Windows**, **doctor de salud** y **gates de secretos en profundidad**.
+Fuente canónica en `ai-specs/`, doctrina en `docs/base-standards.md`, y los ficheros de memoria
+(`CLAUDE.md`, `AGENTS.md`) apuntando a ella. Incluye **hooks deterministas**, **adaptadores por stack**,
+**soporte real en Windows**, **doctor de salud** y **gates de secretos en profundidad**.
 
 ```bash
 # Linux / macOS
@@ -62,7 +62,7 @@ en [MANUAL.md](docs/MANUAL.md).
 | `docs/project-context.md` | **El único fichero que escribes tú.** Sobrevive a las actualizaciones |
 | `.cursor/rules/` | Las mismas reglas para Cursor: núcleo, TDD, OpenSpec y stack |
 | `.github/` | Instrucciones de Copilot, workflows de review, CI backend y `frontend.yml`, plantilla de PR |
-| `CLAUDE.md` `AGENTS.md` `GEMINI.md` `codex.md` | Los cuatro apuntan a `docs/base-standards.md` |
+| `CLAUDE.md` `AGENTS.md` | Apuntan a `docs/base-standards.md` |
 
 ---
 
@@ -204,8 +204,8 @@ Este kit nace de los apuntes de las clases del **Máster AI4Devs de [LIDR Academ
 y toma como punto de partida ideas y convenciones de
 **[`LIDR-academy/lidr-specboot`](https://github.com/LIDR-academy/lidr-specboot)** (MIT), el
 repositorio de referencia del máster: la disposición de `ai-specs/` con skills y subagentes como
-fuente canónica, los estándares en `docs/`, y los cuatro ficheros de memoria por copiloto
-—`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `codex.md`— apuntando a una doctrina única.
+fuente canónica, los estándares en `docs/`, y los ficheros de memoria por copiloto
+—`CLAUDE.md`, `AGENTS.md`— apuntando a una doctrina única.
 
 Lo que este kit añade sobre ese punto de partida:
 

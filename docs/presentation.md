@@ -74,7 +74,7 @@ The kit is the **harness** around OpenSpec and the copilots: the discipline that
 
 Installed once per project, it leaves:
 
-- The same rules for Cursor, Claude Code, Copilot, and Gemini (one doctrine, several tools).
+- The same rules for Cursor, Claude Code, and Copilot (one doctrine, several tools).
 - 27 “skills”: reusable procedures (`enrich the story`, `implement`, `verify`, `open the PR`…).
 - 9 subagents: specialised roles (explore, audit the spec, write the test, review security…).
 - 9 **hooks**: rules that are not interpreted, they are **executed**. They are the seatbelt.

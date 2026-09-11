@@ -8,8 +8,8 @@ This document is agnostic: it does not name any project or mandate any stack. Wh
 across projects lives in `docs/project-context.md`, `docs/backend-standards.md`, and
 `.claude/sdd-harness.env`.
 
-The kit uses a canonical source in `ai-specs/`, doctrine in `docs/base-standards.md`, and the four
-memory files pointing to it.
+The kit uses a canonical source in `ai-specs/`, doctrine in `docs/base-standards.md`, and the
+memory files (`CLAUDE.md`, `AGENTS.md`) pointing to it.
 
 Inventory: **29 skills**, **9 subagents**, and **9 hooks**. Skills and subagents are always edited
 in `ai-specs/`; `.claude/` and `.cursor/` reference them, and `bash .claude/sync-artifacts.sh`
@@ -84,12 +84,12 @@ Before the first line of prompt you must decide three independent things, the **
 > «All three matter equally — if you neglect one, the others do not compensate.»
 > The most common bottleneck is not the tool, but the context the model receives.
 
-**Tools and artefacts by surface:** one body of rules, four readings.
-`docs/base-standards.md` is read by Claude Code, Cursor, Codex, and Gemini through the four root
-files; Cursor adds `.cursor/rules/`; Copilot, `.github/copilot-instructions.md`.
+**Tools and artefacts by surface:** one body of rules, several readings.
+`docs/base-standards.md` is read by Claude Code and Cursor through `CLAUDE.md` and `AGENTS.md`;
+Cursor adds `.cursor/rules/`; Copilot, `.github/copilot-instructions.md`.
 
-**What the kit installs in this phase:** the doctrine in `docs/`, the four memory files
-pointing to `docs/base-standards.md`, Cursor rules, and Copilot instructions. Four
+**What the kit installs in this phase:** the doctrine in `docs/`, the memory files
+pointing to `docs/base-standards.md`, Cursor rules, and Copilot instructions. Several
 surfaces, one single source of truth.
 
 **What you have to do:** write `docs/project-context.md`. Under 200 lines, and only what

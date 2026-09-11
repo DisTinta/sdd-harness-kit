@@ -8,9 +8,9 @@ Contribution guide: [CONTRIBUTING.en.md](CONTRIBUTING.en.md). Origin and credits
 Portable AI artefacts —subagents, skills, hooks, standards, and templates— to apply
 **Spec-Driven Development** with a deterministic harness in any project.
 
-Canonical source in `ai-specs/`, doctrine in `docs/base-standards.md`, and the four memory files
-pointing to it. Includes **deterministic hooks**, **per-stack adapters**, **real Windows
-support**, a **health doctor**, and **deep secret gates**.
+Canonical source in `ai-specs/`, doctrine in `docs/base-standards.md`, and the memory files
+(`CLAUDE.md`, `AGENTS.md`) pointing to it. Includes **deterministic hooks**, **per-stack adapters**,
+**real Windows support**, a **health doctor**, and **deep secret gates**.
 
 ```bash
 # Linux / macOS
@@ -62,7 +62,7 @@ doctrine act on the file path, not on which command wrote it. Correspondence tab
 | `docs/project-context.md` | **The only file you write.** Survives updates |
 | `.cursor/rules/` | The same rules for Cursor: core, TDD, OpenSpec, and stack |
 | `.github/` | Copilot instructions, review and CI workflows, backend CI and `frontend.yml`, PR template |
-| `CLAUDE.md` `AGENTS.md` `GEMINI.md` `codex.md` | All four point to `docs/base-standards.md` |
+| `CLAUDE.md` `AGENTS.md` | Point to `docs/base-standards.md` |
 
 ---
 
@@ -204,8 +204,8 @@ This kit comes from the class notes of the **AI4Devs Master at [LIDR Academy](ht
 and takes as a starting point ideas and conventions from
 **[`LIDR-academy/lidr-specboot`](https://github.com/LIDR-academy/lidr-specboot)** (MIT), the
 master’s reference repository: the `ai-specs/` layout with skills and subagents as canonical source,
-standards in `docs/`, and the four per-copilot memory files —`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`,
-`codex.md`— pointing to a single doctrine.
+standards in `docs/`, and the per-copilot memory files —`CLAUDE.md`, `AGENTS.md`— pointing to a
+single doctrine.
 
 What this kit adds on top of that starting point:
 

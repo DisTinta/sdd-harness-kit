@@ -8,8 +8,8 @@ Este documento es agnóstico: no menciona ningún proyecto ni obliga a ningún s
 entre proyectos vive en `docs/project-context.md`, `docs/backend-standards.md` y
 `.claude/sdd-harness.env`.
 
-El kit usa una fuente canónica en `ai-specs/`, doctrina en `docs/base-standards.md`, y los cuatro
-ficheros de memoria apuntando a ella.
+El kit usa una fuente canónica en `ai-specs/`, doctrina en `docs/base-standards.md`, y los ficheros
+de memoria (`CLAUDE.md`, `AGENTS.md`) apuntando a ella.
 
 Inventario: **29 skills**, **9 subagentes** y **9 hooks**. Las skills y los subagentes se editan
 siempre en `ai-specs/`; `.claude/` y `.cursor/` los referencian, y `bash .claude/sync-artifacts.sh`
@@ -84,12 +84,12 @@ Antes de la primera línea de prompt hay que decidir tres cosas independientes, 
 > «Los tres importan por igual — si descuidas uno, los otros no compensan.»
 > El cuello de botella más frecuente no es la herramienta, sino el contexto que recibe el modelo.
 
-**Herramientas y artefactos por superficie:** un solo cuerpo de reglas, cuatro lecturas.
-`docs/base-standards.md` la leen Claude Code, Cursor, Codex y Gemini a través de los cuatro ficheros
-raíz; Cursor añade `.cursor/rules/`; Copilot, `.github/copilot-instructions.md`.
+**Herramientas y artefactos por superficie:** un solo cuerpo de reglas, varias lecturas.
+`docs/base-standards.md` la leen Claude Code y Cursor a través de `CLAUDE.md` y `AGENTS.md`;
+Cursor añade `.cursor/rules/`; Copilot, `.github/copilot-instructions.md`.
 
-**Lo que instala el kit en esta fase:** la doctrina en `docs/`, los cuatro ficheros de memoria
-apuntando a `docs/base-standards.md`, las reglas de Cursor y las instrucciones de Copilot. Cuatro
+**Lo que instala el kit en esta fase:** la doctrina en `docs/`, los ficheros de memoria
+apuntando a `docs/base-standards.md`, las reglas de Cursor y las instrucciones de Copilot. Varias
 superficies, una sola fuente de verdad.
 
 **Lo que tienes que hacer tú:** escribir `docs/project-context.md`. Menos de 200 líneas, y solo lo

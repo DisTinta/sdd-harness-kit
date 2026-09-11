@@ -234,7 +234,7 @@ If you skip a gate, the rest of the kit amplifies the error instead of saving yo
 
 | Don’t                                                                              | Why                                                                                                                |
 | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `/init` in the repo with the kit                                                   | `CLAUDE.md` / `AGENTS.md` / … point at `docs/base-standards.md`; `/init` would overwrite them and destroy the doctrine |
+| `/init` in the repo with the kit                                                   | `CLAUDE.md` / `AGENTS.md` point at `docs/base-standards.md`; `/init` would overwrite them and destroy the doctrine |
 | **Edit doctrine per project** (`docs/base-standards.md`, mandatory-steps, etc.)    | It is lost or overwritten when you update the kit. Facts → `project-context`; stack architecture → `*-standards.md`    |
 | **Real secrets or PII in chat / fixtures / PR**                                    | They enter the model context and history. Use env vars, MCP, synthetic data                                            |
 | **Install packages only because the model said so**                                | Slopsquatting risk — verify in the registry (`/privacy-ethics-check`)                                                  |

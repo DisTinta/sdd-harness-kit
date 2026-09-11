@@ -18,8 +18,8 @@ Architecture ideas and organisational conventions, not a copy of the content:
   then referenced from each copilot’s folders.
 - **Standards in `docs/`** as the document the agent reads so it does not reinvent architecture on
   every task.
-- The **four memory files** per copilot —`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `codex.md`—
-  all pointing to a single doctrine instead of duplicating it.
+- The **memory files** per copilot —`CLAUDE.md` and `AGENTS.md`— all pointing to a single doctrine
+  instead of duplicating it.
 - The general **Spec-Driven Development** approach on top of OpenSpec.
 
 The skills, subagents, standards, templates, and hooks in this kit are written for it. Where a
