@@ -101,7 +101,7 @@ Puedes usar el **prompt P0** de [PROMPTS.md](PROMPTS.md) para que el agente prop
 
 También revisa en el mismo día:
 
-- `.claude/sdd-harness.env` — ejecuta a mano `CMD_TEST` (si es lento, apunta a la suite rápida). Si `CMD_STATIC` / `CMD_MUTATION` o el `ci.yml` apuntan a binarios que no están en el manifiesto (típico: PHPStan e Infection en Laravel), no los trates como comandos reales: ver [USO.md — Problemas frecuentes](USO.md#problemas-frecuentes).
+- `.claude/sdd-harness.env` — ejecuta a mano `CMD_TEST` (si es lento, apunta a la suite rápida). Si `CMD_STATIC` / `CMD_MUTATION` o el `ci.yml` apuntan a binarios que no están en el manifiesto (típico: PHPStan e Infection en Laravel), no los trates como comandos reales: ver [USO.md — Problemas frecuentes](USO.md#problemas-frecuentes). Escape hatches documentados en [CONFIG.md](CONFIG.md): `KIT_ALLOW_WIP`, `KIT_SKIP_STOP_TESTS`, `KIT_PROTECT_SPECS`, `KIT_SPEC_AUDIT_GATE` (editar a mano; no commitear como `"0"` salvo spikes locales).
 - `docs/backend-standards.md` — ajústalo si tu arquitectura no es la del adaptador.
 - `docs/frontend-standards.md` — si no es React ni Livewire, parte de `adapters/_template.frontend-standards.md` del kit.
 - `tests/a11y/smoke.example.*` — scaffold de axe-core; cablea `test:a11y` cuando quieras el gate (ver `docs/frontend-standards.md`).
@@ -191,10 +191,10 @@ echo '{"source":"startup"}' | bash .claude/hooks/session-context.sh | jq .
 | --------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- |
 | **F0** Harness        | Contexto cargado, env sano, sesión limpia      | `/kit-health` si algo huele mal                                                    |
 | **F1** Planificación  | Story INVEST + criterios + non-goals           | `/enrich-us`, `/dod-feature` (u otro `/dod-`*)                                     |
-| **F2** Especificación | proposal + delta spec + design + tasks         | `/opsx:propose` o P5; luego `spec-auditor` / P6                                    |
+| **F2** Especificación | proposal + delta spec + design + tasks + audit | `/opsx:propose` o P5; luego `spec-auditor` / P6 → `reports/*-spec-audit.md` (`APPROVED`; §7.1 / `spec-audit-gate`) |
 | **F3** Armado         | Skills, plan mode, MCP                         | Plan mode (`Shift+Tab` ×2). Context7 al planear APIs de librería; Playwright al demo UI |
-| **F4** Ejecución      | Task a task, TDD                               | `/openspec-implement` o `/opsx:apply`; `/tdd-red` → `/tdd-green` → `/tdd-refactor` |
-| **F5** Verificación   | Evidencia real + conformidad + revisión hostil | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review`                |
+| **F4** Ejecución      | Task a task, TDD                               | `/openspec-implement` o `/opsx:apply` (solo con audit `APPROVED`); `/tdd-red` → `/tdd-green` → `/tdd-refactor` |
+| **F5** Verificación   | Evidencia + Pre-merge Review (último paso)     | PR abierto → `/show-spec-working` → `/verify-against-spec` → `/adversarial-review` → archive en el mismo PR |
 | **F6** Documentación  | Contratos / ADR si aplica                      | `/update-docs`, `/adr-new`                                                         |
 | **F7** Entrega        | Commits atómicos + PR                          | `/commit` (`feat(TICKET): …`), `/pr-describe`, `/pr-review` |
 | **F8** Cierre         | Archivar change + aprender                     | `/opsx:archive`; apuntes en `project-context` o standards                          |
@@ -215,7 +215,7 @@ Los hooks automatizan lo mecánico. **Estos cinco no se delegan:**
 1. **F1 — Story y criterios**
   No aceptes criterios de aceptación generados por IA sin contrastarlos con el sistema real. Recorta alcance inventado y fija non-goals.
 2. **F2 — Contrato**
-  Tras la propuesta/auditoría, **abre y edita** `proposal` / `specs` / `design` / `tasks` tú. El `tasks.md` debe cumplir los pasos obligatorios; el gate es tu firma implícita del alcance.
+  Tras la propuesta/auditoría (`spec-auditor`, veredicto `APPROVED` o bloqueantes que tú aceptas), **abre y edita** `proposal` / `specs` / `design` / `tasks` tú. El `tasks.md` debe cumplir los pasos obligatorios (incluido Pre-merge Review al final); el gate es tu firma implícita del alcance.
 3. **F4 — Plan antes de ejecutar**
   Si la tarea toca muchos ficheros, efectos colaterales o zona desconocida: plan mode, **apruebas el plan**, luego execute.
 4. **F4/F5 — Tests y evidencia**

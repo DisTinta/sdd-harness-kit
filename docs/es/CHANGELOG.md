@@ -12,6 +12,38 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 ---
 
+## [1.5.0]
+
+### Añadido
+
+- Paso obligatorio **Pre-merge Review** (último en `tasks.md`): PR abierto →
+  `/show-spec-working` → `/verify-against-spec` → `/adversarial-review` →
+  correcciones en el mismo PR → archive antes del merge. Enforced por
+  `validate-tasks`, documentado en `openspec-tasks-mandatory-steps.md`,
+  `config.yaml.tpl` y la regla Cursor `20-openspec.mdc`.
+- Interruptor `KIT_PROTECT_SPECS` (default `"1"`): desactiva las confirmaciones de
+  `protect-specs-and-tests` sin quitar el hook de `settings.json` (los bloqueos de
+  `.env`, `..` y la confirmación sobre `sdd-harness.env` siguen activos).
+  `block-dangerous-bash` deniega escrituras por shell a `sdd-harness.env` cuando el
+  destino es ese fichero.
+- Hook `spec-audit-gate` + interruptor `KIT_SPEC_AUDIT_GATE` (default `"1"`) +
+  §7.1 en `base-standards.md`: entre propose y apply el `spec-auditor` debe dejar
+  `reports/*-spec-audit.md`; sin informe no se edita código ni tests bajo
+  `PATH_SOURCE` / `PATH_TESTS`.
+- `spec-auditor` reescrito: checklist de 11 puntos, veredicto `APPROVED` /
+  `CHANGES REQUIRED`, contraste con el ítem de trabajo (tracker agnóstico),
+  `model: opus`.
+
+### Cambiado
+
+- `openspec-implement` y `20-openspec.mdc` exigen audit `APPROVED` (o bloqueantes
+  aceptados por la autora) antes de codificar.
+- `doctor.sh` / `doctor.ps1` comprueban `spec-audit-gate`.
+- Documentación de escape hatches en CONFIG / GUIA / STEP-BY-STEP; hueco de task
+  tracker en `project-context.md.tpl`.
+
+---
+
 ## [1.4.2]
 
 ### Fixed

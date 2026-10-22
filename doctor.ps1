@@ -48,7 +48,8 @@ Ok "canonical skills: $skillN"
 
 $hooks = @(
     'session-context','block-secrets','block-secret-reads','block-dangerous-bash',
-    'docs-gate','protect-specs-and-tests','post-edit-quality','validate-tasks','verify-tests','lib'
+    'docs-gate','protect-specs-and-tests','spec-audit-gate','post-edit-quality',
+    'validate-tasks','verify-tests','lib'
 )
 foreach ($h in $hooks) {
     $hp = Join-Path $Dest ".claude\hooks\$h.sh"
@@ -62,6 +63,8 @@ if (Test-Path $settings) {
     Ok 'settings.json'
     if (Select-String -Path $settings -Pattern 'block-secret-reads' -Quiet) { Ok 'settings registers block-secret-reads' }
     else { Warn 'settings.json does not reference block-secret-reads' }
+    if (Select-String -Path $settings -Pattern 'spec-audit-gate' -Quiet) { Ok 'settings registers spec-audit-gate' }
+    else { Warn 'settings.json does not reference spec-audit-gate (old kit?)' }
     if (Select-String -Path $settings -Pattern 'invoke\.cjs' -Quiet) { Ok 'settings launches hooks via invoke.cjs' }
     else { Warn 'settings.json does not use invoke.cjs (on Windows `bash` may be WSL)' }
 } else { Fail 'missing .claude/settings.json' }

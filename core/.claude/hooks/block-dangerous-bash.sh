@@ -37,7 +37,16 @@ if printf '%s' "$COMMAND" | grep -qE '(^|[[:space:]])(npm|pnpm|yarn|bun)[[:space
   ask "You are about to install a dependency. First verify in the official registry that the package exists and is the correct one: this is the slopsquatting vector."
 fi
 
-# 6. Additional stack-specific pattern, defined in sdd-harness.env.
+# 6. The kit contract (and its KIT_* switches) is changed by a human, never by a
+#    shell write from the agent. Reading stays free. Only deny when the write
+#    target is sdd-harness.env itself (not e.g. 2>/dev/null or redirect to another file).
+if printf '%s' "$COMMAND" | grep -q 'sdd-harness\.env' && \
+   printf '%s' "$COMMAND" | grep -qE \
+     '(sed|perl)[[:space:]]+[^|;&]*-i[^|;&]*sdd-harness\.env|>[[:space:]]*[^|&;[:space:]]*sdd-harness\.env|(^|[[:space:]|;&])(tee|truncate)[[:space:]]+[^|;&]*sdd-harness\.env|(^|[[:space:]|;&])(mv|cp)[[:space:]]+[^|;&]*sdd-harness\.env|dd[[:space:]]+[^|;&]*of=[^|;&]*sdd-harness\.env'; then
+  deny "sdd-harness.env is edited by hand, not from the agent's shell."
+fi
+
+# 7. Additional stack-specific pattern, defined in sdd-harness.env.
 if [[ -n "$GUARD_DANGEROUS_CMD" ]] && printf '%s' "$COMMAND" | grep -qE "$GUARD_DANGEROUS_CMD"; then
   ask "This command is destructive for this project's stack (${STACK}). Confirm manually."
 fi

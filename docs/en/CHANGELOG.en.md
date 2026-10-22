@@ -11,6 +11,36 @@ Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 ---
 
+## [1.5.0]
+
+### Added
+
+- Mandatory **Pre-merge Review** step (always last in `tasks.md`): PR open →
+  `/show-spec-working` → `/verify-against-spec` → `/adversarial-review` →
+  fixes on the same PR → archive before merge. Enforced by `validate-tasks`,
+  documented in `openspec-tasks-mandatory-steps.md`, `config.yaml.tpl` and the
+  Cursor rule `20-openspec.mdc`.
+- `KIT_PROTECT_SPECS` switch (default `"1"`): turns off `protect-specs-and-tests`
+  confirmations without removing the hook from `settings.json` (`.env` / `..`
+  denies and the `sdd-harness.env` ask stay on). `block-dangerous-bash` denies
+  shell writes when the write target is `sdd-harness.env` itself.
+- `spec-audit-gate` hook + `KIT_SPEC_AUDIT_GATE` switch (default `"1"`) + §7.1 in
+  `base-standards.md`: between propose and apply the `spec-auditor` must leave
+  `reports/*-spec-audit.md`; without a report, code and tests under
+  `PATH_SOURCE` / `PATH_TESTS` are denied.
+- Rewritten `spec-auditor`: 11-point checklist, `APPROVED` / `CHANGES REQUIRED`
+  verdict, contrast against the work item (tracker-agnostic), `model: opus`.
+
+### Changed
+
+- `openspec-implement` and `20-openspec.mdc` require an `APPROVED` audit (or
+  author-accepted blockers) before coding.
+- `doctor.sh` / `doctor.ps1` check `spec-audit-gate`.
+- Escape-hatch docs in CONFIG / GUIA / STEP-BY-STEP; task-tracker slot in
+  `project-context.md.tpl`.
+
+---
+
 ## [1.4.2]
 
 ### Fixed

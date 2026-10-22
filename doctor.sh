@@ -48,7 +48,7 @@ else
 fi
 
 # Hooks
-HOOKS=(session-context block-secrets block-secret-reads block-dangerous-bash docs-gate protect-specs-and-tests post-edit-quality validate-tasks verify-tests lib)
+HOOKS=(session-context block-secrets block-secret-reads block-dangerous-bash docs-gate protect-specs-and-tests spec-audit-gate post-edit-quality validate-tasks verify-tests lib)
 for h in "${HOOKS[@]}"; do
   if [[ -f "$DEST/.claude/hooks/${h}.sh" ]]; then ok "hook $h"
   else fail "missing hook ${h}.sh"; fi
@@ -59,6 +59,11 @@ if [[ -f "$DEST/.claude/settings.json" ]] && grep -q 'block-secret-reads' "$DEST
   ok "settings registers block-secret-reads"
 else
   warn "settings.json does not reference block-secret-reads (old kit?)"
+fi
+if [[ -f "$DEST/.claude/settings.json" ]] && grep -q 'spec-audit-gate' "$DEST/.claude/settings.json"; then
+  ok "settings registers spec-audit-gate"
+else
+  warn "settings.json does not reference spec-audit-gate (old kit?)"
 fi
 if [[ -f "$DEST/.claude/settings.json" ]] && grep -q 'invoke.cjs' "$DEST/.claude/settings.json"; then
   ok "settings launches hooks via invoke.cjs"
