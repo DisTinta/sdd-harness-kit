@@ -12,6 +12,17 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 ---
 
+## [1.4.2]
+
+### Fixed
+
+- Los comandos de los 9 hooks en `.claude/settings.json` usan
+  `${CLAUDE_PROJECT_DIR}/.claude/hooks/…`. Con rutas relativas, Claude Code las
+  resolvía desde el directorio de trabajo (por ejemplo `openspec/changes/`) y Node
+  no encontraba `invoke.cjs`.
+
+---
+
 ## [1.4.1]
 
 ### Fixed

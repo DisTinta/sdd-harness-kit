@@ -11,6 +11,17 @@ Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 ---
 
+## [1.4.2]
+
+### Fixed
+
+- The 9 hook commands in `.claude/settings.json` use
+  `${CLAUDE_PROJECT_DIR}/.claude/hooks/…`. Relative paths were resolved from the
+  working directory (for example `openspec/changes/`), so Node could not find
+  `invoke.cjs`.
+
+---
+
 ## [1.4.1]
 
 ### Fixed
