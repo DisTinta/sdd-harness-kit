@@ -6,19 +6,23 @@
 
 ## Qué se ejecuta y cuándo
 
-| Herramienta | ¿Hace falta? | Cuándo |
-|---|---|---|
-| El instalador del kit | **Sí** | Una vez por proyecto |
-| Completar `docs/project-context.md` | **Sí** | Una vez por proyecto, a mano |
-| `openspec init` + cablear `config.yaml` | **Sí** | Una vez por proyecto, después del instalador |
-| `doctor.ps1` / `doctor.sh` | **Sí** | Tras instalar y cuando algo “no pega” |
-| Activar MCP del proyecto (Context7, Playwright) | Recomendado | Una vez por máquina/IDE; el JSON ya lo copia el instalador |
-| `claude` (la sesión, sin barra) | **Sí** | Cada vez que trabajas |
-| `bash .claude/sync-artifacts.sh` | Cuando toque | Tras crear, renombrar o mover una skill |
-| `/init` | **NO. Nunca en este repositorio** | Rompería la doctrina. Ver abajo |
-| `claude mcp add …` (Jira, BD, etc.) | Opcional | Conectores de equipo con secretos; no van en el kit |
+
+| Herramienta                                     | ¿Hace falta?                      | Cuándo                                                     |
+| ----------------------------------------------- | --------------------------------- | ---------------------------------------------------------- |
+| El instalador del kit                           | **Sí**                            | Una vez por proyecto                                       |
+| Completar `docs/project-context.md`             | **Sí**                            | Una vez por proyecto, a mano                               |
+| `openspec init` + cablear `config.yaml`         | **Sí**                            | Una vez por proyecto, después del instalador               |
+| `doctor.ps1` / `doctor.sh`                      | **Sí**                            | Tras instalar y cuando algo “no pega”                      |
+| Activar MCP del proyecto (Context7, Playwright) | Recomendado                       | Una vez por máquina/IDE; el JSON ya lo copia el instalador |
+| `claude` (la sesión, sin barra)                 | **Sí**                            | Cada vez que trabajas                                      |
+| `bash .claude/sync-artifacts.sh`                | Cuando toque                      | Tras crear, renombrar o mover una skill                    |
+| `/init`                                         | **NO. Nunca en este repositorio** | Rompería la doctrina. Ver abajo                            |
+| `claude mcp add …` (Jira, BD, etc.)             | Opcional                          | Conectores de equipo con secretos; no van en el kit        |
+
 
 ---
+
+
 
 ## Día 1 · Preparar el proyecto
 
@@ -43,7 +47,7 @@ Detecta el stack, copia `ai-specs/` y los hooks, escribe la doctrina en `docs/`,
 genera `docs/project-context.md` con los comandos ya puestos, y enlaza `.claude` y `.cursor` a
 `ai-specs`.
 
-Al final te dirá **`enlazados N · copiados N`**. Si dice «copiados», tu sistema no permite symlinks y
+Al final te dirá `enlazados N · copiados N`. Si dice «copiados», tu sistema no permite symlinks y
 el kit ha hecho copias: funciona igual, pero recuerda editar siempre `ai-specs/` y ejecutar
 `sync-artifacts` para propagar.
 
@@ -67,10 +71,12 @@ git diff .claude/settings.json     # debería estar vacío
 Los nombres no colisionan: OpenSpec instala comandos `/opsx:*` y el kit tiene los suyos. Lo que crea
 cada uno como instalador:
 
-| Ruta | La crea |
-|---|---|
-| `ai-specs/templates/openspec/` | el kit (plantillas de referencia) |
-| `openspec/project.md`, `openspec/changes/`, `openspec/specs/` | `openspec init` |
+
+| Ruta                                                          | La crea                           |
+| ------------------------------------------------------------- | --------------------------------- |
+| `ai-specs/templates/openspec/`                                | el kit (plantillas de referencia) |
+| `openspec/project.md`, `openspec/changes/`, `openspec/specs/` | `openspec init`                   |
+
 
 El **instalador** del kit no escribe dentro de `openspec/`: ese directorio lo gobierna la herramienta.
 Durante el trabajo del día a día sí se escribe ahí, por supuesto —es donde vive cada change— y **da
@@ -91,9 +97,11 @@ te propone el contenido señalando qué ha tenido que inferir.
 Escríbelo **en inglés**: `base-standards.md` §2 lo exige para todo artefacto técnico, y un hook te
 avisará si detecta español en el código.
 
-> ⚠️ **No ejecutes `/init`.** Los ficheros de memoria (`CLAUDE.md`, `AGENTS.md`) apuntan a
+> ⚠️ **No ejecutes** `/init`**.** Los ficheros de memoria (`CLAUDE.md`, `AGENTS.md`) apuntan a
 > `docs/base-standards.md`. `/init` escribiría a través de ellos y se llevaría la
 > doctrina por delante. Para el contexto del proyecto usa P0.
+
+
 
 ### 4. Ajusta los standards del stack
 
@@ -139,6 +147,8 @@ echo '{"tool_input":{"command":"rm -rf /"}}' | bash .claude/hooks/block-dangerou
 echo '{"tool_input":{"command":"git status"}}' | bash .claude/hooks/block-dangerous-bash.sh   # sin salida
 ```
 
+
+
 ### 7. Comprueba que las skills cargan
 
 Abre la sesión (`claude`) y escribe `/`. Deben aparecer `/enrich-us`, `/tdd-red`, `/pr-review` y el
@@ -178,7 +188,11 @@ Se commitea a propósito: es la configuración del equipo. Lo que no se commitea
 
 ---
 
+
+
 ## Día 2 y siguientes · El ciclo de trabajo
+
+
 
 ### Preparar el terreno
 
@@ -312,6 +326,8 @@ retro sobre los datos del ciclo.
 
 ---
 
+
+
 ## Chuleta
 
 ```
@@ -344,6 +360,8 @@ Nunca
 
 ---
 
+
+
 ## Las 27 skills
 
 **Planificación**
@@ -371,15 +389,17 @@ contexto aislado.
 
 ---
 
+
+
 ## Problemas frecuentes
 
-**P0 o el CI dicen que faltan `phpstan` / `infection` (o Stryker, Typedoc…).** El adaptador copia un
+**P0 o el CI dicen que faltan** `phpstan` **/** `infection` **(o Stryker, Typedoc…).** El adaptador copia un
 pipeline y unos `CMD_*` de referencia; el instalador **no instala paquetes**. Un Laravel de fábrica no
 trae PHPStan ni Infection. No los listes como comandos en `docs/project-context.md`: van a **Gotchas**.
 Después decides: instalar las herramientas y alinear `project-context.md`, `sdd-harness.env` y
 `ci.yml`, o vaciar esas variables y quitar los steps. Los tres ficheros tienen que decir lo mismo.
 
-**Las skills no aparecen con `/`.** Reinicia la sesión. Si persiste:
+**Las skills no aparecen con** `/`**.** Reinicia la sesión. Si persiste:
 `bash .claude/sync-artifacts.sh --check`. Si dice `TEXTO`, los symlinks se materializaron como
 ficheros: ejecuta `sync-artifacts.sh` sin `--check` y hará copias que sí funcionan.
 
@@ -392,7 +412,7 @@ no esté si instalaste con `--no-frontend`.
 `ai-specs/skills/`? En modo copia son ficheros distintos. `sync-artifacts.sh --check` te dirá
 `DIVERGE`; mueve tu cambio a `ai-specs/` y sincroniza.
 
-**El sync marca skills `openspec-*` como `KEEP` (o, en un kit viejo, como huérfanas).** Es
+**El sync marca skills** `openspec-`* **como** `KEEP` **(o, en un kit viejo, como huérfanas).** Es
 esperado después de `openspec init`. No viven en `ai-specs/`: son los comandos `/opsx:*` de
 OpenSpec. **No las borres.** `KEEP` no hace fallar el sync. Un `ORPHAN` / `HUÉRFANO` de verdad
 es otro nombre (skill del kit que se renombró o una copia solo en `.claude/skills/`).
@@ -400,7 +420,7 @@ es otro nombre (skill del kit que se renombró o una copia solo en `.claude/skil
 **Todos mis turnos tardan mucho en cerrarse.** Es el hook de `Stop` ejecutando `CMD_TEST`. Apúntalo a
 la parte rápida de la suite.
 
-**Stop: `Hook JSON output validation failed`.** El hook sí corrió (si ves «Suite en verde», los tests
+**Stop:** `Hook JSON output validation failed`**.** El hook sí corrió (si ves «Suite en verde», los tests
 pasaron). Claude Code rechazó el JSON de salida: Stop no admite `additionalContext`. Actualiza
 `.claude/hooks/lib.sh` y `verify-tests.sh` desde el kit (el recordatorio va en `systemMessage`).
 
@@ -408,11 +428,11 @@ pasaron). Claude Code rechazó el JSON de salida: Stop no admite `additionalCont
 trae Git for Windows. Los hooks no invocan `bash` a secas: `.claude/hooks/invoke.cjs` elige Git Bash
 en Windows (si no, el `bash` de PATH suele ser WSL y un PHP distinto al de Laragon).
 
-**Stop / Composer: `You are running 8.2` con un proyecto que pide 8.3.** `CMD_TEST` está bien. El
+**Stop / Composer:** `You are running 8.2` **con un proyecto que pide 8.3.** `CMD_TEST` está bien. El
 `php` es el del shell del hook. En Windows, `invoke.cjs` debe existir y `settings.json` debe
 lanzarlo con `node`. No pongas rutas de Laragon en `sdd-harness.env`.
 
-**`validate-tasks` rechaza mi `tasks.md`.** Está haciendo cumplir
+`validate-tasks` **rechaza mi** `tasks.md`**.** Está haciendo cumplir
 `docs/openspec-tasks-mandatory-steps.md`: falta el Step 0 de rama, algún paso obligatorio, la etiqueta
 `(MANDATORY)`, el `AGENT MUST EXECUTE`, la restauración de estado o la numeración `N.M`. El mensaje
 dice cuál.
