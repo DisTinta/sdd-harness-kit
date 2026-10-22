@@ -159,6 +159,37 @@ own commands (`opsx:propose`, `opsx:explore`, `opsx:apply`, `opsx:sync`, `opsx:a
 kit's equivalents (`/openspec-implement`, the `explorer`/`spec-auditor` subagents, prompts P4-P6). The
 hooks and this document do not know or care which one produced the artifact in front of them.
 
+## 7.1 Mandatory Spec Audit Between Propose and Apply
+
+Once the propose step has produced every artifact of a change (`proposal.md`, `design.md`, the delta
+specs and `tasks.md`), and before any apply step writes code or tests for it, the `spec-auditor`
+subagent MUST review the change. A proposal's defects cost least before the first line of code.
+
+Required order:
+
+1. Run `spec-auditor` over `openspec/changes/<change>/` as the closing step of the propose, whether
+   it ran through `opsx:propose`, `opsx:ff` or the kit's prompts. Pass it the work-item id and/or the
+   ticket text (and the parent/container item if the project uses hierarchy), as described in
+   `docs/project-context.md`. If it cannot reach the project's task tracker, pass the ticket text in
+   the prompt.
+2. Save its full report as `openspec/changes/<change>/reports/<YYYY-MM-DD>-spec-audit.md`. The
+   subagent is read-only, so the main session writes the file. The report opens with the verdict:
+   `APPROVED` or `CHANGES REQUIRED`.
+3. On `CHANGES REQUIRED`, apply its "Corrections to apply" to the artifacts under rule 7
+   (`opsx:update` or an equivalent edit), and to the work item according to the project's tracker
+   conventions in `docs/project-context.md`. A finding that needs a product or scope decision goes to
+   the author; the agent does not settle it alone. No finding becomes a new issue or task: it widens
+   the change's own artifacts. Close the report with a section that says, per finding, how it was
+   resolved: fixed, rejected with the reason, or decided by the author. Then run the auditor again
+   and append its verdict.
+4. Start the apply only on an `APPROVED` verdict, or on blocking findings the author explicitly
+   accepted (recorded in the closing section). An apply step (`opsx:apply`, `/openspec-implement`)
+   that finds no audit report runs steps 1–3 first, without touching code.
+
+The `spec-audit-gate` hook enforces it: an edit under `PATH_SOURCE` or `PATH_TESTS` is denied while
+the branch's active change has no `reports/*spec-audit*.md`. The switch `KIT_SPEC_AUDIT_GATE` in
+`.claude/sdd-harness.env` turns it off; that is the author's call, made by hand.
+
 ## 8. Context Hygiene
 
 The context window is a ceiling, not a target. Degradation begins well before it is full.

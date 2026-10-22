@@ -67,6 +67,8 @@ Variables de rama y escape hatches:
 | `BRANCH_PREFIX` | Prefijo de rama que **exige** `validate-tasks` en el Step 0. Por defecto `feature/` |
 | `KIT_ALLOW_WIP` | `1` = el Stop hook no bloquea por suite en rojo (solo spikes locales; quitar antes del PR) |
 | `KIT_SKIP_STOP_TESTS` | `1` = no ejecuta la suite en Stop |
+| `KIT_PROTECT_SPECS` | `1` (default) = `protect-specs-and-tests` pide confirmación antes de reescribir artefactos OpenSpec existentes, tests existentes, migraciones versionadas y doctrina del kit. `0` = deja de preguntar. Los bloqueos de `.env`, `..` y la confirmación sobre `sdd-harness.env` **siguen activos**. Editar a mano; con `0` el SessionStart avisa; no commitear como `0`. No desactives quitando el hook de `settings.json` (perderías también el bloqueo de `.env`) |
+| `KIT_SPEC_AUDIT_GATE` | `1` (default) = `spec-audit-gate` deniega ediciones bajo `PATH_SOURCE` / `PATH_TESTS` mientras el change activo de la rama no tenga `openspec/changes/<change>/reports/*spec-audit*.md` (`docs/base-standards.md` §7.1). `0` = gate off. Editar a mano; con `0` el SessionStart avisa; no commitear como `0` |
 
 **Seguridad del fichero:** no se hace `source` ni `eval` del env. Solo se aceptan claves allowlisted
 en formato `KEY="valor"`. Líneas con `$(...)` o backticks se ignoran con aviso.
@@ -78,16 +80,17 @@ Las rutas son relativas a la raíz del repositorio y se comparan por prefijo de 
 
 ## Quién consume esta configuración
 
-Los **nueve** hooks del kit. Ninguno tiene un comando escrito dentro:
+Los hooks del kit. Ninguno tiene un comando escrito dentro:
 
 | Hook | Variables que usa |
 |---|---|
-| `session-context` | `STACK`, `CMD_*`, `LAYER_ORDER`, `PATH_BUSINESS`, `BRANCH_PREFIX` |
+| `session-context` | `STACK`, `CMD_*`, `LAYER_ORDER`, `PATH_BUSINESS`, `BRANCH_PREFIX`, `KIT_PROTECT_SPECS`, `KIT_SPEC_AUDIT_GATE` |
 | `block-secrets` | ninguna (patrones universales en el prompt) |
 | `block-secret-reads` | ninguna (patrones de ruta de secretos) |
 | `block-dangerous-bash` | `GUARD_DANGEROUS_CMD`, `STACK` |
 | `docs-gate` | `PATH_MIGRATIONS`, `PATH_HTTP`, `SOURCE_EXTENSIONS` |
-| `protect-specs-and-tests` | `PATH_TESTS`, `PATH_MIGRATIONS` |
+| `protect-specs-and-tests` | `PATH_TESTS`, `PATH_MIGRATIONS`, `KIT_PROTECT_SPECS` |
+| `spec-audit-gate` | `PATH_SOURCE`, `PATH_TESTS`, `KIT_SPEC_AUDIT_GATE` |
 | `post-edit-quality` | `SOURCE_EXTENSIONS`, `CMD_FORMAT_FILE`, `CMD_STATIC_FILE`, `PATH_BUSINESS`, `PATH_HTTP`, las dos guardas |
 | `validate-tasks` | `BRANCH_PREFIX` + checklist de `openspec-tasks-mandatory-steps.md` |
 | `verify-tests` | `CMD_TEST`, `PATH_SOURCE`, `PATH_TESTS`, `PATH_ADR`, `KIT_*` |

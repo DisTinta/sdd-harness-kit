@@ -37,6 +37,9 @@ Verified against this repository. If a command is not here, it does not exist �
 - Branch naming: `feature/<ticket-id>`
 - Ticket id format: {{e.g. ABC-123}}
 - Base branch: {{main}}
+- Task tracker: {{which app — e.g. the team's issue tracker}}
+- How the agent loads a work item (and parent/container if any): {{paste text / MCP / link / export —
+  whatever this installation uses; the kit does not assume a vendor}}
 
 ## Operational constraints
 
