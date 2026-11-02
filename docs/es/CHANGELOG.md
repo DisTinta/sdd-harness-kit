@@ -12,6 +12,18 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 ---
 
+## [1.5.1]
+
+### Añadido
+
+- Tras install/update, `install.sh` / `install.ps1` listan **Project-owned follow-ups
+  (manual)** solo si el destino aún no tiene lo que el kit no pisa sin `--force`:
+  `KIT_PROTECT_SPECS` / `KIT_SPEC_AUDIT_GATE` en `sdd-harness.env`, reglas Pre-merge /
+  §7.1 en `openspec/config.yaml`, y el hueco Task tracker en `project-context.md`.
+  Si todo está al día: `none`.
+
+---
+
 ## [1.5.0]
 
 ### Añadido

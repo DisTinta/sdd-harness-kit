@@ -327,6 +327,39 @@ if (-not $DryRun) {
     & powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $KitDir 'doctor.ps1') -Dest $Dest
 }
 
+# Project-owned files are kept on update: detect kit switches the destination still lacks.
+Write-Head "Project-owned follow-ups (manual)"
+$followUps = 0
+$envFile = Join-Path $Dest '.claude\sdd-harness.env'
+if (Test-Path -LiteralPath $envFile) {
+    if (-not (Select-String -Path $envFile -Pattern '^\s*KIT_PROTECT_SPECS=' -Quiet)) {
+        Write-Warn "Add KIT_PROTECT_SPECS=`"1`" to .claude/sdd-harness.env (see adapters/$Stack.env / docs/en/CONFIG.en.md). lib.sh defaults to `"1`" until you set it."
+        $followUps++
+    }
+    if (-not (Select-String -Path $envFile -Pattern '^\s*KIT_SPEC_AUDIT_GATE=' -Quiet)) {
+        Write-Warn "Add KIT_SPEC_AUDIT_GATE=`"1`" to .claude/sdd-harness.env (see adapters/$Stack.env / docs/en/CONFIG.en.md). lib.sh defaults to `"1`" until you set it."
+        $followUps++
+    }
+}
+$cfg = Join-Path $Dest 'openspec\config.yaml'
+if (-not (Test-Path -LiteralPath $cfg)) { $cfg = Join-Path $Dest 'openspec\config.yml' }
+if (Test-Path -LiteralPath $cfg) {
+    if (-not (Select-String -Path $cfg -Pattern 'Pre-merge Review|spec-audit' -Quiet)) {
+        Write-Warn 'Merge Pre-merge Review + §7.1 audit rules into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks + operations.apply/archive).'
+        $followUps++
+    }
+}
+$pc = Join-Path $Dest 'docs\project-context.md'
+if ((Test-Path -LiteralPath $pc) -and -not (Select-String -Path $pc -Pattern 'Task tracker|task tracker' -Quiet)) {
+    Write-Warn 'Add a Task tracker slot to docs/project-context.md (which app + how the agent loads a work item / parent). See ai-specs/templates/project-context.md.tpl.'
+    $followUps++
+}
+if ($followUps -eq 0) {
+    Write-Ok 'none — project-owned files already cover current kit switches'
+} else {
+    Write-Host '  (These are not overwritten without -Force. Edit by hand; do not commit KIT_* as "0".)'
+}
+
 Write-Head "Siguientes pasos"
 @"
   Update: kit-owned se actualiza siempre; project-owned (env, MCP, stack) solo con -Force.

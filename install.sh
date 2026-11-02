@@ -336,6 +336,40 @@ if [[ $DRY_RUN -eq 0 ]]; then
   bash "$KIT_DIR/doctor.sh" --dest "$DEST" || warn "doctor encontró fallos — revísalos antes de la primera sesión"
 fi
 
+# Project-owned files are kept on update: detect kit switches the destination still lacks.
+head_ "Project-owned follow-ups (manual)"
+FOLLOWUPS=0
+ENVF="$DEST/.claude/sdd-harness.env"
+if [[ -f "$ENVF" ]]; then
+  if ! grep -qE '^[[:space:]]*KIT_PROTECT_SPECS=' "$ENVF" 2>/dev/null; then
+    warn "Add KIT_PROTECT_SPECS=\"1\" to .claude/sdd-harness.env (see adapters/${STACK}.env / docs/en/CONFIG.en.md). lib.sh defaults to \"1\" until you set it."
+    FOLLOWUPS=1
+  fi
+  if ! grep -qE '^[[:space:]]*KIT_SPEC_AUDIT_GATE=' "$ENVF" 2>/dev/null; then
+    warn "Add KIT_SPEC_AUDIT_GATE=\"1\" to .claude/sdd-harness.env (see adapters/${STACK}.env / docs/en/CONFIG.en.md). lib.sh defaults to \"1\" until you set it."
+    FOLLOWUPS=1
+  fi
+fi
+CFG=""
+[[ -f "$DEST/openspec/config.yaml" ]] && CFG="$DEST/openspec/config.yaml"
+[[ -z "$CFG" && -f "$DEST/openspec/config.yml" ]] && CFG="$DEST/openspec/config.yml"
+if [[ -n "$CFG" ]]; then
+  if ! grep -qiE 'Pre-merge Review|spec-audit' "$CFG" 2>/dev/null; then
+    warn "Merge Pre-merge Review + §7.1 audit rules into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks + operations.apply/archive)."
+    FOLLOWUPS=1
+  fi
+fi
+PC="$DEST/docs/project-context.md"
+if [[ -f "$PC" ]] && ! grep -qiE 'Task tracker|task tracker' "$PC" 2>/dev/null; then
+  warn "Add a Task tracker slot to docs/project-context.md (which app + how the agent loads a work item / parent). See ai-specs/templates/project-context.md.tpl."
+  FOLLOWUPS=1
+fi
+if [[ $FOLLOWUPS -eq 0 ]]; then
+  ok "none — project-owned files already cover current kit switches"
+else
+  say "  (These are not overwritten without --force. Edit by hand; do not commit KIT_* as \"0\".)"
+fi
+
 head_ "Siguientes pasos"
 cat <<STEPS
   Update: kit-owned se actualiza siempre; project-owned (env, MCP, stack) solo con --force.
