@@ -74,10 +74,10 @@ cd /ruta/a/sdd-harness-kit
 ./install.sh --dest ~/proyectos/mi-api --stack laravel
 ```
 
-Al terminar deberías ver algo como `enlazados N · copiados N`:
+Al terminar deberías ver algo como `linked N · copied N · ok N · diverging N · orphans N · keep N`:
 
-- **enlazados** = symlinks a `ai-specs/` (ideal).
-- **copiados** = el SO no permitió symlinks (típico en Windows sin modo desarrollador). **Funciona igual**, pero debes editar siempre `ai-specs/` y luego sincronizar (ver § Troubleshooting).
+- **linked** (enlazados) = symlinks a `ai-specs/` (ideal).
+- **copied** (copiados) = el SO no permitió symlinks (típico en Windows sin modo desarrollador). **Funciona igual**, pero debes editar siempre `ai-specs/` y luego sincronizar (ver § Troubleshooting).
 
 El instalador **no** ejecuta `openspec init` ni rellena por ti el significado de `project-context`.
 Sí copia `.mcp.json` y `.cursor/mcp.json` (Context7; Playwright salvo `--no-frontend` / `-NoFrontend`).
@@ -135,6 +135,7 @@ git diff .claude/settings.json     # idealmente vacío o revisado
 
 ```bash
 # Desde el proyecto, si la plantilla ya está en ai-specs (tras install):
+# Sustituye el config.yaml que creó `openspec init`; si ya lo habías personalizado, fusiona a mano.
 cp ai-specs/templates/openspec/config.yaml.tpl openspec/config.yaml
 ```
 
@@ -255,7 +256,7 @@ Si saltas un gate, el resto del kit amplifica el error en lugar de salvarte.
 En Windows sin Developer Mode, Git puede materializar symlinks como texto. Las skills no cargan.
 
 1. `bash .claude/sync-artifacts.sh --check` (o el `.ps1`).
-2. Si ves `TEXTO` / broken: ejecuta sync **sin** `--check` para pasar a **modo copia**.
+2. Si ves `TEXT` / `BROKEN`: ejecuta sync **sin** `--check` para pasar a **modo copia**.
 3. A partir de ahí: edita `ai-specs/…` y vuelve a sincronizar tras cada cambio de skill/agent.
 4. Alternativa de sistema: activa modo desarrollador de Windows y reinstala/re-enlaza.
 
@@ -302,7 +303,7 @@ También: `/sync-agent-artifacts`.
 
 Tras `openspec init`, el sync puede listar `openspec-propose`, `openspec-apply-change`, etc. con
 etiqueta **`KEEP`**. Son las skills nativas de OpenSpec (`/opsx:*`). No las borres; no es un
-error. Un **`ORPHAN` / `HUÉRFANO`** de verdad es cualquier otro nombre que no esté en
+error. Un **`ORPHAN`** de verdad es cualquier otro nombre que no esté en
 `ai-specs/`.
 
 ### `validate-tasks` y `BRANCH_PREFIX`

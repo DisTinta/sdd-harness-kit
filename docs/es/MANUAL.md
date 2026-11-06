@@ -11,7 +11,7 @@ entre proyectos vive en `docs/project-context.md`, `docs/backend-standards.md` y
 El kit usa una fuente canónica en `ai-specs/`, doctrina en `docs/base-standards.md`, y los ficheros
 de memoria (`CLAUDE.md`, `AGENTS.md`) apuntando a ella.
 
-Inventario: **29 skills**, **9 subagentes** y **9 hooks**. Las skills y los subagentes se editan
+Inventario: **30 skills**, **9 subagentes** y **10 hooks**. Las skills y los subagentes se editan
 siempre en `ai-specs/`; `.claude/` y `.cursor/` los referencian, y `bash .claude/sync-artifacts.sh`
 reconstruye esas referencias cuando dejan de resolver.
 
@@ -48,7 +48,7 @@ TRANSVERSAL: ética, privacidad y seguridad en las nueve fases
 **Dos caminos, un resultado.** F2 y F4 tienen dos formas equivalentes de ejecutarse: los comandos
 nativos de OpenSpec (`/opsx:*`, instalados por `openspec init`) o los artefactos del kit. Usa el que
 prefieras, mézclalos entre tickets o incluso dentro del mismo ticket — la doctrina en `docs/` y los
-9 hooks no distinguen uno del otro, porque actúan sobre la ruta del fichero, no sobre quién lo
+10 hooks no distinguen uno del otro, porque actúan sobre la ruta del fichero, no sobre quién lo
 escribió.
 
 | Fase | Camino nativo de OpenSpec | Camino del kit |
@@ -59,7 +59,7 @@ escribió.
 | Implementar | `/opsx:apply` | `/openspec-implement`, o el ciclo `/tdd-red` → `/tdd-green` → `/tdd-refactor` |
 | Reconciliar delta → spec principal | `/opsx:sync` | — (no hace falta: `/openspec-implement` no toca `specs/`) |
 | Verificar | `/opsx:verify` (workflow ampliado) | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review` |
-| Cerrar | `/opsx:archive` | — |
+| Archivar (en la PR, antes del merge) | `/opsx:archive` | `/openspec-archive` justo después: índice `INDEX.md`, commit de archivo y poda de deltas |
 
 > El perfil por defecto de OpenSpec trae `/opsx:explore`, `/opsx:propose`, `/opsx:apply` y
 > `/opsx:archive`. Los comandos `/opsx:new`, `/opsx:continue`, `/opsx:ff` y `/opsx:verify` son del
@@ -326,11 +326,16 @@ ramas concurrentes.
 4. Etiqueta los PR autogenerados.
 5. Los conectores en modo solo lectura para revisión; nunca escritura sobre producción sin humano.
 
-**Skills:** `/commit`, `/pr-describe`, `/pr-review`.
+**Archivado:** archiva el change dentro de la PR, antes del merge, con `/opsx:archive` y justo después
+`/openspec-archive` (paso 11.5 de `openspec-tasks-mandatory-steps.md`). Así llega a la rama
+principal ya archivado.
+
+**Skills:** `/commit`, `/pr-describe`, `/pr-review`, `/openspec-archive`.
 
 ### F8 · Cierre
 
-- **Archiva el change.** «Archivar no es opcional. Si dejas changes activos sin archivar, las
+- **Comprueba que el change quedó archivado** (se archiva en F7, dentro de la PR). «Archivar no
+  es opcional. Si dejas changes activos sin archivar, las
   próximas propuestas no tendrán el contexto correcto de qué ya está implementado.»
 - **Mide segmentando por origen del PR**: velocity, bugs por PR, tiempo hasta el merge, tasa de
   retrabajo. «Si los agentes tienen tres veces más bugs, la velocity está mintiendo.»
@@ -356,6 +361,8 @@ ramas concurrentes.
 ---
 
 ## 2. Matriz de artefactos del kit
+
+Selección de los artefactos más usados por fase. La lista completa está en `ai-specs/skills/` y `ai-specs/agents/`.
 
 | Artefacto | Ruta | Fase | Qué garantiza |
 |---|---|---|---|
@@ -385,10 +392,13 @@ ramas concurrentes.
 | `/architecture-audit` | skill | F4 | DDD, fronteras, SOLID/CUPID, modo Fowler |
 | `/adr-new` | skill | F6 | Transcribir decisiones, y decir cuándo no hace falta |
 | `/commit`, `/pr-describe` | skills | F7 | Commits atómicos y PR con el «por qué» vacío |
+| `/openspec-archive` | skill | F7 | Índice del archivo, commit con los deltas y poda segura, sin push |
 | `session-context` | hook | F0 | Que el agente arranque sabiendo dónde está |
 | `validate-tasks` | hook | F2 | Que un `tasks.md` sin verificación no pase |
+| `spec-audit-gate` | hook | F2-F4 | Que no se escriba código ni tests hasta que el `spec-auditor` haya revisado el change |
 | `docs-gate` | hook | F6 | Que no se commitee con la documentación mintiendo |
 | `block-secrets` | hook | transversal | Que ninguna credencial entre en el contexto |
+| `block-secret-reads` | hook | transversal | Que no se lean `.env`, credenciales ni claves privadas |
 | `block-dangerous-bash` | hook | transversal | Que `rm -rf`, `--force` y producción no pasen |
 | `protect-specs-and-tests` | hook | F2-F4 | Que los specs, los tests y las migraciones no se reescriban sin decisión humana |
 | `post-edit-quality` | hook | F4 | Formato, análisis estático y guardas de capas |

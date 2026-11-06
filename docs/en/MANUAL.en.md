@@ -11,7 +11,7 @@ across projects lives in `docs/project-context.md`, `docs/backend-standards.md`,
 The kit uses a canonical source in `ai-specs/`, doctrine in `docs/base-standards.md`, and the
 memory files (`CLAUDE.md`, `AGENTS.md`) pointing to it.
 
-Inventory: **29 skills**, **9 subagents**, and **9 hooks**. Skills and subagents are always edited
+Inventory: **30 skills**, **9 subagents**, and **10 hooks**. Skills and subagents are always edited
 in `ai-specs/`; `.claude/` and `.cursor/` reference them, and `bash .claude/sync-artifacts.sh`
 rebuilds those references when they stop resolving.
 
@@ -48,7 +48,7 @@ CROSS-CUTTING: ethics, privacy, and security across all nine phases
 **Two paths, one outcome.** F2 and F4 have two equivalent ways to run: native OpenSpec
 commands (`/opsx:*`, installed by `openspec init`) or the kit’s artefacts. Use whichever
 you prefer, mix them across tickets or even within the same ticket — the doctrine in `docs/` and the
-9 hooks do not distinguish one from the other, because they act on the file path, not on who
+10 hooks do not distinguish one from the other, because they act on the file path, not on who
 wrote it.
 
 | Phase | Native OpenSpec path | Kit path |
@@ -59,7 +59,7 @@ wrote it.
 | Implement | `/opsx:apply` | `/openspec-implement`, or the `/tdd-red` → `/tdd-green` → `/tdd-refactor` cycle |
 | Reconcile delta → main spec | `/opsx:sync` | — (not needed: `/openspec-implement` does not touch `specs/`) |
 | Verify | `/opsx:verify` (extended workflow) | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review` |
-| Close | `/opsx:archive` | — |
+| Archive (in the PR, before merge) | `/opsx:archive` | `/openspec-archive` right after: `INDEX.md` index, archive commit and delta pruning |
 
 > OpenSpec's default profile ships `/opsx:explore`, `/opsx:propose`, `/opsx:apply` and
 > `/opsx:archive`. The `/opsx:new`, `/opsx:continue`, `/opsx:ff` and `/opsx:verify` commands belong to
@@ -326,11 +326,16 @@ concurrent branches.
 4. Label auto-generated PRs.
 5. Connectors in read-only mode for review; never write to production without a human.
 
-**Skills:** `/commit`, `/pr-describe`, `/pr-review`.
+**Archiving:** archive the change inside the PR, before merge, with `/opsx:archive` and right after it
+`/openspec-archive` (step 11.5 of `openspec-tasks-mandatory-steps.md`). It reaches the main
+branch already archived.
+
+**Skills:** `/commit`, `/pr-describe`, `/pr-review`, `/openspec-archive`.
 
 ### F8 · Closure
 
-- **Archive the change.** «Archiving is not optional. If you leave active changes unarchived, the
+- **Check the change was archived** (it is archived in F7, inside the PR). «Archiving is not
+  optional. If you leave active changes unarchived, the
   next proposals will not have the correct context of what is already implemented.»
 - **Measure by segmenting on PR origin**: velocity, bugs per PR, time to merge, rework
   rate. «If agents have three times more bugs, velocity is lying.»
@@ -356,6 +361,8 @@ concurrent branches.
 ---
 
 ## 2. Kit artefact matrix
+
+A selection of the most used artefacts per phase. The full list is in `ai-specs/skills/` and `ai-specs/agents/`.
 
 | Artefact | Path | Phase | What it guarantees |
 |---|---|---|---|
@@ -385,10 +392,13 @@ concurrent branches.
 | `/architecture-audit` | skill | F4 | DDD, boundaries, SOLID/CUPID, Fowler mode |
 | `/adr-new` | skill | F6 | Transcribe decisions, and say when they are not needed |
 | `/commit`, `/pr-describe` | skills | F7 | Atomic commits and PR with the «why» left blank |
+| `/openspec-archive` | skill | F7 | Archive index, commit with the deltas and safe pruning, never pushes |
 | `session-context` | hook | F0 | That the agent starts knowing where it is |
 | `validate-tasks` | hook | F2 | That a `tasks.md` without verification does not pass |
+| `spec-audit-gate` | hook | F2-F4 | That no code or test is written until the `spec-auditor` has reviewed the change |
 | `docs-gate` | hook | F6 | That you do not commit with documentation lying |
 | `block-secrets` | hook | cross-cutting | That no credential enters the context |
+| `block-secret-reads` | hook | cross-cutting | That `.env`, credentials and private keys are not read |
 | `block-dangerous-bash` | hook | cross-cutting | That `rm -rf`, `--force`, and production do not pass |
 | `protect-specs-and-tests` | hook | F2-F4 | That specs, tests, and migrations are not rewritten without a human decision |
 | `post-edit-quality` | hook | F4 | Format, static analysis, and layer guards |

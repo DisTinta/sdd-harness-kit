@@ -43,7 +43,7 @@ It detects the stack, copies `ai-specs/` and the hooks, writes the doctrine into
 generates `docs/project-context.md` with the commands already filled in, and links `.claude` and `.cursor` to
 `ai-specs`.
 
-At the end it will say **`enlazados N · copiados N`**. If it says «copiados», your system does not allow symlinks and
+At the end it will say **`linked N · copied N · ok N · …`**. If `copied` is not 0, your system does not allow symlinks and
 the kit has made copies: it works the same, but remember to always edit `ai-specs/` and run
 `sync-artifacts` to propagate.
 
@@ -70,7 +70,7 @@ installer creates:
 | Path | Created by |
 |---|---|
 | `ai-specs/templates/openspec/` | the kit (reference templates) |
-| `openspec/project.md`, `openspec/changes/`, `openspec/specs/` | `openspec init` |
+| `openspec/config.yaml`, `openspec/changes/`, `openspec/specs/` | `openspec init` |
 
 The kit **installer** does not write inside `openspec/`: that directory is owned by the tool.
 During day-to-day work it is written there, of course —that is where each change lives— and **it does not
@@ -128,7 +128,7 @@ add them. If the binary does not exist, do not leave it as a usable command: see
 ls .claude/hooks/
 ```
 
-The 9 hooks run code with your permissions. Read them. And try them without opening a session, because they are scripts that read
+The 10 hooks run code with your permissions. Read them. And try them without opening a session, because they are scripts that read
 JSON from standard input:
 
 ```bash
@@ -169,6 +169,7 @@ Jira, databases, or other connectors with secrets do **not** go here: `claude mc
 
 ```bash
 git add ai-specs .claude .cursor .github docs CLAUDE.md AGENTS.md .mcp.json
+# plus, if the installer created them: tests/a11y, infection.json, .dependency-cruiser.js, .gitignore
 git commit -m "chore: add SDD Harness Kit"
 ```
 
@@ -346,7 +347,7 @@ Never
 
 ---
 
-## The 27 skills
+## The 30 skills
 
 **Planning**
 `/enrich-us` · `/dod-feature` · `/dod-bug` · `/dod-refactor` · `/dod-spike` · `/dod-docs` · `/meta-prompt`
@@ -355,10 +356,10 @@ Never
 `/openspec-implement` · `/feature-slice` · `/tdd-red` · `/tdd-green` · `/tdd-refactor`
 
 **Verification**
-`/show-spec-working` · `/verify-against-spec` · `/adversarial-review` · `/pr-review` · `/code-auditing` · `/privacy-ethics-check`
+`/show-spec-working` · `/verify-against-spec` · `/adversarial-review` · `/pr-review` · `/code-auditing` · `/privacy-ethics-check` · `/migration-review` · `/architecture-audit`
 
 **Documentation and delivery**
-`/explain` · `/adr-new` · `/update-docs` · `/commit` · `/pr-describe`
+`/explain` · `/adr-new` · `/update-docs` · `/commit` · `/pr-describe` · `/openspec-archive`
 
 **Kit maintenance**
 `/writing-skills` · `/sync-agent-artifacts` · `/using-git-worktrees` · `/kit-health`
@@ -382,7 +383,7 @@ Then decide: install the tools and align `project-context.md`, `sdd-harness.env`
 `ci.yml`, or clear those variables and remove the steps. The three files must say the same thing.
 
 **Skills do not appear with `/`.** Restart the session. If it persists:
-`bash .claude/sync-artifacts.sh --check`. If it says `TEXTO`, the symlinks materialised as
+`bash .claude/sync-artifacts.sh --check`. If it says `TEXT`, the symlinks materialised as
 files: run `sync-artifacts.sh` without `--check` and it will make copies that do work.
 
 **Context7 or Playwright do not show up as tools.** The JSON files are in the repo, but the IDE has
@@ -392,17 +393,17 @@ is absent if you installed with `--no-frontend`.
 
 **You edit a skill and the change does not apply.** Did you edit it in `.claude/skills/` instead of in
 `ai-specs/skills/`? In copy mode they are different files. `sync-artifacts.sh --check` will tell you
-`DIVERGE`; move your change to `ai-specs/` and sync.
+`DIVERGES`; move your change to `ai-specs/` and sync.
 
 **Sync marks `openspec-*` skills as `KEEP` (or, on an old kit, as orphans).** That is
 expected after `openspec init`. They do not live in `ai-specs/`: they are OpenSpec’s `/opsx:*`
-commands. **Do not delete them.** `KEEP` does not fail the sync. A real `ORPHAN` / `HUÉRFANO`
+commands. **Do not delete them.** `KEEP` does not fail the sync. A real `ORPHAN`
 is another name (a kit skill that was renamed, or a copy only in `.claude/skills/`).
 
 **All my turns take a long time to close.** It is the `Stop` hook running `CMD_TEST`. Point it at
 the fast part of the suite.
 
-**Stop: `Hook JSON output validation failed`.** The hook did run (if you see «Suite en verde», the tests
+**Stop: `Hook JSON output validation failed`.** The hook did run (if you see «Suite is green», the tests
 passed). Claude Code rejected the output JSON: Stop does not allow `additionalContext`. Update
 `.claude/hooks/lib.sh` and `verify-tests.sh` from the kit (the reminder goes in `systemMessage`).
 
