@@ -762,7 +762,8 @@ CRITERIO DE ACEPTACIÓN
 
 ## P15 · Cierre y aprendizaje
 
-Archiva el cambio primero. Después:
+El cambio se archivó en su pull request antes del merge (`/opsx:archive` y después
+`/openspec-archive`). Después:
 
 ```
 CONTEXTO Y ROL
@@ -770,7 +771,8 @@ Eres un analista de proceso. El cambio está mergeado. Trabajas a nivel de equip
 NUNCA a nivel individual.
 
 INPUTS
-- El cambio archivado.
+- El cambio archivado: su fila en `openspec/changes/archive/INDEX.md` y, si necesitas los
+  artefactos, `git show <commit-de-archivado>:openspec/changes/archive/<carpeta>/<fichero>`.
 - Datos del ciclo: <tiempo desde la apertura del PR hasta el merge>, <número de comentarios de
   revisión>, <commits de corrección tras la primera revisión>, <etiqueta de origen del PR>.
 

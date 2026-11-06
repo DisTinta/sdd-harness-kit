@@ -319,10 +319,13 @@ rellénalo tú.
 
 ### Fase 8 · Cerrar
 
-`/opsx:archive` tras el merge —te preguntará si hace falta `/opsx:sync` primero para volcar el delta
-sobre el spec principal, y en ese caso reescribe `openspec/specs/<capability>/spec.md`: el hook lo
-deja pasar preguntando, igual que con cualquier otra reescritura—. Después, el **prompt P15** para la
-retro sobre los datos del ciclo.
+**Antes del merge, en la misma pull request** (Pre-merge Review, paso 11.5): `/opsx:archive` —te
+preguntará si hace falta `/opsx:sync` primero para volcar el delta sobre el spec principal, y en ese
+caso reescribe `openspec/specs/<capability>/spec.md`: el hook lo deja pasar preguntando, igual que con
+cualquier otra reescritura—, y después `/openspec-archive`, que escribe la fila en
+`openspec/changes/archive/INDEX.md`, crea el commit de archivado con los deltas y poda deltas según
+`KIT_ARCHIVE_PRUNE_DELTAS`. Haces el merge después del commit de archivado. Después, el **prompt P15**
+para la retro sobre los datos del ciclo.
 
 ---
 
@@ -343,7 +346,7 @@ Cada ticket
   /show-spec-working  →  /verify-against-spec  →  /adversarial-review
   /update-docs  →  /adr-new  →  /pr-review
   /commit  →  /pr-describe                        →  ESCRIBES EL POR QUÉ
-  (/opsx:sync)  →  /opsx:archive       →  P15 retro
+  (/opsx:sync)  →  /opsx:archive  →  /openspec-archive  (misma PR)  →  MERGEAS TÚ  →  P15 retro
 
   Todo lo de la izquierda con /opsx: tiene equivalente en el kit (ver tabla en MANUAL.md)
   y viceversa. No hay que elegir uno para todo el proyecto: se decide por ticket.
