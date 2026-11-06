@@ -55,7 +55,8 @@ Existing Spanish in installers or the root PR template is legacy debt — do not
 
 ## 4. How to change the kit
 
-- Branch from `main`: `feat/…`, `fix/…`, `docs/…`. No direct pushes to `main`.
+- Branch from `dev`: `feat/…`, `fix/…`, `docs/…`. PRs target `dev`; `dev` is merged into `main`
+  for releases. No direct pushes to `dev` or `main`.
 - Small, focused PRs. Use `.github/pull_request_template.md`.
 - Touch **both** `install.sh` and `install.ps1` when installer behaviour changes.
 - New stack adapter: follow the full checklist in `docs/en/CONTRIBUTING.en.md` (or `docs/es/CONTRIBUTING.md`).
