@@ -23,7 +23,7 @@ Sustituye solo lo que va entre `<corchetes angulares>`.
 > Varios pasos tienen una skill o un subagente equivalente ya instalados. Cuando los haya, se indica:
 > la skill es más rápida, el prompt es más explícito y editable. Usa el que prefieras.
 >
-> Las 27 skills y los 9 subagentes están en `ai-specs/`. `USO.md` los lista por fase.
+> Las 30 skills y los 9 subagentes están en `ai-specs/`. `USO.md` los lista por fase.
 
 ---
 

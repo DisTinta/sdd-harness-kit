@@ -30,7 +30,7 @@ Thanks for contributing. This repository uses a simple flow to keep quality and 
 else** you must touch for it to be complete — it exists because the `fastify` adapter was left
 half-finished the first time:
 
-1. `adapters/<stack>.env` — required. The 24 contract variables from `_template.env`.
+1. `adapters/<stack>.env` — required. Every contract variable from `_template.env` (`CMD_*`, `PATH_*`, `GUARD_*` and the `KIT_*` switches).
 2. `adapters/<stack>.backend-standards.md` — the five questions from [CONFIG.en.md](CONFIG.en.md), with real paths.
 3. `adapters/<stack>.rules.mdc` and `adapters/<stack>.ci.yml` — optional, but the other adapters ship them.
 4. Extra stack config, if needed: `<stack>.infection.json`, `<stack>.dependency-cruiser.js`. Needs a copy block in **both** installers.
