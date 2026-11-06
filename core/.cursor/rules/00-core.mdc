@@ -21,7 +21,8 @@ This project's concrete conventions (commands, layer paths, stack) live in
 5. **Fact → memory; procedure → skill; invariant → hook.** Do not restate in a prompt a guarantee
    that a hook already enforces.
 6. **Curate context, do not accumulate it.** Explore in a subagent, summarise, and do not carry
-   irrelevant history.
+   irrelevant history. Archived OpenSpec changes are history: consult
+   `openspec/changes/archive/INDEX.md` and Git, never the archived folders by default.
 7. **Non-goals must be explicit** in every unit of work. Without stated limits, scope grows.
 8. **The "why" is not written by you.** Not in the pull request, not in the ADR, not in the story.
 9. **`git push --force` and merges are signed by a human.**

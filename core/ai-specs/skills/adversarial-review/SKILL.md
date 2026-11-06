@@ -24,7 +24,9 @@ Read the change artifacts and the diff, then work through the four axes below.
 - Does every requirement have a scenario, and every scenario a test that actually asserts it?
 - Does any task marked `[x]` lack the evidence the mandatory steps require?
 - Does the code do anything the specification does not ask for?
-- Was the specification edited after implementation to match the code? Check the history.
+- Was the specification edited after implementation to match the code? Check the history with Git
+  (`git log -p -- openspec/`); for past changes use `openspec/changes/archive/INDEX.md`, not the
+  archived folders.
 
 ### 2. Correctness under hostile input
 
