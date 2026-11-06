@@ -194,10 +194,10 @@ echo '{"source":"startup"}' | bash .claude/hooks/session-context.sh | jq .
 | **F2** Especificación | proposal + delta spec + design + tasks + audit | `/opsx:propose` o P5; luego `spec-auditor` / P6 → `reports/*-spec-audit.md` (`APPROVED`; §7.1 / `spec-audit-gate`) |
 | **F3** Armado         | Skills, plan mode, MCP                         | Plan mode (`Shift+Tab` ×2). Context7 al planear APIs de librería; Playwright al demo UI |
 | **F4** Ejecución      | Task a task, TDD                               | `/openspec-implement` o `/opsx:apply` (solo con audit `APPROVED`); `/tdd-red` → `/tdd-green` → `/tdd-refactor` |
-| **F5** Verificación   | Evidencia + Pre-merge Review (último paso)     | PR abierto → `/show-spec-working` → `/verify-against-spec` → `/adversarial-review` → archive en el mismo PR |
+| **F5** Verificación   | Evidencia + Pre-merge Review (último paso)     | PR abierto → `/show-spec-working` → `/verify-against-spec` → `/adversarial-review` → `/opsx:archive` + `/openspec-archive` en el mismo PR, antes del merge |
 | **F6** Documentación  | Contratos / ADR si aplica                      | `/update-docs`, `/adr-new`                                                         |
 | **F7** Entrega        | Commits atómicos + PR                          | `/commit` (`feat(TICKET): …`), `/pr-describe`, `/pr-review` |
-| **F8** Cierre         | Archivar change + aprender                     | `/opsx:archive`; apuntes en `project-context` o standards                          |
+| **F8** Cierre         | Aprender (change ya archivado en su PR)        | Retro P15 tras el merge; apuntes en `project-context` o standards                  |
 | **Transversal**       | Privacidad / deps / datos                      | `/privacy-ethics-check`                                                            |
 | **Prompts flojos**    | Antes de una sesión cara                       | `/meta-prompt`                                                                     |
 

@@ -6,11 +6,11 @@ Thanks for contributing. This repository uses a simple flow to keep quality and 
 
 ## Workflow
 
-- Create a branch from `main` for each change:
+- Create a branch from `dev` for each change:
   - `feat/<short-description>`
   - `fix/<short-description>`
   - `docs/<short-description>`
-- Avoid pushing directly to `main`.
+- Avoid pushing directly to `dev` or `main`; PRs target `dev`, and `dev` is merged into `main` for releases.
 - Open a Pull Request (PR) to land any change.
 
 ## Pull Request rules

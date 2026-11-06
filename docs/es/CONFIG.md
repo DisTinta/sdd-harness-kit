@@ -78,6 +78,51 @@ Las rutas son relativas a la raíz del repositorio y se comparan por prefijo de 
 
 ---
 
+## Retención del archivo de OpenSpec
+
+OpenSpec nunca poda `openspec/changes/archive/`. El kit lo mantiene acotado con
+`.claude/openspec-archive.sh`, que ejecuta la skill `/openspec-archive` justo después de
+`/opsx:archive` (paso 11.5 de la Pre-merge Review). Nunca hace push, amend, rebase, squash ni usa
+`--no-verify`.
+
+| Variable | Por defecto | Para qué |
+|---|---|---|
+| `KIT_ARCHIVE_INDEX` | `1` | Mantiene `openspec/changes/archive/INDEX.md`: una fila por change archivado (carpeta, título, capacidades, commit de archivado, etiqueta). Los agentes leen este fichero en vez de las carpetas archivadas |
+| `KIT_ARCHIVE_PRUNE_DELTAS` | `deferred` | `deferred`: la PR de archivado solo lleva el commit de archivado (con deltas); los deltas de changes anteriores se podan cuando `git cat-file -e <rama-principal>:<carpeta>/specs` demuestra que ya están en la rama principal. `immediate`: commit de archivado + commit de poda separado en la misma PR. `off`: nunca poda deltas |
+| `KIT_ARCHIVE_PRUNE_FOLDERS` | `0` | `1` permite `prune-folders --apply` |
+| `KIT_ARCHIVE_KEEP` | `50` | La poda de carpetas nunca toca las N carpetas fechadas más recientes |
+| `KIT_ARCHIVE_MAX_AGE_DAYS` | `180` | …ni las que tengan menos de N días (gana la regla que conserve más) |
+| `KIT_ARCHIVE_DEFAULT_BRANCH` | origin/HEAD, si no `main` | Ref contra la que se fusionan las PR; sirve de prueba en `deferred` (p. ej. `origin/main`, `origin/dev`) |
+
+Un valor no válido vuelve al comportamiento no destructivo y muestra un aviso.
+
+**Squash merge.** Con `immediate`, el commit de archivado (deltas) y el de poda están en la rama de la
+PR; un squash deja en la rama principal solo el árbol ya podado, así que los deltas nunca llegan a su
+historial. Usa `immediate` solo en repos que fusionan con merge commit o rebase. `deferred` es seguro
+con cualquier estrategia; la poda va un archivado por detrás.
+
+**Comandos** (Windows: `node .claude/hooks/invoke.cjs .claude/openspec-archive.sh …`):
+
+```bash
+bash .claude/openspec-archive.sh config                       # configuración efectiva
+bash .claude/openspec-archive.sh post-archive <carpeta> [--dry-run]
+bash .claude/openspec-archive.sh index [--dry-run]            # rellena/repara INDEX.md
+bash .claude/openspec-archive.sh prune-deltas [--dry-run] [--only <carpeta>]
+bash .claude/openspec-archive.sh prune-folders [--apply] [--only <carpeta>]   # dry-run por defecto
+```
+
+`prune-folders --apply` crea antes la etiqueta anotada `openspec-archive-snapshot-AAAA-MM` sobre HEAD
+(sufijo `-2`, `-3`… si ya existe), elimina las carpetas en un único commit y anota la etiqueta en
+`INDEX.md`. **La etiqueta solo existe en local** hasta que la publiques (`git push origin <etiqueta>`).
+
+**Recuperación:** `git show <commit-de-archivado>:openspec/changes/archive/<carpeta>/specs/<cap>/spec.md`
+para deltas podados; `git show <etiqueta>:openspec/changes/archive/<carpeta>/proposal.md` para carpetas
+podadas.
+
+**Tras actualizar el kit** en un repo existente: `INDEX.md` se rellena en el primer archivado (o con
+`index`), y `deferred` lista todos los changes antiguos cuyos deltas ya están en la rama principal;
+revisa antes `prune-deltas --dry-run` y acota con `--only` si hace falta.
+
 ## Quién consume esta configuración
 
 Los hooks del kit. Ninguno tiene un comando escrito dentro:

@@ -12,9 +12,10 @@ effort: high
 !`grep -vE '^\s*#|^\s*$' .claude/sdd-harness.env`
 
 ## Active changes
-!`ls -1 openspec/changes`
+!`ls -1 openspec/changes | grep -vx archive`
 
-Ignore the `archive` directory if present.
+Archived changes are not listed on purpose: do not open `openspec/changes/archive/`. If you need
+history, read `openspec/changes/archive/INDEX.md` and use Git (`git log`, `git show <ref>:<path>`).
 
 ## Repository state
 - Branch: !`git branch --show-current`

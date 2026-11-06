@@ -86,6 +86,20 @@ else
   warn "missing openspec/config.yaml — use ai-specs/templates/openspec/config.yaml.tpl as a guide"
 fi
 
+# OpenSpec archive retention
+if [[ -f "$DEST/.claude/openspec-archive.sh" ]]; then
+  ok ".claude/openspec-archive.sh (archive retention)"
+  if command -v git >/dev/null && git -C "$DEST" rev-parse --show-toplevel >/dev/null 2>&1; then
+    ARCH_CFG="$( (cd "$DEST" && bash .claude/openspec-archive.sh config) 2>/dev/null | paste -sd ' ' - || true)"
+    [[ -n "$ARCH_CFG" ]] && ok "archive retention: $ARCH_CFG"
+  fi
+else
+  warn "missing .claude/openspec-archive.sh — re-run the kit installer"
+fi
+if [[ -d "$DEST/openspec/changes/archive" ]] && [[ ! -f "$DEST/openspec/changes/archive/INDEX.md" ]]; then
+  warn "openspec/changes/archive/INDEX.md missing — run: bash .claude/openspec-archive.sh index"
+fi
+
 # MCP (recommended, non-blocking)
 if [[ -f "$DEST/.mcp.json" ]]; then
   ok ".mcp.json (Claude Code)"

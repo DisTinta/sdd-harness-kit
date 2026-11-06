@@ -349,6 +349,14 @@ if [[ -f "$ENVF" ]]; then
     warn "Add KIT_SPEC_AUDIT_GATE=\"1\" to .claude/sdd-harness.env (see adapters/${STACK}.env / docs/en/CONFIG.en.md). lib.sh defaults to \"1\" until you set it."
     FOLLOWUPS=1
   fi
+  MISSING_ARCHIVE=""
+  for k in KIT_ARCHIVE_INDEX KIT_ARCHIVE_PRUNE_DELTAS KIT_ARCHIVE_PRUNE_FOLDERS KIT_ARCHIVE_KEEP KIT_ARCHIVE_MAX_AGE_DAYS KIT_ARCHIVE_DEFAULT_BRANCH; do
+    grep -qE "^[[:space:]]*$k=" "$ENVF" 2>/dev/null || MISSING_ARCHIVE="$MISSING_ARCHIVE $k"
+  done
+  if [[ -n "$MISSING_ARCHIVE" ]]; then
+    warn "Add the OpenSpec archive retention keys to .claude/sdd-harness.env:$MISSING_ARCHIVE (block at the end of adapters/${STACK}.env / docs/en/CONFIG.en.md). lib.sh defaults apply until you set them: INDEX on, deltas deferred, folder pruning off."
+    FOLLOWUPS=1
+  fi
 fi
 CFG=""
 [[ -f "$DEST/openspec/config.yaml" ]] && CFG="$DEST/openspec/config.yaml"
@@ -356,6 +364,10 @@ CFG=""
 if [[ -n "$CFG" ]]; then
   if ! grep -qiE 'Pre-merge Review|spec-audit' "$CFG" 2>/dev/null; then
     warn "Merge Pre-merge Review + §7.1 audit rules into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks + operations.apply/archive)."
+    FOLLOWUPS=1
+  fi
+  if ! grep -qE 'openspec-archive' "$CFG" 2>/dev/null; then
+    warn "Merge the /openspec-archive step into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks last step + operations.archive.guidance)."
     FOLLOWUPS=1
   fi
 fi

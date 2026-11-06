@@ -28,7 +28,8 @@ The path through the code, with real paths and line numbers. Follow the actual c
 reconstruct it from the names.
 
 ### 3. Why it is like this
-Look for the reason before guessing at it: check the decision records, the change history, the commit
+Look for the reason before guessing at it: check the decision records, the change history (`openspec/changes/archive/INDEX.md` plus
+`git log` / `git show <ref>:<path>`; do not open archived change folders), the commit
 that introduced it. If you find the reason, cite it. **If you do not, say that you do not know** rather
 than inventing a plausible rationale — a confident wrong reason is worse than an admitted gap, because
 the next person will build on it.

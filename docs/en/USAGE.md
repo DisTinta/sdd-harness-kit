@@ -304,9 +304,12 @@ you fill it in.
 
 ### Phase 8 · Close
 
-`/opsx:archive` after the merge —it will ask whether `/opsx:sync` is needed first to dump the delta
-onto the main spec, and in that case it rewrites `openspec/specs/<capability>/spec.md`: the hook
-lets it through after asking, same as with any other rewrite—. Afterwards, **prompt P15** for the
+**Before the merge, on the same pull request** (Pre-merge Review, step 11.5): `/opsx:archive` —it
+will ask whether `/opsx:sync` is needed first to dump the delta onto the main spec, and in that case it
+rewrites `openspec/specs/<capability>/spec.md`: the hook lets it through after asking, same as with
+any other rewrite—, then `/openspec-archive`, which writes the row in
+`openspec/changes/archive/INDEX.md`, creates the archive commit with the delta specs and prunes deltas
+per `KIT_ARCHIVE_PRUNE_DELTAS`. You merge after the archive commit. Afterwards, **prompt P15** for the
 retro on the cycle data.
 
 ---
@@ -326,7 +329,7 @@ Every ticket
   /show-spec-working  →  /verify-against-spec  →  /adversarial-review
   /update-docs  →  /adr-new  →  /pr-review
   /commit  →  /pr-describe                        →  YOU WRITE THE WHY
-  (/opsx:sync)  →  /opsx:archive       →  P15 retro
+  (/opsx:sync)  →  /opsx:archive  →  /openspec-archive  (same PR)  →  YOU MERGE  →  P15 retro
 
   Everything on the left with /opsx: has a kit equivalent (see table in MANUAL.en.md)
   and vice versa. You do not have to pick one for the whole project: decide per ticket.

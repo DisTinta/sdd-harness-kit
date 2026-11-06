@@ -761,7 +761,8 @@ ACCEPTANCE CRITERIA
 
 ## P15 · Close and learn
 
-Archive the change first. Then:
+The change was archived on its pull request before the merge (`/opsx:archive`, then
+`/openspec-archive`). Then:
 
 ```
 CONTEXT AND ROLE
@@ -769,7 +770,8 @@ You are a process analyst. The change is merged. You work at team and process le
 NEVER at individual level.
 
 INPUTS
-- The archived change.
+- The archived change: its row in `openspec/changes/archive/INDEX.md` and, if you need the
+  artifacts, `git show <archive-commit>:openspec/changes/archive/<folder>/<file>`.
 - Cycle data: <time from PR open to merge>, <number of review
   comments>, <fix commits after the first review>, <PR origin label>.
 

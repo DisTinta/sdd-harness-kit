@@ -340,12 +340,22 @@ if (Test-Path -LiteralPath $envFile) {
         Write-Warn "Add KIT_SPEC_AUDIT_GATE=`"1`" to .claude/sdd-harness.env (see adapters/$Stack.env / docs/en/CONFIG.en.md). lib.sh defaults to `"1`" until you set it."
         $followUps++
     }
+    $archiveKeys = @('KIT_ARCHIVE_INDEX','KIT_ARCHIVE_PRUNE_DELTAS','KIT_ARCHIVE_PRUNE_FOLDERS','KIT_ARCHIVE_KEEP','KIT_ARCHIVE_MAX_AGE_DAYS','KIT_ARCHIVE_DEFAULT_BRANCH')
+    $missingArchive = @($archiveKeys | Where-Object { -not (Select-String -Path $envFile -Pattern "^\s*$_=" -Quiet) })
+    if ($missingArchive.Count -gt 0) {
+        Write-Warn "Add the OpenSpec archive retention keys to .claude/sdd-harness.env: $($missingArchive -join ' ') (block at the end of adapters/$Stack.env / docs/en/CONFIG.en.md). lib.sh defaults apply until you set them: INDEX on, deltas deferred, folder pruning off."
+        $followUps++
+    }
 }
 $cfg = Join-Path $Dest 'openspec\config.yaml'
 if (-not (Test-Path -LiteralPath $cfg)) { $cfg = Join-Path $Dest 'openspec\config.yml' }
 if (Test-Path -LiteralPath $cfg) {
     if (-not (Select-String -Path $cfg -Pattern 'Pre-merge Review|spec-audit' -Quiet)) {
         Write-Warn 'Merge Pre-merge Review + §7.1 audit rules into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks + operations.apply/archive).'
+        $followUps++
+    }
+    if (-not (Select-String -Path $cfg -Pattern 'openspec-archive' -Quiet)) {
+        Write-Warn 'Merge the /openspec-archive step into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks last step + operations.archive.guidance).'
         $followUps++
     }
 }

@@ -6,11 +6,11 @@ Gracias por contribuir. Este repositorio usa un flujo simple para mantener calid
 
 ## Flujo de trabajo
 
-- Crea una rama desde `main` para cada cambio:
+- Crea una rama desde `dev` para cada cambio:
   - `feat/<descripcion-corta>`
   - `fix/<descripcion-corta>`
   - `docs/<descripcion-corta>`
-- Evita hacer `push` directo a `main`.
+- Evita hacer `push` directo a `dev` o `main`; las PR van contra `dev`, y `dev` se integra en `main` para cada versión.
 - Abre un Pull Request (PR) para integrar cualquier cambio.
 
 ## Reglas para Pull Requests
