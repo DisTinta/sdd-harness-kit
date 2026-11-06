@@ -30,6 +30,7 @@ English-only product artefacts). It is **not** the doctrine of this kit reposito
 | `install.sh` / `install.ps1` | Install into `--dest` (refuse to install the kit onto itself) |
 | `doctor.sh` / `doctor.ps1` | Health check for an installed destination |
 | `openspec/` | OpenSpec changes and specs for the kit itself (not installed) |
+| `.claude/sdd-harness.env` | Kit-repo settings for `core/.claude/openspec-archive.sh` on this repo (`KIT_ARCHIVE_DEFAULT_BRANCH="origin/dev"`); not payload |
 | `VERSION` | Semver of the installable kit |
 | `AGENTS.md` / `CLAUDE.md` | **These files** — maintainer rules for the kit repo only |
 
