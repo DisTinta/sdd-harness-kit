@@ -187,6 +187,13 @@ toda tarea que mute datos incluya su restauración:
 
 ## 10. Update Technical Documentation (MANDATORY)
 - [ ] 10.1 Regenerate the API specification
+
+## 11. Pre-merge Review (MANDATORY - AGENT MUST EXECUTE)
+- [ ] 11.1 Open the pull request (after confirming with the author)
+- [ ] 11.2 Run `/show-spec-working`, `/verify-against-spec` and `/adversarial-review`; one report each under `reports/`
+- [ ] 11.3 Fix every finding and record its destination in `design.md` → Follow-ups
+- [ ] 11.4 Commit the fixes to the same pull request
+- [ ] 11.5 `/opsx:archive`, then `/openspec-archive`; the author merges afterwards
 ```
 
 Si el agente escribe un `tasks.md` sin el paso 0, sin la etiqueta `(MANDATORY)`, sin el
@@ -194,8 +201,11 @@ Si el agente escribe un `tasks.md` sin el paso 0, sin la etiqueta `(MANDATORY)`,
 momento de escribirlo** y le dice exactamente qué falta. La doctrina deja de ser una
 recomendación.
 
-**Gate humano.** Abrir los cuatro ficheros y editarlos. El subagente `spec-auditor` o el prompt P6 te
-dicen dónde mirar —incluida la conformidad del `tasks.md`—; la decisión es tuya.
+**Gate humano.** Abrir los cuatro ficheros y editarlos. Después, el subagente `spec-auditor` (o el
+prompt P6) revisa el change y su informe se guarda en `reports/*-spec-audit.md`. **Es obligatorio:**
+el hook `spec-audit-gate` no deja escribir código ni tests hasta que ese informe existe y termina en
+`APPROVED` o con los hallazgos bloqueantes que tú aceptaste. El auditor te dice dónde mirar
+—incluida la conformidad del `tasks.md`—; la decisión sobre el alcance es tuya.
 
 ---
 

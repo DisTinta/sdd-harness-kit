@@ -144,7 +144,7 @@ Las skills que dependen de esta configuración para ejecutar algo son las que m�
 `/openspec-implement`, `/tdd-red`, `/tdd-green`, `/tdd-refactor`, `/feature-slice`, `/show-spec-working`,
 `/adversarial-review`, `/code-auditing`, `/privacy-ethics-check`, `/kit-health`.
 
-Y las 24 en general, a través del contexto dinámico que abre casi todas:
+Y todas en general, a través del contexto dinámico que abre casi todas:
 
 ```
 ## Project configuration
@@ -260,8 +260,9 @@ Según `--frontend` (`auto` | `react` | `livewire`) el instalador copia:
 
 - `docs/frontend-standards.md` — React o Livewire; con `--no-frontend`, la plantilla vacía.
 - `.github/workflows/frontend.yml` — el CI de esa UI (omitido con `--no-frontend`).
-- `tests/a11y/smoke.example.tsx` (React) o `tests/a11y/smoke.example.mjs` (Livewire), **solo si no
-  existe** — el kit no pisa un scaffold ya personalizado (igual que `infection.json`).
+- `tests/a11y/smoke.example.tsx` (React) o `tests/a11y/smoke.example.mjs` (Livewire). Es del
+  proyecto: si ya existe y es distinto, **se conserva**; solo `--force` lo pisa (igual que
+  `infection.json`).
 
 El scaffold no es el gate: el nombre no dispara Vitest/Pest, y el kit **no edita** `package.json`.
 Hasta que el equipo instale axe-core, renombre el fichero y añada el script `test:a11y`, el workflow

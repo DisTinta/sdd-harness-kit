@@ -30,7 +30,7 @@ Gracias por contribuir. Este repositorio usa un flujo simple para mantener calid
 que hay que tocar para que quede completo — existe porque el adaptador `fastify` se quedó a
 medias la primera vez:
 
-1. `adapters/<stack>.env` — obligatorio. Las 24 variables del contrato de `_template.env`.
+1. `adapters/<stack>.env` — obligatorio. Todas las variables del contrato de `_template.env` (las de `CMD_*`, `PATH_*`, `GUARD_*` y los interruptores `KIT_*`).
 2. `adapters/<stack>.backend-standards.md` — las cinco preguntas de [CONFIG.md](CONFIG.md), con rutas reales.
 3. `adapters/<stack>.rules.mdc` y `adapters/<stack>.ci.yml` — opcionales, pero los demás
    adaptadores los traen.

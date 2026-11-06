@@ -75,9 +75,9 @@ The kit is the **harness** around OpenSpec and the copilots: the discipline that
 Installed once per project, it leaves:
 
 - The same rules for Cursor, Claude Code, and Copilot (one doctrine, several tools).
-- 27 “skills”: reusable procedures (`enrich the story`, `implement`, `verify`, `open the PR`…).
+- 30 “skills”: reusable procedures (`enrich the story`, `implement`, `verify`, `open the PR`…).
 - 9 subagents: specialised roles (explore, audit the spec, write the test, review security…).
-- 9 **hooks**: rules that are not interpreted, they are **executed**. They are the seatbelt.
+- 10 **hooks**: rules that are not interpreted, they are **executed**. They are the seatbelt.
 - **MCP** (plugs into external tools): **Context7** (up-to-date library documentation) and **Playwright** (demonstrate the real interface in the browser).
 - Templates, stack standards, and a health check (`doctor`).
 
@@ -198,6 +198,7 @@ This is what separates “we have a process document” from “the process actu
 | Rewrite tests or the specification to fit a code shortcut | Asks. A human decides whether the design actually changed |
 | Mix layers (e.g. business logic in the HTTP controller) | Hands control back so it can be fixed |
 | Commit an API or schema change without touching the documentation | Prevents it |
+| Write code or tests before the specification has been audited | Blocks it until the spec auditor's report exists |
 | Write an incomplete task list (no branch, no verification, no data restore) | Rejects it on the spot |
 | End the turn with tests in red | Does not let it close |
 
@@ -211,7 +212,7 @@ The MCP plugs also come in on their own when it is time:
 | Demonstrating an interface scenario | **Playwright** opens an isolated browser, walks the flow, and leaves evidence |
 | The plug is off or there is no frontend | It says so and continues (HTTP/CLI). It does not invent APIs or fake a demo |
 
-In the **GitHub pipeline** (if enabled): automatic PR review with the same criteria as the kit. **It does not replace human review**; it is a first pass.
+In the **GitHub pipeline** (if enabled): automatic PR review with the same criteria as the kit, plus an interactive workflow that answers when someone mentions `@claude` in an issue or a PR comment. **It does not replace human review**; it is a first pass.
 
 Other actions the team triggers with a command, but that the kit standardises:
 

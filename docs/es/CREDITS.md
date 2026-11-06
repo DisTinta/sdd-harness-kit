@@ -31,8 +31,8 @@ escritos para él. Donde coincide una convención, coincide porque se adoptó a 
 | Añadido | Qué resuelve |
 |---|---|
 | **Instalable** `install.sh` / `install.ps1`, con `--dry-run` y detección de stack | Montar el harness en un proyecto nuevo sin repetir el trabajo a mano |
-| **9 hooks deterministas** del ciclo de vida | Convertir una convención escrita en una comprobada. Actúan sobre la ruta del fichero, no sobre qué comando lo escribió |
-| **29 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/show-spec-working`, `/kit-health` |
+| **10 hooks deterministas** del ciclo de vida | Convertir una convención escrita en una comprobada. Actúan sobre la ruta del fichero, no sobre qué comando lo escribió |
+| **30 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/show-spec-working`, `/kit-health` |
 | **Adaptadores por stack** (`laravel`, `adonisjs`, `fastify`, `react`, `livewire`, plantilla) | El mismo harness en stacks distintos sin tocar una skill ni un hook |
 | **Soporte real en Windows** | PowerShell de primera clase, y copia cuando el sistema no permite symlinks |
 | **`doctor.sh` / `doctor.ps1`** | Diagnosticar una instalación en lugar de adivinar |
@@ -52,5 +52,5 @@ El kit no las incluye: las configura o las asume instaladas.
 
 ## Licencia de este kit
 
-[MIT](LICENSE). El fichero de licencia conserva el aviso de copyright de `lidr-specboot`,
+[MIT](../../LICENSE). El fichero de licencia conserva el aviso de copyright de `lidr-specboot`,
 como exige su propia licencia MIT.

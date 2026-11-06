@@ -187,6 +187,13 @@ every task that mutates data include its restoration:
 
 ## 10. Update Technical Documentation (MANDATORY)
 - [ ] 10.1 Regenerate the API specification
+
+## 11. Pre-merge Review (MANDATORY - AGENT MUST EXECUTE)
+- [ ] 11.1 Open the pull request (after confirming with the author)
+- [ ] 11.2 Run `/show-spec-working`, `/verify-against-spec` and `/adversarial-review`; one report each under `reports/`
+- [ ] 11.3 Fix every finding and record its destination in `design.md` → Follow-ups
+- [ ] 11.4 Commit the fixes to the same pull request
+- [ ] 11.5 `/opsx:archive`, then `/openspec-archive`; the author merges afterwards
 ```
 
 If the agent writes a `tasks.md` without step 0, without the `(MANDATORY)` label, without
@@ -194,8 +201,11 @@ If the agent writes a `tasks.md` without step 0, without the `(MANDATORY)` label
 write time** and says exactly what is missing. Doctrine stops being a
 recommendation.
 
-**Human gate.** Open the four files and edit them. The `spec-auditor` subagent or the P6 prompt tell
-you where to look —including `tasks.md` conformity—; the decision is yours.
+**Human gate.** Open the four files and edit them. Then the `spec-auditor` subagent (or the P6
+prompt) reviews the change and its report is saved to `reports/*-spec-audit.md`. **It is mandatory:**
+the `spec-audit-gate` hook blocks code and test edits until that report exists and ends in
+`APPROVED` or in blocking findings you accepted. The auditor tells you where to look
+—including `tasks.md` conformity—; the scope decision is yours.
 
 ---
 

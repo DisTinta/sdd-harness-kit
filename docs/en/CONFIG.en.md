@@ -142,7 +142,7 @@ The skills that depend on this configuration to run something benefit the most:
 `/openspec-implement`, `/tdd-red`, `/tdd-green`, `/tdd-refactor`, `/feature-slice`, `/show-spec-working`,
 `/adversarial-review`, `/code-auditing`, `/privacy-ethics-check`, `/kit-health`.
 
-And all 24 in general, through the dynamic context that opens almost every one:
+And all of them in general, through the dynamic context that opens almost every one:
 
 ```
 ## Project configuration
@@ -257,9 +257,9 @@ Per `--frontend` (`auto` | `react` | `livewire`) the installer copies:
 
 - `docs/frontend-standards.md` — React or Livewire; with `--no-frontend`, the empty template.
 - `.github/workflows/frontend.yml` — that UI's CI (omitted with `--no-frontend`).
-- `tests/a11y/smoke.example.tsx` (React) or `tests/a11y/smoke.example.mjs` (Livewire), **only if it
-  does not already exist** — the kit does not overwrite a scaffold you already customised (same as
-  `infection.json`).
+- `tests/a11y/smoke.example.tsx` (React) or `tests/a11y/smoke.example.mjs` (Livewire). It is
+  project-owned: if it already exists and differs, **it is kept**; only `--force` overwrites it
+  (same as `infection.json`).
 
 The scaffold is not the gate: the filename is not picked up by Vitest/Pest, and the kit **does not
 edit** `package.json`. Until the team installs axe-core, renames the file, and adds the `test:a11y`

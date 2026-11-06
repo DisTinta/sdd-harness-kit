@@ -74,10 +74,10 @@ cd /ruta/a/sdd-harness-kit
 ./install.sh --dest ~/proyectos/mi-api --stack laravel
 ```
 
-When it finishes you should see something like `enlazados N · copiados N`:
+When it finishes you should see something like `linked N · copied N · ok N · diverging N · orphans N · keep N`:
 
-- **enlazados** = symlinks to `ai-specs/` (ideal).
-- **copiados** = the OS did not allow symlinks (typical on Windows without Developer Mode). **It works the same**, but you must always edit `ai-specs/` and then sync (see § Troubleshooting).
+- **linked** = symlinks to `ai-specs/` (ideal).
+- **copied** = the OS did not allow symlinks (typical on Windows without Developer Mode). **It works the same**, but you must always edit `ai-specs/` and then sync (see § Troubleshooting).
 
 The installer does **not** run `openspec init` or fill in the meaning of `project-context` for you.
 It does copy `.mcp.json` and `.cursor/mcp.json` (Context7; Playwright unless `--no-frontend` / `-NoFrontend`).
@@ -135,6 +135,7 @@ git diff .claude/settings.json     # ideally empty or reviewed
 
 ```bash
 # From the project, if the template is already in ai-specs (after install):
+# Replaces the config.yaml created by `openspec init`; if you already customised it, merge by hand.
 cp ai-specs/templates/openspec/config.yaml.tpl openspec/config.yaml
 ```
 
@@ -255,7 +256,7 @@ If you skip a gate, the rest of the kit amplifies the error instead of saving yo
 On Windows without Developer Mode, Git may materialize symlinks as text. Skills do not load.
 
 1. `bash .claude/sync-artifacts.sh --check` (or the `.ps1`).
-2. If you see `TEXTO` / broken: run sync **without** `--check` to switch to **copy mode**.
+2. If you see `TEXT` / `BROKEN`: run sync **without** `--check` to switch to **copy mode**.
 3. From then on: edit `ai-specs/…` and sync again after every skill/agent change.
 4. System alternative: enable Windows Developer Mode and reinstall/re-link.
 
@@ -302,7 +303,7 @@ Also: `/sync-agent-artifacts`.
 
 After `openspec init`, sync may list `openspec-propose`, `openspec-apply-change`, etc. with the
 **`KEEP`** label. Those are OpenSpec’s native skills (`/opsx:*`). Do not delete them; it is not an
-error. A real **`ORPHAN` / `HUÉRFANO`** is any other name that is not in
+error. A real **`ORPHAN`** is any other name that is not in
 `ai-specs/`.
 
 ### `validate-tasks` and `BRANCH_PREFIX`

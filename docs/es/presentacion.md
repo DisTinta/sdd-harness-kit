@@ -75,9 +75,9 @@ El kit es el **arnés** alrededor de OpenSpec y de los copilotos: la disciplina 
 Instalado una vez por proyecto, deja:
 
 - Las mismas reglas para Cursor, Claude Code y Copilot (una doctrina, varias herramientas).
-- 27 “skills”: procedimientos reutilizables (`enriquecer la historia`, `implementar`, `verificar`, `abrir el PR`…).
+- 30 “skills”: procedimientos reutilizables (`enriquecer la historia`, `implementar`, `verificar`, `abrir el PR`…).
 - 9 subagentes: roles especializados (explorar, auditar la spec, escribir el test, revisar seguridad…).
-- 9 **hooks**: reglas que no se interpretan, se **ejecutan**. Son el cinturón de seguridad.
+- 10 **hooks**: reglas que no se interpretan, se **ejecutan**. Son el cinturón de seguridad.
 - **MCP** (enchufes a herramientas externas): **Context7** (documentación actual de librerías) y **Playwright** (demostrar la interfaz real en el navegador).
 - Plantillas, estándares del stack y un chequeo de salud (`doctor`).
 
@@ -198,6 +198,7 @@ Los **hooks** son comprobaciones que saltan solas mientras el copiloto trabaja:
 | Reescribir tests o la especificación para que encajen con un atajo de código | Pregunta. Un humano decide si el diseño cambió de verdad |
 | Mezclar capas (p. ej. lógica de negocio en el controlador HTTP) | Devuelve el control para corregirlo |
 | Commitear un cambio de API o de esquema sin tocar la documentación | Lo impide |
+| Escribir código o tests antes de que se haya auditado la especificación | Lo bloquea hasta que exista el informe del auditor de specs |
 | Escribir una lista de tareas incompleta (sin rama, sin verificación, sin restaurar datos) | La rechaza en el momento |
 | Cerrar el turno con tests en rojo | No deja cerrar |
 
@@ -211,7 +212,7 @@ Los enchufes MCP también entran solos cuando toca:
 | Demostrar un escenario de interfaz | **Playwright** abre un navegador aislado, recorre el flujo y deja evidencia |
 | El enchufe está apagado o no hay frontend | Lo dice y continúa (HTTP/CLI). No inventa APIs ni finge una demo |
 
-En el **pipeline de GitHub** (si se activa): revisión automática del PR con el mismo criterio del kit. **No sustituye la revisión humana**; es un primer pase.
+En el **pipeline de GitHub** (si se activa): revisión automática del PR con el mismo criterio del kit, y un workflow interactivo que responde cuando alguien menciona `@claude` en una issue o en un comentario de PR. **No sustituye la revisión humana**; es un primer pase.
 
 Otras acciones que el equipo dispara con un comando, pero que el kit estandariza:
 

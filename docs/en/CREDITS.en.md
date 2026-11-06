@@ -30,12 +30,12 @@ convention matches, it matches because it was adopted on purpose.
 | Addition | What it solves |
 |---|---|
 | **Installable** `install.sh` / `install.ps1`, with `--dry-run` and stack detection | Mount the harness on a new project without repeating the work by hand |
-| **9 deterministic lifecycle hooks** | Turn a written convention into an enforced one. They act on the file path, not on which command wrote it |
+| **10 deterministic lifecycle hooks** | Turn a written convention into an enforced one. They act on the file path, not on which command wrote it |
 | **Per-stack adapters** (`laravel`, `adonisjs`, `fastify`, `react`, `livewire`, template) | The same harness on different stacks without touching a skill or a hook |
 | **Real Windows support** | First-class PowerShell, and copy when the OS does not allow symlinks |
 | **`doctor.sh` / `doctor.ps1`** | Diagnose an install instead of guessing |
 | **Deep secret gates** | Blocking in the prompt and on file reads, not only before commit |
-| **29 skills and 9 subagents** | The TDD trilogy with isolated context per phase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/show-spec-working`, `/kit-health` |
+| **30 skills and 9 subagents** | The TDD trilogy with isolated context per phase, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/show-spec-working`, `/kit-health` |
 | **Own doctrine** in `docs/base-standards.md` and `docs/documentation-standards.md` | The five human stop points and the documentation gate |
 
 ## Third-party tools
@@ -51,5 +51,5 @@ The kit does not ship them: it configures them or assumes they are installed.
 
 ## Licence of this kit
 
-[MIT](LICENSE). The licence file keeps the copyright notice from `lidr-specboot`, as its own MIT
+[MIT](../../LICENSE). The licence file keeps the copyright notice from `lidr-specboot`, as its own MIT
 licence requires.

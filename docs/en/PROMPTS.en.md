@@ -23,7 +23,7 @@ Replace only what is between `<angle brackets>`.
 > Several steps have an equivalent skill or subagent already installed. When they do, it is noted:
 > the skill is faster, the prompt is more explicit and editable. Use whichever you prefer.
 >
-> The 27 skills and 9 subagents are in `ai-specs/`. `USAGE.md` lists them by phase.
+> The 30 skills and 9 subagents are in `ai-specs/`. `USAGE.md` lists them by phase.
 
 ---
 
