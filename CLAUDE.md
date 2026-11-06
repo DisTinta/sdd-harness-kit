@@ -68,6 +68,10 @@ Existing Spanish in installers or the root PR template is legacy debt — do not
   `docs/es/CHANGELOG.md` and `docs/en/CHANGELOG.en.md`.
 - Kit-only docs/memory (these files, human guides) need changelog entries when useful, but **no**
   version bump unless installable payload changes.
+- Release: once the `dev` → `main` PR that carries a `VERSION` bump is merged, create an annotated
+  tag `vX.Y.Z` (matching `VERSION`) on that merge commit in `main`, push only that tag, and publish
+  a GitHub release marked Latest with the version's `docs/en/CHANGELOG.en.md` entry as notes. Never
+  move or rewrite an existing tag. Agents tag and release only with the owner's explicit go-ahead.
 
 ## 5. Canonical source
 
