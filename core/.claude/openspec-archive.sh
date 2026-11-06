@@ -174,9 +174,11 @@ folder_title() {
       t="$(strip_cr < "$p" | awk '
         /^##? +[Ww]hy[[:space:]]*$/ { inwhy=1; next }
         inwhy && /^#/ { exit }
-        inwhy && NF { print; exit }')"
+        inwhy && NF { para = para (para == "" ? "" : " ") $0; next }
+        inwhy && para != "" { exit }
+        END { if (para != "") print para }')"
       t="${t%%. *}"; t="${t%.}"
-      if (( ${#t} > 100 )); then t="${t:0:97}..."; fi
+      if (( ${#t} > 100 )); then t="${t:0:97}"; t="${t% *}..."; fi
     fi
   fi
   [[ -n "$t" ]] || t="$(printf '%s' "$folder" | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}-//')"

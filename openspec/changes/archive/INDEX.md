@@ -6,4 +6,4 @@
 
 | Folder | Title | Capabilities | Archive commit | Snapshot tag |
 |---|---|---|---|---|
-| 2026-11-06-openspec-archive-retention | OpenSpec (1.9.0) never prunes `openspec/changes/archive/`, so in every consumer repo of the kit the | archive-context-hygiene, archive-delta-pruning, archive-folder-pruning, archive-index, archive-retention-config | pending | — |
+| 2026-11-06-openspec-archive-retention | OpenSpec (1.9.0) never prunes `openspec/changes/archive/`, so in every consumer repo of the kit... | archive-context-hygiene, archive-delta-pruning, archive-folder-pruning, archive-index, archive-retention-config | pending | — |

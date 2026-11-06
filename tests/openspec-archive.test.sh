@@ -126,6 +126,21 @@ test_index_commit_filled_in_immediate_mode() {
   assert exists_at HEAD~1 "$A/$TODAY-alpha/specs/cap/spec.md"
 }
 
+test_index_title_from_multiline_why_paragraph() {
+  local d="$A/2024-04-01-wrapped"
+  mkdir -p "$d"
+  printf '## Why
+
+Archives grow without bound in every
+consumer repo of the kit. Second sentence.
+
+## What Changes
+' > "$d/proposal.md"
+  commit_all
+  kit index >/dev/null
+  assert_eq "$(col "$(index_row 2024-04-01-wrapped)" 2)" "Archives grow without bound in every consumer repo of the kit"
+}
+
 test_index_backfill_legacy_archive() {
   fake_archived 2024-01-01-one; fake_archived 2024-02-01-two; fake_archived 2024-03-01-three; commit_all
   kit index >/dev/null
