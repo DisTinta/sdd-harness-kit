@@ -8,8 +8,13 @@
 ## 1. What this repository is
 
 Portable Spec-Driven Development harness: skills, subagents, deterministic hooks, stack adapters,
-installers, and human guides. It is **not** an application, not an OpenSpec project, and not a
-product codebase with a suite to govern.
+installers, and human guides. It is **not** an application and not a product codebase with a
+suite to govern.
+
+The kit governs **its own** changes with OpenSpec: `openspec/` at the repo root (initialised with
+`openspec init --tools none`, so no `/opsx:*` commands are generated here). That tree and its
+`config.yaml` are kit-repo only — never payload. Consumer projects get
+`core/ai-specs/templates/openspec/config.yaml.tpl` instead.
 
 `core/docs/base-standards.md` is **payload** copied into consumer projects (TDD, OpenSpec,
 English-only product artefacts). It is **not** the doctrine of this kit repository.
@@ -24,6 +29,7 @@ English-only product artefacts). It is **not** the doctrine of this kit reposito
 | `docs/en/` | Human guides in English (paired with `docs/es/`) |
 | `install.sh` / `install.ps1` | Install into `--dest` (refuse to install the kit onto itself) |
 | `doctor.sh` / `doctor.ps1` | Health check for an installed destination |
+| `openspec/` | OpenSpec changes and specs for the kit itself (not installed) |
 | `VERSION` | Semver of the installable kit |
 | `AGENTS.md` / `CLAUDE.md` | **These files** — maintainer rules for the kit repo only |
 
