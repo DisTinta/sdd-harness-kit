@@ -58,6 +58,9 @@ Existing Spanish in installers or the root PR template is legacy debt — do not
 
 - Branch from `dev`: `feat/…`, `fix/…`, `docs/…`. PRs target `dev`; `dev` is merged into `main`
   for releases. No direct pushes to `dev` or `main`.
+- Merge method: **Create a merge commit** only (enforced by the ruleset on `dev` and `main`). After a
+  release `main` is ahead of `dev` by that merge commit; the content is identical, do not sync it.
+  Merges need the owner's approval (`.github/CODEOWNERS`); agents never merge.
 - Small, focused PRs. Use `.github/pull_request_template.md`.
 - Touch **both** `install.sh` and `install.ps1` when installer behaviour changes.
 - New stack adapter: follow the full checklist in `docs/en/CONTRIBUTING.en.md` (or `docs/es/CONTRIBUTING.md`).

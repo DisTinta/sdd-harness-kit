@@ -49,9 +49,13 @@ adaptador que no se ha instalado nunca en un repositorio de prueba no está term
 
 ## Revisión y merge
 
-- Solicita al menos una revisión antes de hacer merge.
+- Solo los colaboradores pueden abrir pull requests. Si no lo eres, abre una **issue** con el cambio
+  o el problema.
+- Todo merge en `dev` o `main` necesita la aprobación de la propietaria (`.github/CODEOWNERS`).
 - Revisa que la descripción y pasos de prueba sean claros y ejecutables.
-- Prefiere **Squash and merge** para mantener el historial limpio.
+- Haz merge con **Create a merge commit** (el único método permitido). Squash aplastaría el commit de
+  archivado de OpenSpec con commits posteriores, y el rebase de GitHub reescribe los SHA, así que
+  `dev` y `main` volverían a mostrar los mismos commits en la siguiente PR de versión.
 
 ## Convenciones de contenido
 

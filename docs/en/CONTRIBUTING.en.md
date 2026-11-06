@@ -46,9 +46,13 @@ adapter that has never been installed into a test repository is not finished.
 
 ## Review and merge
 
-- Request at least one review before merging.
+- Only collaborators can open pull requests. If you are not one, open an **issue** describing the
+  change or the problem.
+- Every merge into `dev` or `main` needs the owner's approval (`.github/CODEOWNERS`).
 - Check that the description and test steps are clear and executable.
-- Prefer **Squash and merge** to keep history clean.
+- Merge with **Create a merge commit** (the only method allowed). Squash would collapse an
+  OpenSpec archive commit with later commits, and GitHub's rebase merge rewrites SHAs, so `dev` and
+  `main` would show the same commits again in the next release PR.
 
 ## Content conventions
 
