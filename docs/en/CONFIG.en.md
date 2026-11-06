@@ -78,6 +78,49 @@ Paths are relative to the repository root and compared by segment prefix, so
 
 ---
 
+## OpenSpec archive retention
+
+OpenSpec never prunes `openspec/changes/archive/`. The kit keeps it bounded with
+`.claude/openspec-archive.sh`, driven by the `/openspec-archive` skill right after `/opsx:archive`
+(Pre-merge Review step 11.5). It never pushes, amends, rebases, squashes or uses `--no-verify`.
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `KIT_ARCHIVE_INDEX` | `1` | Maintain `openspec/changes/archive/INDEX.md`: one row per archived change (folder, title, capabilities, archive commit, snapshot tag). Agents read this file instead of the archived folders |
+| `KIT_ARCHIVE_PRUNE_DELTAS` | `deferred` | `deferred`: the archive PR carries only the archive commit (with deltas); deltas of earlier changes are pruned once `git cat-file -e <default-branch>:<folder>/specs` proves they are on the default branch. `immediate`: archive commit + separate prune commit in the same PR. `off`: never prune deltas |
+| `KIT_ARCHIVE_PRUNE_FOLDERS` | `0` | `1` allows `prune-folders --apply` |
+| `KIT_ARCHIVE_KEEP` | `50` | Folder pruning never touches the newest N dated folders |
+| `KIT_ARCHIVE_MAX_AGE_DAYS` | `180` | …nor folders younger than N days (the rule that retains more wins) |
+| `KIT_ARCHIVE_DEFAULT_BRANCH` | origin/HEAD, else `main` | Ref PRs merge into, used as the deferred proof (e.g. `origin/main`, `origin/dev`) |
+
+Invalid values fall back to the non-destructive behaviour and print a warning.
+
+**Squash merges.** With `immediate`, the archive commit (deltas) and the prune commit are on the PR
+branch; a squash merge leaves only the pruned tree on the default branch, so the deltas never reach
+its history. Use `immediate` only in repos that merge with merge commits or rebase. `deferred` is safe
+with every strategy; pruning lags one archive behind.
+
+**Commands** (Windows: `node .claude/hooks/invoke.cjs .claude/openspec-archive.sh …`):
+
+```bash
+bash .claude/openspec-archive.sh config                       # effective configuration
+bash .claude/openspec-archive.sh post-archive <folder> [--dry-run]
+bash .claude/openspec-archive.sh index [--dry-run]            # backfill/repair INDEX.md
+bash .claude/openspec-archive.sh prune-deltas [--dry-run] [--only <folder>]
+bash .claude/openspec-archive.sh prune-folders [--apply] [--only <folder>]   # dry run by default
+```
+
+`prune-folders --apply` first creates the annotated tag `openspec-archive-snapshot-YYYY-MM` on HEAD
+(suffix `-2`, `-3`… on collision), then removes the folders in one commit and records the tag in
+`INDEX.md`. **The tag is local only** until you push it (`git push origin <tag>`).
+
+**Recovery:** `git show <archive-commit>:openspec/changes/archive/<folder>/specs/<cap>/spec.md` for
+pruned deltas; `git show <tag>:openspec/changes/archive/<folder>/proposal.md` for pruned folders.
+
+**After updating the kit** in an existing repo: `INDEX.md` is backfilled on the first archive (or
+with `index`), and `deferred` lists every legacy change whose deltas are on the default branch; check
+`prune-deltas --dry-run` first and narrow with `--only` if needed.
+
 ## Who consumes this configuration
 
 The kit's hooks. None of them has a command hard-coded inside:

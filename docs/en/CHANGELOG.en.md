@@ -11,6 +11,46 @@ Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 ---
 
+## [1.6.0]
+
+### Added
+
+- **OpenSpec archive retention.** New kit-owned `.claude/openspec-archive.sh` and skill
+  `/openspec-archive`, run right after `/opsx:archive` (Pre-merge Review step 11.5):
+  - `openspec/changes/archive/INDEX.md` with one row per archived change (folder, title,
+    capabilities, archive commit, snapshot tag), backfilled for existing archives.
+  - Archive commit that always contains the delta specs, then delta pruning per
+    `KIT_ARCHIVE_PRUNE_DELTAS`: `deferred` (default; prunes only deltas already on the default
+    branch, safe with squash merges), `immediate` (separate prune commit in the same PR; merge-commit
+    or rebase repos only) or `off`. Nothing is pruned if the archive commit was not created.
+  - Separate folder pruning (`prune-folders`, dry run unless `--apply`, off by default) behind an
+    annotated local tag `openspec-archive-snapshot-YYYY-MM`; thresholds `KIT_ARCHIVE_KEEP` (50) and
+    `KIT_ARCHIVE_MAX_AGE_DAYS` (180).
+  - Never pushes commits or tags; warns that the snapshot tag is local only.
+- `KIT_ARCHIVE_*` keys in `sdd-harness.env` (allowlisted in `lib.sh`, defaults when absent) and in
+  every adapter env. The installer warns about missing keys and about the `/openspec-archive` step
+  missing from `openspec/config.yaml`. `doctor` checks the script and the index.
+
+### Changed
+
+- Context hygiene: SessionStart no longer counts tasks of archived changes; `openspec-implement`
+  no longer lists `archive`; `settings.json` denies `Read` on archived change folders (INDEX.md stays
+  readable); skills, Cursor rules, Copilot instructions and `base-standards.md` point history lookups
+  to `INDEX.md` + Git.
+- `invoke.cjs` forwards extra arguments to the script (hooks are unaffected).
+- Doctrine: `openspec-tasks-mandatory-steps.md` step 11.5 and `config.yaml.tpl` now run
+  `/openspec-archive` after `/opsx:archive`.
+
+### Update notes
+
+- Re-running the installer delivers the script and skill; `sdd-harness.env` and
+  `openspec/config.yaml` are project-owned and kept, so defaults apply until you add the keys.
+- Nothing is deleted at install time. On the first archive after updating, `deferred` may prune the
+  deltas of every legacy change already on the default branch in one commit: run
+  `prune-deltas --dry-run` first.
+
+---
+
 ## [1.5.1]
 
 ### Added

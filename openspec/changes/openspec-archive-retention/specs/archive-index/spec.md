@@ -19,10 +19,11 @@ snapshot tag. Rows MUST be sorted by folder name ascending.
 - **THEN** `INDEX.md` is neither created nor modified
 
 ### Requirement: Row content derived before pruning
-The row for a change MUST be written before any pruning of that change. The title MUST come from the
-first level-1 or level-2 heading of `proposal.md` that is not `Why` (falling back to the change name),
-and capabilities MUST be the directory names under the change's `specs/`, comma-separated, or `—`
-when there are none.
+The row for a change MUST be written before any pruning of that change. The title MUST come from
+`proposal.md`: its first level-1 heading that is not `Why`; otherwise the first sentence of its `Why`
+section (at most 100 characters); otherwise the change name. Capabilities MUST be the capability paths
+under the change's `specs/` (directories holding a `spec.md`), comma-separated, or `—` when there are
+none.
 
 #### Scenario: Title and capabilities captured before delta prune
 - **WHEN** a change with `proposal.md` and delta specs for `auth` and `billing` is archived in `immediate` mode

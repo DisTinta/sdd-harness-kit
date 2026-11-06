@@ -114,9 +114,13 @@ Windows never hits WSL bash.
 ### D8. Context hygiene
 - `session-context.sh`: pending-task grep excludes `archive/`.
 - `openspec-implement`: list active changes with a command that excludes `archive`.
-- `settings.json`: `permissions.deny` += `Read(openspec/changes/archive/*/**)` (INDEX.md stays readable).
-  The exact path-pattern semantics are checked against current Claude Code permission docs during
-  implementation; if `Read` deny does not cover Grep/Glob, instructions remain the main control.
+- `settings.json`: `permissions.deny` += `Read(/openspec/changes/archive/*/**)` (INDEX.md stays readable).
+  Verified against https://code.claude.com/docs/en/permissions: gitignore syntax; a leading `/`
+  anchors at the session's primary working directory for project settings (a bare path would be
+  cwd-relative); `*/**` needs a directory segment, so `INDEX.md` stays readable. Read deny applies
+  best-effort to Grep/Glob and to recognised Bash file commands (`cat`, `head`, `sed`…), not to
+  `grep -r` from a parent directory or to scripts; it also blocks Edit/Write on those paths (the
+  script edits through `git`, unaffected). Instructions and hook exclusions stay the primary control.
 - Skills `adversarial-review`, `explain`, rules `00-core`, `20-openspec`, `copilot-instructions.md`,
   `base-standards.md`: "history = `openspec/changes/archive/INDEX.md` + `git log` / `git show`; do not
   read archived folders unless the human asks".
@@ -150,7 +154,3 @@ with `core/` payload). `AGENTS.md` / `CLAUDE.md` §1–2 updated in lockstep.
 3. Rollback: set `KIT_ARCHIVE_PRUNE_DELTAS=off` and `KIT_ARCHIVE_INDEX=0`; pruned content is
    recoverable from the recorded commits and tags.
 
-## Open Questions
-
-- Exact Claude Code permission-pattern syntax for the `Read` deny (verified during implementation; does
-  not change specs).

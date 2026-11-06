@@ -18,7 +18,7 @@ The installed `.claude/settings.json` SHALL deny `Read` on `openspec/changes/arc
 
 #### Scenario: Deny rule present and index readable
 - **WHEN** `settings.json` is inspected after install
-- **THEN** `permissions.deny` contains `Read(openspec/changes/archive/*/**)` and no deny entry matches `openspec/changes/archive/INDEX.md`
+- **THEN** `permissions.deny` contains `Read(/openspec/changes/archive/*/**)` and no deny entry matches `openspec/changes/archive/INDEX.md`
 
 ### Requirement: Instructions point to INDEX.md and Git
 Installed skills, agents, Cursor rules, Copilot instructions and doctrine MUST NOT instruct agents to
