@@ -62,7 +62,7 @@ Each unit of work (a “change”) leaves four pieces:
 | **Design** (`design.md`) | Technical decisions already closed, so the AI does not improvise architecture | Development |
 | **Tasks** (`tasks.md`) | Actionable checklist, one task = one step | The AI walks through them; the human signs them off |
 
-When the change is merged, it is **archived**. That way the next proposal knows what is already done. If it is left open, the context goes stale.
+Before the change is merged, it is **archived** on its own pull request, so it lands in the main branch already archived. That way the next proposal knows what is already done. If it is left open, the context goes stale.
 
 OpenSpec does not replace Jira or Product. It translates the ticket into a contract that a copilot can execute without guessing.
 
@@ -159,10 +159,10 @@ Ticket (Jira / Linear / whatever we use)
         ▼
 6. DOCUMENT      Only what is needed (decisions that are hard to reverse)
         ▼
-7. DELIVER       Commits + PR with what / why / how to test it
+7. DELIVER       Commits + PR with what / why / how to test it + archive the change on the PR
         │         ◆ Human writes the “why” and signs the merge
         ▼
-8. CLOSE         Archive the change + learn for the next one
+8. CLOSE         Learn for the next one (retro on the cycle data)
 ```
 
 ### What Product sees in each phase
