@@ -2,6 +2,7 @@
 // Launches a .sh hook with a bash that is not WSL's on Windows.
 // Claude Code with `"command": "bash"` usually resolves C:\Windows\System32\bash.exe (WSL).
 // This process is Windows Node; here we pick Git Bash if it exists.
+// Extra arguments after the script path are forwarded (used by .claude/openspec-archive.sh).
 'use strict'
 
 const { spawnSync } = require('child_process')
@@ -32,7 +33,7 @@ function gitBashWin() {
 }
 
 const bash = process.platform === 'win32' ? gitBashWin() || 'bash' : 'bash'
-const result = spawnSync(bash, [script], {
+const result = spawnSync(bash, [script, ...process.argv.slice(3)], {
   stdio: 'inherit',
   cwd: process.cwd(),
   env: process.env,

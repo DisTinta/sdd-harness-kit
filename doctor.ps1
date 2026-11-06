@@ -80,6 +80,14 @@ else { Warn 'openspec is not on PATH' }
 if (Test-Path (Join-Path $Dest 'openspec')) { Ok 'openspec/ present' }
 else { Warn 'openspec/ not initialized — openspec init' }
 
+# OpenSpec archive retention
+if (Test-Path (Join-Path $Dest '.claude\openspec-archive.sh')) { Ok '.claude/openspec-archive.sh (archive retention)' }
+else { Warn 'missing .claude/openspec-archive.sh — re-run the kit installer' }
+$archiveDir = Join-Path $Dest 'openspec\changesrchive'
+if ((Test-Path $archiveDir) -and -not (Test-Path (Join-Path $archiveDir 'INDEX.md'))) {
+    Warn 'openspec/changes/archive/INDEX.md missing — run: node .claude/hooks/invoke.cjs .claude/openspec-archive.sh index'
+}
+
 $mcp = Join-Path $Dest '.mcp.json'
 if (Test-Path $mcp) {
     Ok '.mcp.json (Claude Code)'

@@ -32,4 +32,8 @@ When you are asked to implement a change from `openspec/changes/<id>/`:
    will not have the correct context of what is already implemented. Archive only after the
    Pre-merge Review of `docs/openspec-tasks-mandatory-steps.md` (PR open → `/show-spec-working` →
    `/verify-against-spec` → `/adversarial-review` → fixes on the same PR), and commit the archive to
-   that PR before the merge.
+   that PR before the merge: run `/opsx:archive`, then `/openspec-archive` (index row, archive
+   commit with deltas, delta pruning per `KIT_ARCHIVE_PRUNE_DELTAS`).
+9. History of past changes: read `openspec/changes/archive/INDEX.md` and use Git (`git log`,
+   `git show <commit-or-tag>:<path>`). Do not list, read or search `openspec/changes/archive/*/`
+   unless the human asks for a specific archived change.

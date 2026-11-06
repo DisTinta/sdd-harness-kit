@@ -412,7 +412,8 @@ A model does not generate that. It is not in the diff.
 
 ## F8 · Close-out
 
-Archive the change, delete the branch, and the P15 retro on the cycle data. In this case
+The change was already archived on its pull request before the merge (`/opsx:archive`, then
+`/openspec-archive`). After the merge: delete the branch, and the P15 retro on the cycle data. In this case
 an unforeseen task appeared —the second triangulation test— and the conclusion was actionable:
 add to `docs/backend-standards.md` the rule that every implementation task carries its
 triangulation from the

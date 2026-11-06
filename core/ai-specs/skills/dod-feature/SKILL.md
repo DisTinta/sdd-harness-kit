@@ -29,7 +29,7 @@ markdown checklist ready to paste into the pull request.
 - [ ] ADR written if the feature introduced a non-trivial, hard-to-reverse decision
 - [ ] The interface was exercised by the agent against the running system, with the state restored
 - [ ] Verification report written under the change's `reports/` directory
-- [ ] OpenSpec change archived after the merge, if applicable
+- [ ] OpenSpec change archived on its pull request before the merge (`/opsx:archive`, then `/openspec-archive`), if applicable
 - [ ] Pull request with what / why / how to test, and a link to the ticket
 - [ ] Pull request labelled with its origin
 - [ ] Reviewed by at least one human, not only by agents

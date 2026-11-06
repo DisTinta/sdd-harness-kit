@@ -18,8 +18,9 @@ if [[ -d "$PROJECT_DIR/openspec/changes" ]]; then
   FOUND=$(find "$PROJECT_DIR/openspec/changes" -maxdepth 1 -mindepth 1 -type d \
     -not -name archive 2>/dev/null | sed 's#.*/##' | paste -sd ', ' - || true)
   [[ -n "$FOUND" ]] && ACTIVE_CHANGES="$FOUND"
+  # Active changes only: archived ones live under openspec/changes/archive/ (see its INDEX.md).
   PENDING_TASKS=$(grep -rh '^- \[ \]' "$PROJECT_DIR/openspec/changes" \
-    --include='tasks.md' 2>/dev/null | wc -l | tr -d ' ')
+    --include='tasks.md' --exclude-dir=archive 2>/dev/null | wc -l | tr -d ' ')
 fi
 
 PROTECT_WARNING=""

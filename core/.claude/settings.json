@@ -9,7 +9,8 @@
       "Read(**/credentials.*)",
       "Read(**/id_rsa)",
       "Read(**/id_ed25519)",
-      "Read(**/service-account*.json)"
+      "Read(**/service-account*.json)",
+      "Read(/openspec/changes/archive/*/**)"
     ]
   },
   "hooks": {

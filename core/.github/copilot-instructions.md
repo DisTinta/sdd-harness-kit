@@ -14,3 +14,5 @@ Rules that always apply:
 - **Dependencies.** Do not suggest packages that are not already in the manifest without warning
   about it explicitly: nearly one in five packages that models recommend does not exist.
 - **Secrets.** Never write credentials in the code, not even example ones.
+- **Archived specs.** Do not read `openspec/changes/archive/*/`. For past changes use
+  `openspec/changes/archive/INDEX.md` and Git history.

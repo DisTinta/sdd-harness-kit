@@ -87,7 +87,9 @@ enforces it; the rest depend on you.
 5. **Fact goes to memory, procedure goes to a skill, invariant goes to a hook.** Do not restate in a
    prompt a guarantee that a hook already enforces.
 6. **Curate context, do not accumulate it.** Explore in a subagent, summarise, and drop what is no
-   longer relevant.
+   longer relevant. Archived OpenSpec changes are history: read `openspec/changes/archive/INDEX.md`
+   and use Git (`git log`, `git show <commit-or-tag>:<path>`); do not list, read or search
+   `openspec/changes/archive/*/` unless the human asks for a specific archived change.
 7. **Non-goals must be explicit** in every unit of work. Without stated limits, scope grows.
 8. **The "why" is not written by the AI.** Not in the pull request, not in an ADR, not in a story.
 9. **`git push --force` and merges are signed by a human.**

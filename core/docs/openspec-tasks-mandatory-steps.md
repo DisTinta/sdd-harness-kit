@@ -99,7 +99,8 @@ Every change closes with the same sequence. The order is fixed:
 
 ```
 apply done → PR opened → /show-spec-working → /verify-against-spec → /adversarial-review
-  → fixes committed to the same PR → /opsx:archive → archive commit on the same PR → merge
+  → fixes committed to the same PR → /opsx:archive → /openspec-archive (archive commit on the same PR)
+  → merge
 ```
 
 1. **Precondition**: the pull request of the change is open. Pushing and opening it are outward-facing:
@@ -117,8 +118,12 @@ apply done → PR opened → /show-spec-working → /verify-against-spec → /ad
    manual evidence) and add an addendum to the affected report.
 4. **Commit the fixes to the same pull request** (push confirmed with the author). Re-run a check when
    its findings led to non-trivial fixes, until it returns no Blocker or Major.
-5. **Archive, then merge**: `/opsx:archive` only after the three checks are clean; commit the archive
-   to the same pull request. The author merges after the archive commit. The agent never merges.
+5. **Archive, then merge**: `/opsx:archive` only after the three checks are clean, then
+   `/openspec-archive`, which writes the `openspec/changes/archive/INDEX.md` row, creates the archive
+   commit (deltas included) on the same pull request and prunes deltas per `KIT_ARCHIVE_PRUNE_DELTAS`
+   (default `deferred`: only deltas already on the default branch, safe with squash merges). The
+   author merges after the archive commit. The agent never merges, pushes or pushes tags without
+   confirmation.
 
 ## 4. Verification checklist
 
@@ -246,7 +251,7 @@ is part of the title.
 - [ ] 11.2 Run `/show-spec-working`, `/verify-against-spec` and `/adversarial-review`, in this order; one report each under `reports/`
 - [ ] 11.3 Fix every finding in this change and give each one an A/B/C/D destination in `design.md` → Follow-ups; re-run the verification each fix invalidates
 - [ ] 11.4 Commit the fixes to the same pull request
-- [ ] 11.5 `/opsx:archive`, and commit the archive to the same pull request; the author merges afterwards
+- [ ] 11.5 `/opsx:archive`, then `/openspec-archive` (INDEX.md row + archive commit on the same pull request + delta pruning per config); the author merges afterwards
 ```
 
 ## 8. Agent execution requirements

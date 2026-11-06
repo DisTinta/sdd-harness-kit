@@ -12,6 +12,49 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 ---
 
+## [1.6.0]
+
+### Añadido
+
+- **Retención del archivo de OpenSpec.** Nuevos `.claude/openspec-archive.sh` y skill
+  `/openspec-archive` (del kit), que se ejecutan justo después de `/opsx:archive` (paso 11.5 de la
+  Pre-merge Review):
+  - `openspec/changes/archive/INDEX.md` con una fila por change archivado (carpeta, título,
+    capacidades, commit de archivado, etiqueta), rellenado también para archivos existentes.
+  - Commit de archivado que siempre contiene los deltas y, después, poda de deltas según
+    `KIT_ARCHIVE_PRUNE_DELTAS`: `deferred` (por defecto; solo poda deltas que ya están en la rama
+    principal, seguro con squash merge), `immediate` (commit de poda separado en la misma PR; solo
+    repos con merge commit o rebase) u `off`. No se poda nada si no se creó el commit de archivado.
+  - Poda de carpetas aparte (`prune-folders`, dry-run salvo `--apply`, desactivada por defecto)
+    protegida por una etiqueta anotada local `openspec-archive-snapshot-AAAA-MM`; umbrales
+    `KIT_ARCHIVE_KEEP` (50) y `KIT_ARCHIVE_MAX_AGE_DAYS` (180).
+  - Nunca hace push de commits ni etiquetas; avisa de que la etiqueta solo existe en local.
+- Claves `KIT_ARCHIVE_*` en `sdd-harness.env` (en la lista blanca de `lib.sh`, con valores por
+  defecto si faltan) y en todos los env de adaptadores. El instalador avisa de las claves que faltan
+  y de si `openspec/config.yaml` no incluye el paso `/openspec-archive`. `doctor` revisa el script y
+  el índice.
+
+### Cambiado
+
+- Higiene de contexto: SessionStart ya no cuenta tareas de changes archivados; `openspec-implement`
+  ya no lista `archive`; `settings.json` deniega `Read` sobre las carpetas archivadas (INDEX.md sigue
+  legible); skills, reglas de Cursor, instrucciones de Copilot y `base-standards.md` remiten a
+  `INDEX.md` + Git para consultar historia.
+- `invoke.cjs` reenvía argumentos extra al script (los hooks no cambian).
+- Doctrina: el paso 11.5 de `openspec-tasks-mandatory-steps.md` y `config.yaml.tpl` ejecutan
+  `/openspec-archive` tras `/opsx:archive`.
+
+### Notas de actualización
+
+- Volver a ejecutar el instalador trae el script y la skill; `sdd-harness.env` y
+  `openspec/config.yaml` son del proyecto y se conservan, así que aplican los valores por defecto
+  hasta que añadas las claves.
+- Al instalar no se borra nada. En el primer archivado tras actualizar, `deferred` puede podar en un
+  único commit los deltas de todos los changes antiguos que ya estén en la rama principal: revisa antes
+  `prune-deltas --dry-run`.
+
+---
+
 ## [1.5.1]
 
 ### Añadido

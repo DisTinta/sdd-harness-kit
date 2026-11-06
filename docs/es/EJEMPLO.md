@@ -410,7 +410,8 @@ Eso no lo genera un modelo. No está en el diff.
 
 ## F8 · Cierre
 
-Archivar el cambio, borrar la rama, y la retro de P15 sobre los datos del ciclo. En este caso
+El cambio ya se archivó en su pull request antes del merge (`/opsx:archive` y después
+`/openspec-archive`). Tras el merge: borrar la rama, y la retro de P15 sobre los datos del ciclo. En este caso
 apareció una task no prevista —el segundo test de triangulación— y la conclusión fue accionable:
 añadir a `docs/backend-standards.md` la regla de que toda task de implementación lleva su
 triangulación desde el

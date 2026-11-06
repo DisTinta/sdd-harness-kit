@@ -1,0 +1,33 @@
+schema: spec-driven
+
+# OpenSpec config for the sdd-harness-kit repository ITSELF (kit maintenance).
+# Not payload: consumer projects get core/ai-specs/templates/openspec/config.yaml.tpl.
+
+context: |
+  Repository: sdd-harness-kit, a portable Spec-Driven Development harness (skills, subagents,
+  deterministic bash hooks, stack adapters, installers, human guides). Not an application.
+  Read AGENTS.md (== CLAUDE.md) first: map, language rules, change rules.
+
+  - core/ is installable payload; adapters/ are per-stack files; docs/es + docs/en are paired human guides.
+  - install.sh / install.ps1 must change together; kit-owned files are overwritten on re-install,
+    project-owned files (is_project_owned list) are kept.
+  - Consumer configuration lives in .claude/sdd-harness.env, parsed by core/.claude/hooks/lib.sh allowlist.
+  - Hooks are bash, dispatched by core/.claude/hooks/invoke.cjs (Git Bash on Windows).
+  - Language: English for every artefact here except docs/es/** and root README.md.
+  - Do not invent OpenSpec flags; check `openspec <cmd> --help` for the installed version.
+
+rules:
+  proposal:
+    - State why, in-scope and explicit non-goals.
+    - Call out impact on already-installed consumer repos (kit-owned vs project-owned files).
+  specs:
+    - Use RFC-2119 language (MUST / SHOULD / MAY).
+    - Scenarios in Given/When/Then; each scenario maps to exactly one automated test.
+  design:
+    - Record decisions that would otherwise be improvised mid-implementation.
+    - Note cross-platform behaviour (Git Bash on Windows, macOS, Linux).
+  tasks:
+    - Step 0 creates the branch from dev (feat/…, fix/…, docs/…).
+    - One task is about one agent turn; include test steps before implementation steps.
+    - If installable payload changes, bump VERSION and add the entry to both CHANGELOGs.
+    - Never push, tag-push, merge or rewrite history without the author's explicit confirmation.
