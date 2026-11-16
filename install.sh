@@ -366,8 +366,8 @@ if [[ -n "$CFG" ]]; then
     warn "Merge Pre-merge Review + §7.1 audit rules into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks + operations.apply/archive)."
     FOLLOWUPS=1
   fi
-  if ! grep -qE 'openspec-archive' "$CFG" 2>/dev/null; then
-    warn "Merge the /openspec-archive step into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks last step + operations.archive.guidance)."
+  if ! grep -qE 'sdd-archive' "$CFG" 2>/dev/null; then
+    warn "Merge the /sdd-archive step into openspec/config.yaml from ai-specs/templates/openspec/config.yaml.tpl (rules.tasks last step + operations.archive.guidance)."
     FOLLOWUPS=1
   fi
 fi
@@ -393,8 +393,9 @@ cat <<STEPS
   4. Si hay frontend: cablea tests/a11y (deps + rename + script test:a11y). Ver docs/frontend-standards.md.
   5. Activa los MCP del proyecto en Claude Code / Cursor (Context7; Playwright si hay frontend).
      Si Cursor pide permiso la primera vez, acéptalo. Opcional: CONTEXT7_API_KEY en el entorno.
-  6. Inicializa OpenSpec:  openspec init
+  6. Inicializa OpenSpec ≥ 2.0:  npm i -g @fission-ai/openspec@2 && openspec init
      Luego cablea openspec/config.yaml con ai-specs/templates/openspec/config.yaml.tpl
+     (skills nativas /openspec-*; kit: /sdd-implement, /sdd-archive)
   7. Revisa .claude/hooks/ antes de confiar en ellos: ejecutan código con tus permisos.
   8. Abre una sesión y escribe /enrich-us (o /kit-health) para probar que las skills cargan.
   9. Vuelve a pasar el doctor:  bash $DEST/.claude/doctor.sh --dest $DEST

@@ -10,8 +10,8 @@
 #   bash .claude/sync-artifacts.sh --force    overwrite copies that diverge
 #
 # Entries under .claude/.cursor that are not in ai-specs/:
-#   KEEP    — OpenSpec native skills (openspec-*), from `openspec init`. Do not delete.
-#   ORPHAN  — anything else. Real drift; the human decides.
+#   KEEP    — official OpenSpec 2.0 skills (allowlisted), from `openspec init` / `update`.
+#   ORPHAN  — anything else (incl. legacy kit openspec-implement / openspec-archive).
 # ─────────────────────────────────────────────────────────────────────────────
 set -uo pipefail
 cd "${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
@@ -41,13 +41,25 @@ strip_os_junk() {
   find "$1" -type f \( -iname 'desktop.ini' -o -iname 'Thumbs.db' -o -name '.DS_Store' \) -delete 2>/dev/null || true
 }
 
-# OpenSpec init writes openspec-* skills into .claude/skills and .cursor/skills.
-# The kit's openspec-implement lives in ai-specs, so it never hits this branch.
+# OpenSpec 2.0 owns these skill folder names (see openspec.dev/docs/upgrade-to-2).
+# Kit skills use the sdd-* prefix and live in ai-specs/, so they never hit this branch.
+# Legacy kit folders openspec-implement / openspec-archive are NOT listed → ORPHAN.
 is_expected_foreign() {
   local kind="$1" name="$2"
   [[ "$kind" == "skills" ]] || return 1
   case "$name" in
-    openspec-*) return 0 ;;
+    openspec-propose) return 0 ;;
+    openspec-explore) return 0 ;;
+    openspec-apply-change) return 0 ;;
+    openspec-update-change) return 0 ;;
+    openspec-sync-specs) return 0 ;;
+    openspec-archive-change) return 0 ;;
+    openspec-new-change) return 0 ;;
+    openspec-continue-change) return 0 ;;
+    openspec-ff-change) return 0 ;;
+    openspec-verify-change) return 0 ;;
+    openspec-bulk-archive-change) return 0 ;;
+    openspec-onboard) return 0 ;;
   esac
   return 1
 }
@@ -111,7 +123,7 @@ for tool in .claude .cursor; do
       name="$(basename "$ref")"
       if [[ ! -e "ai-specs/$kind/$name" ]]; then
         if is_expected_foreign "$kind" "$name"; then
-          report "KEEP" "$ref — OpenSpec native skill (does not live in ai-specs/; do not delete)"
+          report "KEEP" "$ref — OpenSpec 2.0 skill (does not live in ai-specs/; do not delete)"
           keep=$((keep+1))
         else
           report "ORPHAN" "$ref — not present in ai-specs/$kind/"
@@ -132,7 +144,7 @@ if [[ $copied -gt 0 ]]; then
 fi
 if [[ $keep -gt 0 ]]; then
   echo
-  echo "  KEEP = OpenSpec native skills (openspec init). They do not live in ai-specs/. Do not delete them."
+  echo "  KEEP = OpenSpec 2.0 skills (allowlisted). They do not live in ai-specs/. Do not delete them."
 fi
 [[ $conflicts -gt 0 || $orphans -gt 0 ]] && exit 1
 exit 0

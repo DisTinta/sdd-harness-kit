@@ -1,5 +1,5 @@
 ---
-name: openspec-implement
+name: sdd-implement
 description: Use when the user says "implement the change", refers to openspec/changes/, or names a change id. Walks an OpenSpec change task by task in TDD, enforcing the mandatory verification steps and the traceability between scenarios and tests.
 author: sdd-harness-kit
 version: 1.0.0
@@ -99,7 +99,7 @@ created or modified, and any deviation from `design.md`.
   scope needs to move, do not patch code around a stale spec and do not silently rewrite the spec to
   match what you already built. **Stop, say what changed and why, and update `proposal.md`,
   `design.md` or `specs/**/*.md` first** — this is Rule 7 of `docs/base-standards.md`, and it is the
-  same thing native OpenSpec's `/opsx:apply` does when it "fixes the artifact, then continues". Only
+  same thing native OpenSpec's `/openspec-apply-change` does when it "fixes the artifact, then continues". Only
   after the artifact reflects the new reality do you resume coding.
 - Outside of that case, the files you touch under `openspec/` are `tasks.md` (marking tasks `[x]`) and
   `reports/` (the mandatory verification reports). Specs are input to be followed, not a target to be

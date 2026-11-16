@@ -99,7 +99,7 @@ Every change closes with the same sequence. The order is fixed:
 
 ```
 apply done → PR opened → /show-spec-working → /verify-against-spec → /adversarial-review
-  → fixes committed to the same PR → /opsx:archive → /openspec-archive (archive commit on the same PR)
+  → fixes committed to the same PR → /openspec-archive-change → /sdd-archive (archive commit on the same PR)
   → merge
 ```
 
@@ -118,8 +118,8 @@ apply done → PR opened → /show-spec-working → /verify-against-spec → /ad
    manual evidence) and add an addendum to the affected report.
 4. **Commit the fixes to the same pull request** (push confirmed with the author). Re-run a check when
    its findings led to non-trivial fixes, until it returns no Blocker or Major.
-5. **Archive, then merge**: `/opsx:archive` only after the three checks are clean, then
-   `/openspec-archive`, which writes the `openspec/changes/archive/INDEX.md` row, creates the archive
+5. **Archive, then merge**: `/openspec-archive-change` only after the three checks are clean, then
+   `/sdd-archive`, which writes the `openspec/changes/archive/INDEX.md` row, creates the archive
    commit (deltas included) on the same pull request and prunes deltas per `KIT_ARCHIVE_PRUNE_DELTAS`
    (default `deferred`: only deltas already on the default branch, safe with squash merges). The
    author merges after the archive commit. The agent never merges, pushes or pushes tags without
@@ -148,12 +148,12 @@ This document is enforced by the `validate-tasks` hook, which matches on the fil
 (`*/tasks.md`). It does not know or care which command produced or edited the file, so it applies
 identically on both paths available in this kit:
 
-- Creating `tasks.md` via `/opsx:ff` or `/opsx:propose` (OpenSpec) or via prompt **P5** (kit)
-- Creating or updating `tasks.md` via `/opsx:continue` (OpenSpec)
+- Creating `tasks.md` via `/openspec-ff-change` or `/openspec-propose` (OpenSpec) or via prompt **P5** (kit)
+- Creating or updating `tasks.md` via `/openspec-continue-change` (OpenSpec)
 - Any manual edit of an existing `tasks.md`
-- Implementing tasks via `/opsx:apply` (OpenSpec) or `/openspec-implement` (kit) — the agent must
+- Implementing tasks via `/openspec-apply-change` (OpenSpec) or `/sdd-implement` (kit) — the agent must
   execute the verification steps either way
-- Updating `tasks.md` as a side effect of `/opsx:sync` reconciling a delta spec into the main spec
+- Updating `tasks.md` as a side effect of `/openspec-sync-specs` reconciling a delta spec into the main spec
 
 ## 6. Report template
 
@@ -251,7 +251,7 @@ is part of the title.
 - [ ] 11.2 Run `/show-spec-working`, `/verify-against-spec` and `/adversarial-review`, in this order; one report each under `reports/`
 - [ ] 11.3 Fix every finding in this change and give each one an A/B/C/D destination in `design.md` → Follow-ups; re-run the verification each fix invalidates
 - [ ] 11.4 Commit the fixes to the same pull request
-- [ ] 11.5 `/opsx:archive`, then `/openspec-archive` (INDEX.md row + archive commit on the same pull request + delta pruning per config); the author merges afterwards
+- [ ] 11.5 `/openspec-archive-change`, then `/sdd-archive` (INDEX.md row + archive commit on the same pull request + delta pruning per config); the author merges afterwards
 ```
 
 ## 8. Agent execution requirements
