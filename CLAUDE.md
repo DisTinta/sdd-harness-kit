@@ -12,7 +12,7 @@ installers, and human guides. It is **not** an application and not a product cod
 suite to govern.
 
 The kit governs **its own** changes with OpenSpec: `openspec/` at the repo root (initialised with
-`openspec init --tools none`, so no `/opsx:*` commands are generated here). That tree and its
+`openspec init --tools none`, so no OpenSpec skills are generated here). That tree and its
 `config.yaml` are kit-repo only — never payload. Consumer projects get
 `core/ai-specs/templates/openspec/config.yaml.tpl` instead.
 

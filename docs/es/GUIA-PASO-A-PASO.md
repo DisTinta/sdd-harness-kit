@@ -21,7 +21,7 @@ Más detalle: [USO.md](USO.md) · [MANUAL.md](MANUAL.md) · [CONFIG.md](CONFIG.m
 | **Git**                    | Repo + contexto de sesión | Git for Windows (incluye **Git Bash**)                                                          | `git` del sistema                         |
 | **Git Bash**               | Ejecutar hooks `.sh`      | Viene con Git for Windows; úsalo o llama `bash` desde PowerShell                                | bash nativo                               |
 | **jq**                     | Parsear JSON de los hooks | `winget install jqlang.jq`                                                                      | `brew install jq` / `sudo apt install jq` |
-| **OpenSpec CLI**           | Changes / specs           | Tras Node: `npm install -g @fission-ai/openspec`                                                | Igual                                     |
+| **OpenSpec CLI ≥ 2.0**     | Changes / specs           | Tras Node: `npm install -g @fission-ai/openspec@2`                                              | Igual                                     |
 | **Claude Code y/o Cursor** | Superficies de agente     | Las que uses en el equipo                                                                       | Igual                                     |
 
 
@@ -116,7 +116,7 @@ También revisa en el mismo día:
 
 ```bash
 cd C:\proyectos\mi-api    # o ~/proyectos/mi-api
-npm install -g @fission-ai/openspec   # si aún no
+npm install -g @fission-ai/openspec@2 # si aún no (OpenSpec ≥ 2.0)
 openspec init                         # elige Claude Code, Cursor, etc.
 ```
 
@@ -148,7 +148,7 @@ Copy-Item ai-specs\templates\openspec\config.yaml.tpl openspec\config.yaml
 1. Abre `openspec/config.yaml`, quita solo lo que no aplique, y deja los punteros a `docs/` y `ai-specs/`.
 2. No pegues novelas en `context` (límite ~50KB): bastan rutas y reglas cortas.
 
-Los comandos nativos `/opsx:*` y los del kit (`/openspec-implement`, etc.) pueden convivir: los hooks miran **rutas de fichero**, no quién escribió el change.
+Las skills nativas de OpenSpec 2.0 (`/openspec-*`) y las del kit (`/sdd-implement`, `/sdd-archive`, etc.) pueden convivir: los hooks miran **rutas de fichero**, no quién escribió el change.
 
 ---
 
@@ -192,10 +192,10 @@ echo '{"source":"startup"}' | bash .claude/hooks/session-context.sh | jq .
 | --------------------- | ---------------------------------------------- | ---------------------------------------------------------------------------------- |
 | **F0** Harness        | Contexto cargado, env sano, sesión limpia      | `/kit-health` si algo huele mal                                                    |
 | **F1** Planificación  | Story INVEST + criterios + non-goals           | `/enrich-us`, `/dod-feature` (u otro `/dod-`*)                                     |
-| **F2** Especificación | proposal + delta spec + design + tasks + audit | `/opsx:propose` o P5; luego `spec-auditor` / P6 → `reports/*-spec-audit.md` (`APPROVED`; §7.1 / `spec-audit-gate`) |
+| **F2** Especificación | proposal + delta spec + design + tasks + audit | `/openspec-propose` o P5; luego `spec-auditor` / P6 → `reports/*-spec-audit.md` (`APPROVED`; §7.1 / `spec-audit-gate`) |
 | **F3** Armado         | Skills, plan mode, MCP                         | Plan mode (`Shift+Tab` ×2). Context7 al planear APIs de librería; Playwright al demo UI |
-| **F4** Ejecución      | Task a task, TDD                               | `/openspec-implement` o `/opsx:apply` (solo con audit `APPROVED`); `/tdd-red` → `/tdd-green` → `/tdd-refactor` |
-| **F5** Verificación   | Evidencia + Pre-merge Review (último paso)     | PR abierto → `/show-spec-working` → `/verify-against-spec` → `/adversarial-review` → `/opsx:archive` + `/openspec-archive` en el mismo PR, antes del merge |
+| **F4** Ejecución      | Task a task, TDD                               | `/sdd-implement` o `/openspec-apply-change` (solo con audit `APPROVED`); `/tdd-red` → `/tdd-green` → `/tdd-refactor` |
+| **F5** Verificación   | Evidencia + Pre-merge Review (último paso)     | PR abierto → `/show-spec-working` → `/verify-against-spec` → `/adversarial-review` → `/openspec-archive-change` + `/sdd-archive` en el mismo PR, antes del merge |
 | **F6** Documentación  | Contratos / ADR si aplica                      | `/update-docs`, `/adr-new`                                                         |
 | **F7** Entrega        | Commits atómicos + PR                          | `/commit` (`feat(TICKET): …`), `/pr-describe`, `/pr-review` |
 | **F8** Cierre         | Aprender (change ya archivado en su PR)        | Retro P15 tras el merge; apuntes en `project-context` o standards                  |
@@ -301,10 +301,11 @@ pwsh -File .claude/sync-artifacts.ps1
 
 También: `/sync-agent-artifacts`.
 
-Tras `openspec init`, el sync puede listar `openspec-propose`, `openspec-apply-change`, etc. con
-etiqueta **`KEEP`**. Son las skills nativas de OpenSpec (`/opsx:*`). No las borres; no es un
-error. Un **`ORPHAN`** de verdad es cualquier otro nombre que no esté en
-`ai-specs/`.
+Tras `openspec init` / `openspec update` (OpenSpec ≥ 2.0), el sync puede listar
+`openspec-propose`, `openspec-apply-change`, etc. con etiqueta **`KEEP`** (allowlist oficial).
+No las borres; no es un error. Un **`ORPHAN`** es cualquier otro nombre fuera de esa allowlist
+y de `ai-specs/` (p. ej. las antiguas `openspec-implement` / `openspec-archive` del kit tras
+actualizar a 1.7.0: bórralas a mano una vez sincronizadas `/sdd-implement` y `/sdd-archive`).
 
 ### `validate-tasks` y `BRANCH_PREFIX`
 

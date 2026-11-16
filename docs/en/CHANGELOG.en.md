@@ -11,6 +11,33 @@ Semantic versioning: the live version is in [`VERSION`](../../VERSION).
 
 ---
 
+## [1.7.0]
+
+### Changed
+
+- **OpenSpec 2.0 alignment.** The CLI no longer installs `/opsx:*` commands; the native flow is
+  skills `/openspec-propose`, `/openspec-apply-change`, `/openspec-archive-change`, and so on
+  (shared `.agents/skills/` folder). Docs, installable doctrine, hooks and templates use that map.
+- **Kit skills leave the `openspec-*` prefix.** Renamed so they do not collide with the package
+  namespace: `/openspec-implement` → `/sdd-implement`, `/openspec-archive` → `/sdd-archive`. The
+  `.claude/openspec-archive.sh` script keeps its name (kit infrastructure, not a skill).
+- **Sync KEEP is an allowlist.** `sync-artifacts` no longer treats every `openspec-*` name as
+  KEEP: only the 12 official OpenSpec 2.0 skills. Legacy kit folders `openspec-implement` /
+  `openspec-archive` become `ORPHAN` after upgrade.
+
+### Update notes
+
+- Upgrade the CLI to OpenSpec ≥ 2.0 (`npm install -g @fission-ai/openspec@2`) and run
+  `openspec update` in each consumer project.
+- Re-install or update the kit; sync artifacts. Delete leftover orphan references
+  `.claude/skills/openspec-implement` and `.claude/skills/openspec-archive` (and the `.cursor/`
+  copies) by hand once `/sdd-implement` and `/sdd-archive` are synced.
+- In the project’s `openspec/config.yaml` (if you customized it), replace `/openspec-implement` /
+  `/openspec-archive` / `/opsx:*` with `/sdd-implement` / `/sdd-archive` / `/openspec-*` per the
+  2.0 map.
+
+---
+
 ## [1.6.0]
 
 ### Added

@@ -45,8 +45,8 @@ case "$FILE" in
         if [[ -f "$FILE" ]]; then
           ask "You are about to REWRITE a specification artifact that already exists (${FILE}).
 
-This is normal and frequent when working with the fluid OpenSpec flow: /opsx:apply fixes an
-artifact and moves on, /opsx:sync dumps a delta onto the main spec. It is not an alarm on its own.
+This is normal and frequent when working with the fluid OpenSpec flow: /openspec-apply-change fixes an
+artifact and moves on, /openspec-sync-specs dumps a delta onto the main spec. It is not an alarm on its own.
 
 Legitimate: a scope change arrived, or the design turned out to be wrong, and you are updating the
 specification BEFORE (or while) touching the code — rule 7 of docs/base-standards.md.

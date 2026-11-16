@@ -270,7 +270,7 @@ CRITERIO DE ACEPTACIÓN
 
 ## P5 · Especificar el cambio
 
-**Contexto limpio obligatorio.** Si usas OpenSpec, el comando `/opsx:propose "<descripción>"` hace
+**Contexto limpio obligatorio.** Si usas OpenSpec, el comando `/openspec-propose "<descripción>"` hace
 esto mismo. Este prompt es la versión controlada, y sirve también sin OpenSpec.
 
 ```
@@ -762,8 +762,8 @@ CRITERIO DE ACEPTACIÓN
 
 ## P15 · Cierre y aprendizaje
 
-El cambio se archivó en su pull request antes del merge (`/opsx:archive` y después
-`/openspec-archive`). Después:
+El cambio se archivó en su pull request antes del merge (`/openspec-archive-change` y después
+`/sdd-archive`). Después:
 
 ```
 CONTEXTO Y ROL

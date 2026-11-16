@@ -93,7 +93,7 @@ autor del issue no había pensado.
 
 ## F2 · De story a contrato
 
-Contexto limpio. `/opsx:propose` o el prompt P5 — cualquiera de los dos produce los mismos cuatro
+Contexto limpio. `/openspec-propose` o el prompt P5 — cualquiera de los dos produce los mismos cuatro
 ficheros y queda sujeto a los mismos hooks.
 
 Cuatro ficheros. Los dos que más deciden el resultado:
@@ -193,7 +193,7 @@ toda tarea que mute datos incluya su restauración:
 - [ ] 11.2 Run `/show-spec-working`, `/verify-against-spec` and `/adversarial-review`; one report each under `reports/`
 - [ ] 11.3 Fix every finding and record its destination in `design.md` → Follow-ups
 - [ ] 11.4 Commit the fixes to the same pull request
-- [ ] 11.5 `/opsx:archive`, then `/openspec-archive`; the author merges afterwards
+- [ ] 11.5 `/openspec-archive-change`, then `/sdd-archive`; the author merges afterwards
 ```
 
 Si el agente escribe un `tasks.md` sin el paso 0, sin la etiqueta `(MANDATORY)`, sin el
@@ -211,7 +211,7 @@ el hook `spec-audit-gate` no deja escribir código ni tests hasta que ese inform
 
 ## F4 · De contrato a código
 
-`/openspec-implement <id>` recorre las tasks. Lo que ocurre en cada una:
+`/sdd-implement <id>` recorre las tasks. Lo que ocurre en cada una:
 
 ### Rojo
 
@@ -420,8 +420,8 @@ Eso no lo genera un modelo. No está en el diff.
 
 ## F8 · Cierre
 
-El cambio ya se archivó en su pull request antes del merge (`/opsx:archive` y después
-`/openspec-archive`). Tras el merge: borrar la rama, y la retro de P15 sobre los datos del ciclo. En este caso
+El cambio ya se archivó en su pull request antes del merge (`/openspec-archive-change` y después
+`/sdd-archive`). Tras el merge: borrar la rama, y la retro de P15 sobre los datos del ciclo. En este caso
 apareció una task no prevista —el segundo test de triangulación— y la conclusión fue accionable:
 añadir a `docs/backend-standards.md` la regla de que toda task de implementación lleva su
 triangulación desde el

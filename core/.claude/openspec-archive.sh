@@ -10,7 +10,7 @@
 # Usage (from anywhere inside the repo; on Windows prefer
 #   node .claude/hooks/invoke.cjs .claude/openspec-archive.sh <subcommand> …):
 #   archive <change> [--dry-run]           openspec archive -y + post-archive
-#   post-archive <folder> [--dry-run]      after /opsx:archive: index → archive commit → prune
+#   post-archive <folder> [--dry-run]      after /openspec-archive-change: index → archive commit → prune
 #   index [--dry-run]                      rebuild/backfill INDEX.md (writes file, no commit)
 #   prune-deltas [--dry-run] [--only F]    prune deltas already on the default branch
 #   prune-folders [--apply] [--only F]     threshold folder prune (dry run unless --apply)
@@ -25,7 +25,7 @@
 set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROG="openspec-archive"
+PROG="sdd-archive"
 
 ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
   printf '%s: not inside a Git work tree\n' "$PROG" >&2

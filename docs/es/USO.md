@@ -55,7 +55,7 @@ el kit ha hecho copias: funciona igual, pero recuerda editar siempre `ai-specs/`
 
 ```bash
 node -v                                 # necesitas 20.19 o superior
-npm install -g @fission-ai/openspec
+npm install -g @fission-ai/openspec@2   # OpenSpec ≥ 2.0 (skills /openspec-*, sin /opsx:*)
 cd C:\proyectos\mi-api
 openspec init                           # elige Claude Code, Cursor, etc.
 ```
@@ -68,8 +68,9 @@ git status --short
 git diff .claude/settings.json     # debería estar vacío
 ```
 
-Los nombres no colisionan: OpenSpec instala comandos `/opsx:*` y el kit tiene los suyos. Lo que crea
-cada uno como instalador:
+Los nombres no colisionan: OpenSpec 2.0 reserva el prefijo `openspec-*` para sus skills
+(`/openspec-propose`, `/openspec-apply-change`, …) y el kit usa el prefijo `sdd-*`
+(`/sdd-implement`, `/sdd-archive`). Lo que crea cada uno como instalador:
 
 
 | Ruta                                                          | La crea                           |
@@ -80,10 +81,10 @@ cada uno como instalador:
 
 El **instalador** del kit no escribe dentro de `openspec/`: ese directorio lo gobierna la herramienta.
 Durante el trabajo del día a día sí se escribe ahí, por supuesto —es donde vive cada change— y **da
-igual qué lo escriba**: `/opsx:propose` o el prompt P5, `/opsx:apply` o `/openspec-implement`. Los
+igual qué lo escriba**: `/openspec-propose` o el prompt P5, `/openspec-apply-change` o `/sdd-implement`. Los
 hooks `validate-tasks` y `protect-specs-and-tests` actúan sobre la ruta del fichero, no sobre qué
 comando lo tocó, así que el kit funciona igual si usas exclusivamente los comandos nativos de OpenSpec
-(`/opsx:explore`, `/opsx:propose`, `/opsx:apply`, `/opsx:sync`, `/opsx:archive`), exclusivamente los
+(`/openspec-explore`, `/openspec-propose`, `/openspec-apply-change`, `/openspec-sync-specs`, `/openspec-archive-change`), exclusivamente los
 del kit, o una mezcla. La tabla de correspondencia completa está en [MANUAL.md](MANUAL.md#1-el-flujo-en-nueve-fases).
 
 ### 3. Completa `docs/project-context.md`
@@ -219,11 +220,11 @@ Ese recorte es el trabajo más rentable de todo el ciclo.
 
 ### Fase 2 · De story a contrato
 
-Contexto limpio primero (`/clear`). Opcional antes de esto: `/opsx:explore` (nativo) o el subagente
+Contexto limpio primero (`/clear`). Opcional antes de esto: `/openspec-explore` (nativo) o el subagente
 `explorer`/**prompt P4** (kit) si todavía no tienes claro el enfoque.
 
 ```
-/opsx:propose "filter the listing by state"
+/openspec-propose "filter the listing by state"
 ```
 
 Es exactamente equivalente al **prompt P5** si no usas OpenSpec, o si quieres controlar tú el
@@ -247,11 +248,11 @@ implementan.
 ### Fase 4 · Implementar
 
 ```
-/openspec-implement <id-del-change>
+/sdd-implement <id-del-change>
 ```
 
-Equivalente al `/opsx:apply` nativo, con la doctrina del kit explícita: exige la tabla de
-trazabilidad antes de codificar y ejecuta él mismo los pasos de verificación. Si usas `/opsx:apply`
+Equivalente al `/openspec-apply-change` nativo, con la doctrina del kit explícita: exige la tabla de
+trazabilidad antes de codificar y ejecuta él mismo los pasos de verificación. Si usas `/openspec-apply-change`
 en su lugar, la misma doctrina se aplica igual —está en `CLAUDE.md`, no en la skill— y los hooks no
 distinguen cuál de los dos escribió el fichero.
 
@@ -320,10 +321,10 @@ rellénalo tú.
 
 ### Fase 8 · Cerrar
 
-**Antes del merge, en la misma pull request** (Pre-merge Review, paso 11.5): `/opsx:archive` —te
-preguntará si hace falta `/opsx:sync` primero para volcar el delta sobre el spec principal, y en ese
+**Antes del merge, en la misma pull request** (Pre-merge Review, paso 11.5): `/openspec-archive-change` —te
+preguntará si hace falta `/openspec-sync-specs` primero para volcar el delta sobre el spec principal, y en ese
 caso reescribe `openspec/specs/<capability>/spec.md`: el hook lo deja pasar preguntando, igual que con
-cualquier otra reescritura—, y después `/openspec-archive`, que escribe la fila en
+cualquier otra reescritura—, y después `/sdd-archive`, que escribe la fila en
 `openspec/changes/archive/INDEX.md`, crea el commit de archivado con los deltas y poda deltas según
 `KIT_ARCHIVE_PRUNE_DELTAS`. Haces el merge después del commit de archivado. Después, el **prompt P15**
 para la retro sobre los datos del ciclo.
@@ -341,15 +342,15 @@ Día 1, una vez por proyecto
 
 Cada ticket
   /enrich-us          →  P2 poke-holes            →  RECORTAS TÚ
-  (/opsx:explore)  →  /clear  →  /opsx:propose  →  spec-auditor  →  EDITAS TÚ
+  (/openspec-explore)  →  /clear  →  /openspec-propose  →  spec-auditor  →  EDITAS TÚ
   Shift+Tab ×2  →  P7 plan                        →  APRUEBAS TÚ
   /tdd-red  →  VES FALLAR EL TEST  →  /tdd-green  →  P10 triangulación
   /show-spec-working  →  /verify-against-spec  →  /adversarial-review
   /update-docs  →  /adr-new  →  /pr-review
   /commit  →  /pr-describe                        →  ESCRIBES EL POR QUÉ
-  (/opsx:sync)  →  /opsx:archive  →  /openspec-archive  (misma PR)  →  MERGEAS TÚ  →  P15 retro
+  (/openspec-sync-specs)  →  /openspec-archive-change  →  /sdd-archive  (misma PR)  →  MERGEAS TÚ  →  P15 retro
 
-  Todo lo de la izquierda con /opsx: tiene equivalente en el kit (ver tabla en MANUAL.md)
+  Todo lo de la izquierda con /openspec- tiene equivalente en el kit (ver tabla en MANUAL.md)
   y viceversa. No hay que elegir uno para todo el proyecto: se decide por ticket.
 
 Al tocar el kit
@@ -372,13 +373,13 @@ Nunca
 `/enrich-us` · `/dod-feature` · `/dod-bug` · `/dod-refactor` · `/dod-spike` · `/dod-docs` · `/meta-prompt`
 
 **Implementación**
-`/openspec-implement` · `/feature-slice` · `/tdd-red` · `/tdd-green` · `/tdd-refactor`
+`/sdd-implement` · `/feature-slice` · `/tdd-red` · `/tdd-green` · `/tdd-refactor`
 
 **Verificación**
 `/show-spec-working` · `/verify-against-spec` · `/adversarial-review` · `/pr-review` · `/code-auditing` · `/privacy-ethics-check` · `/migration-review` · `/architecture-audit`
 
 **Documentación y entrega**
-`/explain` · `/adr-new` · `/update-docs` · `/commit` · `/pr-describe` · `/openspec-archive`
+`/explain` · `/adr-new` · `/update-docs` · `/commit` · `/pr-describe` · `/sdd-archive`
 
 **Mantenimiento del kit**
 `/writing-skills` · `/sync-agent-artifacts` · `/using-git-worktrees` · `/kit-health`
@@ -416,10 +417,11 @@ no esté si instalaste con `--no-frontend`.
 `ai-specs/skills/`? En modo copia son ficheros distintos. `sync-artifacts.sh --check` te dirá
 `DIVERGES`; mueve tu cambio a `ai-specs/` y sincroniza.
 
-**El sync marca skills** `openspec-`* **como** `KEEP` **(o, en un kit viejo, como huérfanas).** Es
-esperado después de `openspec init`. No viven en `ai-specs/`: son los comandos `/opsx:*` de
-OpenSpec. **No las borres.** `KEEP` no hace fallar el sync. Un `ORPHAN` de verdad
-es otro nombre (skill del kit que se renombró o una copia solo en `.claude/skills/`).
+**El sync marca skills de OpenSpec 2.0 como** `KEEP` **(o, tras renombrar skills del kit, como huérfanas).**
+Es esperado después de `openspec init` / `update`: las de la allowlist oficial (`openspec-propose`,
+`openspec-apply-change`, …) no viven en `ai-specs/`. **No las borres.** `KEEP` no hace fallar el sync.
+Un `ORPHAN` de verdad es otro nombre (p. ej. las antiguas `openspec-implement` / `openspec-archive`
+del kit, o una copia solo en `.claude/skills/`).
 
 **Todos mis turnos tardan mucho en cerrarse.** Es el hook de `Stop` ejecutando `CMD_TEST`. Apúntalo a
 la parte rápida de la suite.

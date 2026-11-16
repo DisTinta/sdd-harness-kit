@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Rebuilds the references from .claude and .cursor to the canonical source in ai-specs.
 
@@ -7,8 +7,8 @@
     to copying when the platform does not allow them (Windows without developer mode).
 
     Entries under .claude/.cursor that are not in ai-specs/ are classified:
-    KEEP    — OpenSpec native skills (openspec-*), installed by `openspec init`. Leave them.
-    ORPHAN  — anything else. Real drift; the human decides whether to delete.
+    KEEP    — official OpenSpec 2.0 skills (allowlisted), from `openspec init` / `update`.
+    ORPHAN  — anything else (incl. legacy kit openspec-implement / openspec-archive).
 
 .PARAMETER Check
     Report only, change nothing.
@@ -29,9 +29,15 @@ $linked = 0; $copied = 0; $ok = 0; $conflicts = 0; $orphans = 0; $keep = 0
 function Report($tag, $msg) { Write-Host ("  {0,-9} {1}" -f $tag, $msg) }
 
 function Test-ExpectedForeign([string]$Name, [string]$Kind) {
-    # OpenSpec init writes openspec-* skills into .claude/skills and .cursor/skills.
-    # Kit-owned openspec-implement lives in ai-specs, so it never hits this branch.
-    return ($Kind -eq 'skills') -and ($Name -like 'openspec-*')
+    # OpenSpec 2.0 owns these skill folder names (see openspec.dev/docs/upgrade-to-2).
+    # Kit skills use the sdd-* prefix and live in ai-specs/, so they never hit this branch.
+    # Legacy kit folders openspec-implement / openspec-archive are NOT listed → ORPHAN.
+    $openSpecSkills = @(
+        'openspec-propose', 'openspec-explore', 'openspec-apply-change', 'openspec-update-change',
+        'openspec-sync-specs', 'openspec-archive-change', 'openspec-new-change', 'openspec-continue-change',
+        'openspec-ff-change', 'openspec-verify-change', 'openspec-bulk-archive-change', 'openspec-onboard'
+    )
+    return ($Kind -eq 'skills') -and ($openSpecSkills -contains $Name)
 }
 
 function Test-OsJunkName([string]$Name) {
@@ -115,7 +121,7 @@ foreach ($tool in @('.claude', '.cursor')) {
         Get-ChildItem -LiteralPath $dstDir -Force -ErrorAction SilentlyContinue | Where-Object { -not (Test-OsJunkName $_.Name) } | ForEach-Object {
             if (-not (Test-Path (Join-Path $srcDir $_.Name))) {
                 if (Test-ExpectedForeign $_.Name $kind) {
-                    Report 'KEEP' "$dstDir\$($_.Name) - OpenSpec native skill (not from ai-specs; do not delete)"
+                    Report 'KEEP' "$dstDir\$($_.Name) - OpenSpec 2.0 skill (not from ai-specs; do not delete)"
                     $script:keep++
                 } else {
                     Report 'ORPHAN' "$dstDir\$($_.Name) - not present in $srcDir"
@@ -135,6 +141,6 @@ if ($copied -gt 0) {
 }
 if ($keep -gt 0) {
     Write-Host ""
-    Write-Host "  KEEP = OpenSpec skills from 'openspec init'. They do not live in ai-specs/. Do not delete them."
+    Write-Host "  KEEP = OpenSpec 2.0 skills (allowlisted). They do not live in ai-specs/. Do not delete them."
 }
 if ($conflicts -gt 0 -or $orphans -gt 0) { exit 1 }

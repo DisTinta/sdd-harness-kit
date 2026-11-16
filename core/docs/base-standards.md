@@ -113,8 +113,8 @@ enforces it; the rest depend on you.
 ## 5. Planning Model Requirement
 
 Planning workflows must run with the strongest available model and high reasoning effort. This
-applies to: `enrich-us`, OpenSpec propose / explore / ff (`opsx:propose`, `opsx:explore`,
-`opsx:ff`), the kit's planning subagents (`product-analyst`, `backend-planner`,
+applies to: `enrich-us`, OpenSpec propose / explore / ff (`openspec-propose`, `openspec-explore`,
+`openspec-ff-change`), the kit's planning subagents (`product-analyst`, `backend-planner`,
 `frontend-planner`, `spec-auditor`), and any explicit planning turn.
 
 Before starting any of these workflows, verify the session is using it. If you can change the session
@@ -141,7 +141,7 @@ so this requirement is about the main session and any explicit planning turn.
 
 ## 7. Mandatory OpenSpec Artifact Updates for Post-Apply Changes
 
-When a new fix or change request appears after `opsx:apply` and before `opsx:archive`, treat it as a
+When a new fix or change request appears after `openspec-apply-change` and before `openspec-archive-change`, treat it as a
 spec update first, not as an informal "fix this quickly". This is the core principle of OpenSpec:
 documentation is the source of truth.
 
@@ -149,16 +149,16 @@ Required order:
 
 1. Update the affected OpenSpec change artifacts (scenarios, requirements, `tasks.md`). Do not add
    tasks labelled as "bugfixes": add them to the proper section, as part of the initial design.
-2. If artifact regeneration is needed, run the corresponding OpenSpec step (`opsx:continue`,
-   `opsx:ff`, or equivalent) before coding.
+2. If artifact regeneration is needed, run the corresponding OpenSpec step (`openspec-continue-change`,
+   `openspec-ff-change`, or equivalent) before coding.
 3. Implement code only after the artifacts reflect the new request.
 4. Re-run verification against the updated artifacts before archiving.
 
 Do not apply direct code-only fixes in this window without updating OpenSpec artifacts.
 
 This applies identically whether the change was created and is being implemented through OpenSpec's
-own commands (`opsx:propose`, `opsx:explore`, `opsx:apply`, `opsx:sync`, `opsx:archive`) or through the
-kit's equivalents (`/openspec-implement`, the `explorer`/`spec-auditor` subagents, prompts P4-P6). The
+own commands (`openspec-propose`, `openspec-explore`, `openspec-apply-change`, `openspec-sync-specs`, `openspec-archive-change`) or through the
+kit's equivalents (`/sdd-implement`, the `explorer`/`spec-auditor` subagents, prompts P4-P6). The
 hooks and this document do not know or care which one produced the artifact in front of them.
 
 ## 7.1 Mandatory Spec Audit Between Propose and Apply
@@ -170,7 +170,7 @@ subagent MUST review the change. A proposal's defects cost least before the firs
 Required order:
 
 1. Run `spec-auditor` over `openspec/changes/<change>/` as the closing step of the propose, whether
-   it ran through `opsx:propose`, `opsx:ff` or the kit's prompts. Pass it the work-item id and/or the
+   it ran through `openspec-propose`, `openspec-ff-change` or the kit's prompts. Pass it the work-item id and/or the
    ticket text (and the parent/container item if the project uses hierarchy), as described in
    `docs/project-context.md`. If it cannot reach the project's task tracker, pass the ticket text in
    the prompt.
@@ -178,14 +178,14 @@ Required order:
    subagent is read-only, so the main session writes the file. The report opens with the verdict:
    `APPROVED` or `CHANGES REQUIRED`.
 3. On `CHANGES REQUIRED`, apply its "Corrections to apply" to the artifacts under rule 7
-   (`opsx:update` or an equivalent edit), and to the work item according to the project's tracker
+   (`openspec-update-change` or an equivalent edit), and to the work item according to the project's tracker
    conventions in `docs/project-context.md`. A finding that needs a product or scope decision goes to
    the author; the agent does not settle it alone. No finding becomes a new issue or task: it widens
    the change's own artifacts. Close the report with a section that says, per finding, how it was
    resolved: fixed, rejected with the reason, or decided by the author. Then run the auditor again
    and append its verdict.
 4. Start the apply only on an `APPROVED` verdict, or on blocking findings the author explicitly
-   accepted (recorded in the closing section). An apply step (`opsx:apply`, `/openspec-implement`)
+   accepted (recorded in the closing section). An apply step (`openspec-apply-change`, `/sdd-implement`)
    that finds no audit report runs steps 1–3 first, without touching code.
 
 The `spec-audit-gate` hook enforces it: an edit under `PATH_SOURCE` or `PATH_TESTS` is denied while
@@ -227,8 +227,8 @@ replace one.
 - Do not rewrite an OpenSpec artifact to make it match code you have already written. Creating a
   proposal's artifacts is normal (the propose phase produces them). Fixing an artifact mid-implementation
   because the design was wrong, or syncing a delta spec into the main spec, is also normal — it is exactly
-  what OpenSpec's own fluid workflow expects (`opsx:apply`: "if something's wrong, fix the artifact, then
-  continue"; `opsx:sync`). What is prohibited is the reverse direction: adjusting the specification after
+  what OpenSpec's own fluid workflow expects (`openspec-apply-change`: "if something's wrong, fix the artifact, then
+  continue"; `openspec-sync-specs`). What is prohibited is the reverse direction: adjusting the specification after
   the fact so it stops disagreeing with an implementation shortcut. See Rule 7.
 - Do not edit migrations that are already applied on the main branch. Create a new one.
 - Do not add dependencies without justifying them and without verifying that the package actually

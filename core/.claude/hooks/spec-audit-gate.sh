@@ -55,7 +55,7 @@ Before the apply:
 1. Run the spec-auditor subagent over openspec/changes/${CHANGE}/ (proposal, design, specs, tasks).
 2. Save its full report as openspec/changes/${CHANGE}/reports/<YYYY-MM-DD>-spec-audit.md, closing
    with a section that says how each finding was resolved.
-3. Fix the artifacts it flags (rule 7 / opsx:update). A finding that needs a product decision goes
+3. Fix the artifacts it flags (rule 7 / openspec-update-change). A finding that needs a product decision goes
    to the author; do not decide it alone.
 Then retry this edit. Turning the gate off (KIT_SPEC_AUDIT_GATE=\"0\" in .claude/sdd-harness.env)
 is the author's call, made by hand."

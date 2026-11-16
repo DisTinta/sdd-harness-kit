@@ -32,7 +32,7 @@ comando configurado sale con código 0 y no molesta.
 | Variable | Cómo se invoca | Quién la usa |
 |---|---|---|
 | `CMD_TEST` | tal cual | Hook `verify-tests` (Stop), contexto de sesión, skills |
-| `CMD_TEST_FILTER` | `$CMD_TEST_FILTER "<patrón>"` | Skills de TDD, `openspec-implement` |
+| `CMD_TEST_FILTER` | `$CMD_TEST_FILTER "<patrón>"` | Skills de TDD, `sdd-implement` |
 | `CMD_LINT` | tal cual | Contexto de sesión, skills |
 | `CMD_FORMAT_FILE` | `$CMD_FORMAT_FILE "<ruta>"` | Hook `post-edit-quality`, en silencio |
 | `CMD_STATIC_FILE` | `$CMD_STATIC_FILE "<ruta>"` | Hook `post-edit-quality`; su salida vuelve al agente |
@@ -81,8 +81,8 @@ Las rutas son relativas a la raíz del repositorio y se comparan por prefijo de 
 ## Retención del archivo de OpenSpec
 
 OpenSpec nunca poda `openspec/changes/archive/`. El kit lo mantiene acotado con
-`.claude/openspec-archive.sh`, que ejecuta la skill `/openspec-archive` justo después de
-`/opsx:archive` (paso 11.5 de la Pre-merge Review). Nunca hace push, amend, rebase, squash ni usa
+`.claude/openspec-archive.sh`, que ejecuta la skill `/sdd-archive` justo después de
+`/openspec-archive-change` (paso 11.5 de la Pre-merge Review). Nunca hace push, amend, rebase, squash ni usa
 `--no-verify`.
 
 | Variable | Por defecto | Para qué |
@@ -141,7 +141,7 @@ Los hooks del kit. Ninguno tiene un comando escrito dentro:
 | `verify-tests` | `CMD_TEST`, `PATH_SOURCE`, `PATH_TESTS`, `PATH_ADR`, `KIT_*` |
 
 Las skills que dependen de esta configuración para ejecutar algo son las que más se benefician:
-`/openspec-implement`, `/tdd-red`, `/tdd-green`, `/tdd-refactor`, `/feature-slice`, `/show-spec-working`,
+`/sdd-implement`, `/tdd-red`, `/tdd-green`, `/tdd-refactor`, `/feature-slice`, `/show-spec-working`,
 `/adversarial-review`, `/code-auditing`, `/privacy-ethics-check`, `/kit-health`.
 
 Y todas en general, a través del contexto dinámico que abre casi todas:
