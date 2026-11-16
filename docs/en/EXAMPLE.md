@@ -93,7 +93,7 @@ slipped in —configurable sorting, cursor pagination, and a count endpoint— t
 
 ## F2 · From story to contract
 
-Clean context. `/opsx:propose` or the P5 prompt — either produces the same four files and is subject
+Clean context. `/openspec-propose` or the P5 prompt — either produces the same four files and is subject
 to the same hooks.
 
 Four files. The two that most decide the outcome:
@@ -193,7 +193,7 @@ every task that mutates data include its restoration:
 - [ ] 11.2 Run `/show-spec-working`, `/verify-against-spec` and `/adversarial-review`; one report each under `reports/`
 - [ ] 11.3 Fix every finding and record its destination in `design.md` → Follow-ups
 - [ ] 11.4 Commit the fixes to the same pull request
-- [ ] 11.5 `/opsx:archive`, then `/openspec-archive`; the author merges afterwards
+- [ ] 11.5 `/openspec-archive-change`, then `/sdd-archive`; the author merges afterwards
 ```
 
 If the agent writes a `tasks.md` without step 0, without the `(MANDATORY)` label, without
@@ -211,7 +211,7 @@ the `spec-audit-gate` hook blocks code and test edits until that report exists a
 
 ## F4 · From contract to code
 
-`/openspec-implement <id>` walks the tasks. What happens in each one:
+`/sdd-implement <id>` walks the tasks. What happens in each one:
 
 ### Red
 
@@ -422,8 +422,8 @@ A model does not generate that. It is not in the diff.
 
 ## F8 · Close-out
 
-The change was already archived on its pull request before the merge (`/opsx:archive`, then
-`/openspec-archive`). After the merge: delete the branch, and the P15 retro on the cycle data. In this case
+The change was already archived on its pull request before the merge (`/openspec-archive-change`, then
+`/sdd-archive`). After the merge: delete the branch, and the P15 retro on the cycle data. In this case
 an unforeseen task appeared —the second triangulation test— and the conclusion was actionable:
 add to `docs/backend-standards.md` the rule that every implementation task carries its
 triangulation from the

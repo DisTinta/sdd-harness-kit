@@ -46,29 +46,29 @@ CROSS-CUTTING: ethics, privacy, and security across all nine phases
 ```
 
 **Two paths, one outcome.** F2 and F4 have two equivalent ways to run: native OpenSpec
-commands (`/opsx:*`, installed by `openspec init`) or the kit’s artefacts. Use whichever
+skills (`/openspec-*`, installed by `openspec init` / `update` in OpenSpec 2.0) or the kit’s artefacts. Use whichever
 you prefer, mix them across tickets or even within the same ticket — the doctrine in `docs/` and the
 10 hooks do not distinguish one from the other, because they act on the file path, not on who
 wrote it.
 
 | Phase | Native OpenSpec path | Kit path |
 |---|---|---|
-| Explore | `/opsx:explore` | Subagent `explorer`, or **prompt P4** |
-| Specify | `/opsx:propose` (or `/opsx:new` + `/opsx:continue`/`/opsx:ff`) | **Prompt P5** — «also works without OpenSpec» |
+| Explore | `/openspec-explore` | Subagent `explorer`, or **prompt P4** |
+| Specify | `/openspec-propose` (or `/openspec-new-change` + `/openspec-continue-change`/`/openspec-ff-change`) | **Prompt P5** — «also works without OpenSpec» |
 | Audit the proposal | — | Subagent `spec-auditor`, or **prompt P6** |
-| Implement | `/opsx:apply` | `/openspec-implement`, or the `/tdd-red` → `/tdd-green` → `/tdd-refactor` cycle |
-| Reconcile delta → main spec | `/opsx:sync` | — (not needed: `/openspec-implement` does not touch `specs/`) |
-| Verify | `/opsx:verify` (extended workflow) | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review` |
-| Archive (in the PR, before merge) | `/opsx:archive` | `/openspec-archive` right after: `INDEX.md` index, archive commit and delta pruning |
+| Implement | `/openspec-apply-change` | `/sdd-implement`, or the `/tdd-red` → `/tdd-green` → `/tdd-refactor` cycle |
+| Reconcile delta → main spec | `/openspec-sync-specs` | — (not needed: `/sdd-implement` does not touch `specs/`) |
+| Verify | `/openspec-verify-change` (extended workflow) | `/show-spec-working`, `/verify-against-spec`, `/adversarial-review` |
+| Archive (in the PR, before merge) | `/openspec-archive-change` | `/sdd-archive` right after: `INDEX.md` index, archive commit and delta pruning |
 
-> OpenSpec's default profile ships `/opsx:explore`, `/opsx:propose`, `/opsx:apply` and
-> `/opsx:archive`. The `/opsx:new`, `/opsx:continue`, `/opsx:ff` and `/opsx:verify` commands belong to
+> OpenSpec's default profile ships `/openspec-explore`, `/openspec-propose`, `/openspec-apply-change` and
+> `/openspec-archive-change`. The `/openspec-new-change`, `/openspec-continue-change`, `/openspec-ff-change` and `/openspec-verify-change` commands belong to
 > the **extended** profile: enable them with `openspec config profile` and `openspec update`. If your
 > install does not have them, use the kit path in the right-hand column.
 
 What does **not** change between the two paths: `validate-tasks` still requires step 0 and the
 mandatory steps in any `tasks.md`, `protect-specs-and-tests` still prompts on any rewrite of an
-artefact that already exists (whether `/opsx:apply` is fixing its own work or you do it by hand),
+artefact that already exists (whether `/openspec-apply-change` is fixing its own work or you do it by hand),
 and `session-context` reads `openspec/changes` without asking who created them.
 
 ### F0 · Harness
@@ -174,7 +174,7 @@ a single AI turn. If a task is *implement the full auth system*, split it. If it
 two hours, trivial fixes where the change is obvious. Specifying has a cost; that is what
 the criterion is for.
 
-**Kit templates:** `ai-specs/templates/openspec/`. **Skills:** `/openspec-implement`.
+**Kit templates:** `ai-specs/templates/openspec/`. **Skills:** `/sdd-implement`.
 **Subagent:** `spec-auditor`. **Hook:** `validate-tasks` rejects a `tasks.md` without the mandatory
 steps from `docs/openspec-tasks-mandatory-steps.md`.
 
@@ -251,7 +251,7 @@ context in each phase is why the cycle works with agents.
 > «Never allow the agent to modify your tests without explicit review. Protect tests as
 > if they were the client’s signed specification — because they are.»
 
-**Skills:** `/tdd-red`, `/tdd-green`, `/feature-slice`, `/openspec-implement`.
+**Skills:** `/tdd-red`, `/tdd-green`, `/feature-slice`, `/sdd-implement`.
 **Subagents:** `explorer`, and the TDD cycle trilogy —`tdd-test-writer`, `tdd-implementer`,
 `tdd-refactorer`— each with isolated context for its phase.
 **Hooks:** `protect-specs-and-tests`, `post-edit-quality`, `verify-tests`.
@@ -326,11 +326,11 @@ concurrent branches.
 4. Label auto-generated PRs.
 5. Connectors in read-only mode for review; never write to production without a human.
 
-**Archiving:** archive the change inside the PR, before merge, with `/opsx:archive` and right after it
-`/openspec-archive` (step 11.5 of `openspec-tasks-mandatory-steps.md`). It reaches the main
+**Archiving:** archive the change inside the PR, before merge, with `/openspec-archive-change` and right after it
+`/sdd-archive` (step 11.5 of `openspec-tasks-mandatory-steps.md`). It reaches the main
 branch already archived.
 
-**Skills:** `/commit`, `/pr-describe`, `/pr-review`, `/openspec-archive`.
+**Skills:** `/commit`, `/pr-describe`, `/pr-review`, `/sdd-archive`.
 
 ### F8 · Closure
 
@@ -383,7 +383,7 @@ A selection of the most used artefacts per phase. The full list is in `ai-specs/
 | `security-reviewer` | subagent | F5 | That nobody merges an IDOR out of haste |
 | `/enrich-us` | skill | F1 | Stories with verifiable criteria and non-goals |
 | `/dod-*` (5) | skills | F1 | Definition of Done by task type |
-| `/openspec-implement` | skill | F2-F4 | Scenario → test traceability, task by task |
+| `/sdd-implement` | skill | F2-F4 | Scenario → test traceability, task by task |
 | `/feature-slice` | skill | F4 | Full vertical unit in layer order |
 | `/tdd-red`, `/tdd-green` | skills | F4 | The red-green cycle split into two turns |
 | `/verify-against-spec` | skill | F5 | Detect both what is missing and what is surplus |
@@ -392,7 +392,7 @@ A selection of the most used artefacts per phase. The full list is in `ai-specs/
 | `/architecture-audit` | skill | F4 | DDD, boundaries, SOLID/CUPID, Fowler mode |
 | `/adr-new` | skill | F6 | Transcribe decisions, and say when they are not needed |
 | `/commit`, `/pr-describe` | skills | F7 | Atomic commits and PR with the «why» left blank |
-| `/openspec-archive` | skill | F7 | Archive index, commit with the deltas and safe pruning, never pushes |
+| `/sdd-archive` | skill | F7 | Archive index, commit with the deltas and safe pruning, never pushes |
 | `session-context` | hook | F0 | That the agent starts knowing where it is |
 | `validate-tasks` | hook | F2 | That a `tasks.md` without verification does not pass |
 | `spec-audit-gate` | hook | F2-F4 | That no code or test is written until the `spec-auditor` has reviewed the change |
@@ -492,7 +492,7 @@ When there are several reasonable ways to configure the harness, the kit adopts 
 
 | Topic | Adopted criterion |
 |---|---|
-| Two distinct «OpenSpec»s under the same name: the CLI tool with `/opsx:*` and delta specs, and a conceptual framework with `.feature.spec.md` extensions | The CLI tool for the flow; the conceptual framework only as a template catalogue |
+| Two distinct «OpenSpec»s under the same name: the CLI tool with `/openspec-*` skills and delta specs, and a conceptual framework with `.feature.spec.md` extensions | The CLI tool for the flow; the conceptual framework only as a template catalogue |
 | Two L1–L5 taxonomies: by who initiates the task, and by tool type | The first, to decide delegation |
 | Two hook formats: a flat one and a three-level one (event → matcher → handlers) | The three-level one, which is canonical |
 | Environment variables (`$CLAUDE_FILE`) versus reading JSON from stdin with `jq` | stdin and `jq` |

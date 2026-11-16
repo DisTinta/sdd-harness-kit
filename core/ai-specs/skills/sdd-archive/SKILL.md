@@ -1,6 +1,6 @@
 ---
-name: openspec-archive
-description: Use right after /opsx:archive (Pre-merge Review step 11.5), or when the user asks to index, prune or clean up openspec/changes/archive. Writes the INDEX.md row, creates the archive commit with the delta specs, prunes deltas per KIT_ARCHIVE_PRUNE_DELTAS, and runs the separate, dry-run-first folder pruning behind an annotated snapshot tag. Never pushes.
+name: sdd-archive
+description: Use right after /openspec-archive-change (Pre-merge Review step 11.5), or when the user asks to index, prune or clean up openspec/changes/archive. Writes the INDEX.md row, creates the archive commit with the delta specs, prunes deltas per KIT_ARCHIVE_PRUNE_DELTAS, and runs the separate, dry-run-first folder pruning behind an annotated snapshot tag. Never pushes.
 author: sdd-harness-kit
 version: 1.0.0
 argument-hint: [archived folder YYYY-MM-DD-<change> | index | prune-deltas | prune-folders]
@@ -22,9 +22,9 @@ allowed-tools: Bash(bash .claude/openspec-archive.sh *) Bash(node .claude/hooks/
 
 Exit codes: `0` ok · `1` usage · `2` refused (preflight or config) · `3` commit failed, nothing pruned.
 
-## Procedure A — after `/opsx:archive` (default)
+## Procedure A — after `/openspec-archive-change` (default)
 
-1. Identify the archived folder `openspec/changes/archive/YYYY-MM-DD-<change>` that `/opsx:archive`
+1. Identify the archived folder `openspec/changes/archive/YYYY-MM-DD-<change>` that `/openspec-archive-change`
    just created (its summary prints it). If `$ARGUMENTS` names it, use that.
 2. Preview: `post-archive <folder> --dry-run`. Show the output to the user.
 3. Run: `post-archive <folder>`. It:

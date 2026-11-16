@@ -12,6 +12,34 @@ Versionado semántico: la versión viva está en [`VERSION`](../../VERSION).
 
 ---
 
+## [1.7.0]
+
+### Cambiado
+
+- **Alineación con OpenSpec 2.0.** La CLI ya no instala comandos `/opsx:*`; el flujo nativo son
+  skills `/openspec-propose`, `/openspec-apply-change`, `/openspec-archive-change`, etc. (carpeta
+  compartida `.agents/skills/`). Documentación, doctrina instalable, hooks y plantillas usan ese
+  mapa.
+- **Skills del kit fuera del prefijo `openspec-*`.** Renombradas para no pisar el namespace del
+  paquete: `/openspec-implement` → `/sdd-implement`, `/openspec-archive` → `/sdd-archive`. El
+  script `.claude/openspec-archive.sh` conserva el nombre (infra del kit, no skill).
+- **KEEP del sync por allowlist.** `sync-artifacts` ya no trata todo `openspec-*` como KEEP: solo
+  las 12 skills oficiales de OpenSpec 2.0. Las carpetas legacy `openspec-implement` /
+  `openspec-archive` pasan a `ORPHAN` tras actualizar.
+
+### Notas de actualización
+
+- Actualiza la CLI a OpenSpec ≥ 2.0 (`npm install -g @fission-ai/openspec@2`) y ejecuta
+  `openspec update` en cada proyecto consumidor.
+- Reinstala o actualiza el kit; sincroniza artefactos. Borra a mano las referencias huérfanas
+  `.claude/skills/openspec-implement` y `.claude/skills/openspec-archive` (y las de `.cursor/`)
+  cuando `/sdd-implement` y `/sdd-archive` ya estén sincronizadas.
+- Sustituye en `openspec/config.yaml` del proyecto (si lo personalizaste) las menciones a
+  `/openspec-implement` / `/openspec-archive` / `/opsx:*` por `/sdd-implement` /
+  `/sdd-archive` / `/openspec-*` según el mapa 2.0.
+
+---
+
 ## [1.6.0]
 
 ### Añadido

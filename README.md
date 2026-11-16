@@ -122,8 +122,8 @@ bash ./doctor.sh --dest /ruta/a/mi-proyecto      # Windows: .\doctor.ps1 -Dest C
 La [guía paso a paso](docs/es/GUIA-PASO-A-PASO.md) cubre prerrequisitos, OpenSpec y problemas
 frecuentes en Windows y Unix.
 
-Funciona igual con los comandos nativos de OpenSpec (`/opsx:explore`, `/opsx:propose`,
-`/opsx:apply`, `/opsx:sync`, `/opsx:archive`), con los del kit o con ambos a la vez: los hooks y la
+Funciona igual con los comandos nativos de OpenSpec (`/openspec-explore`, `/openspec-propose`,
+`/openspec-apply-change`, `/openspec-sync-specs`, `/openspec-archive-change`), con los del kit o con ambos a la vez: los hooks y la
 doctrina actúan sobre la ruta del fichero, no sobre qué comando lo escribió. Tabla de
 correspondencia en el [Manual](docs/es/MANUAL.md).
 
@@ -136,13 +136,13 @@ correspondencia en el [Manual](docs/es/MANUAL.md).
 
 | Ruta en tu repositorio | Qué es |
 |---|---|
-| `ai-specs/skills/` | **30 skills**, fuente canónica. Incluye `/show-spec-working`, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/openspec-archive`, `/meta-prompt`, `/kit-health` |
+| `ai-specs/skills/` | **30 skills**, fuente canónica. Incluye `/sdd-implement`, `/sdd-archive`, `/show-spec-working`, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/meta-prompt`, `/kit-health` |
 | `ai-specs/agents/` | **9 subagentes**, fuente canónica. Incluye `spec-auditor` y la trilogía `tdd-test-writer` / `tdd-implementer` / `tdd-refactorer`, un contexto aislado por fase del ciclo |
 | `ai-specs/templates/` | Plantillas de story, ADR, PR, artefactos OpenSpec y `config.yaml.tpl` |
 | `.claude/skills/` · `.cursor/skills/` | Referencias a `ai-specs` (symlink, o copia si el SO no lo permite) |
 | `.claude/agents/` · `.cursor/agents/` | Ídem |
 | `.claude/hooks/` | **10 hooks** deterministas del ciclo de vida (incluye bloqueo de lectura de secretos) |
-| `.claude/openspec-archive.sh` | Índice y retención de `openspec/changes/archive/` (lo usa `/openspec-archive`) |
+| `.claude/openspec-archive.sh` | Índice y retención de `openspec/changes/archive/` (lo usa `/sdd-archive`) |
 | `.claude/sdd-harness.env` | **La única pieza que cambia entre proyectos**: comandos, rutas, `BRANCH_PREFIX` y guardas |
 | `.mcp.json` · `.cursor/mcp.json` | MCP del proyecto: **Context7** (docs de librerías) y **Playwright** (demo de UI; se omite con `--no-frontend`) |
 | `.claude/sync-artifacts.sh` · `.ps1` | Reconstruye las referencias a `ai-specs` |
@@ -313,7 +313,7 @@ Lo que este kit añade sobre ese punto de partida:
 | **Soporte real en Windows** | PowerShell de primera clase, copia cuando el SO no permite symlinks |
 | **`doctor`** (`doctor.sh` / `doctor.ps1`) | Diagnosticar una instalación en vez de adivinar por qué no funciona |
 | **Gates de secretos en profundidad** | Bloqueo en el prompt y en la lectura de ficheros, no solo en el commit |
-| **30 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, auditoría de la spec antes de codificar, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/openspec-archive`, `/kit-health` |
+| **30 skills y 9 subagentes** | La trilogía TDD con contexto aislado por fase, auditoría de la spec antes de codificar, `/adversarial-review`, `/migration-review`, `/architecture-audit`, `/privacy-ethics-check`, `/sdd-archive`, `/kit-health` |
 
 El diseño, el afinado y todo lo anterior son trabajo propio. La deuda con `lidr-specboot` es de
 arquitectura y convenciones, y queda declarada aquí y en [CREDITS.md](docs/es/CREDITS.md).

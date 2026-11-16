@@ -23,7 +23,7 @@ context: |
   - docs/documentation-standards.md — docs gate before commit
   - docs/openspec-tasks-mandatory-steps.md — required steps inside every tasks.md
   - ai-specs/agents/ — specialised subagents (explorer, planners, TDD triad, auditors)
-  - ai-specs/skills/ — procedures (/openspec-implement, /tdd-*, /verify-against-spec, …)
+  - ai-specs/skills/ — procedures (/sdd-implement, /tdd-*, /verify-against-spec, …)
   - .claude/sdd-harness.env — executable commands and BRANCH_PREFIX for hooks
 
   Rules of engagement:
@@ -55,7 +55,7 @@ rules:
     - One task ≈ one agent turn; split epics.
     - Include TDD red→green→refactor where behaviour changes.
     - BRANCH_PREFIX in .claude/sdd-harness.env must match the branch naming in step 0.
-    - Last step, always - Pre-merge Review (MANDATORY - AGENT MUST EXECUTE) - with the PR open, run /show-spec-working, /verify-against-spec and /adversarial-review in that order; fix findings in this change and commit them to the same PR; then /opsx:archive followed by /openspec-archive (INDEX.md row + archive commit on the same PR); the author merges after that (docs/openspec-tasks-mandatory-steps.md, Pre-merge Review).
+    - Last step, always - Pre-merge Review (MANDATORY - AGENT MUST EXECUTE) - with the PR open, run /show-spec-working, /verify-against-spec and /adversarial-review in that order; fix findings in this change and commit them to the same PR; then /openspec-archive-change followed by /sdd-archive (INDEX.md row + archive commit on the same PR); the author merges after that (docs/openspec-tasks-mandatory-steps.md, Pre-merge Review).
     - Once tasks.md is written (the last artifact of the propose), run the spec-auditor subagent over the whole change, save its full report as reports/<YYYY-MM-DD>-spec-audit.md, on CHANGES REQUIRED apply its corrections to the artifacts (product or scope decisions go to the author; no new issues or tasks), close the report with how each finding was resolved and re-run the auditor; only present the change as ready on an APPROVED verdict (docs/base-standards.md §7.1).
 
 # Optional operation guidance (OpenSpec apply / archive)
@@ -63,11 +63,11 @@ operations:
   apply:
     guidance:
       - Before any code or test, check that the change has reports/*-spec-audit.md ending in an APPROVED verdict (or blocking findings the author accepted); if it does not, run the spec-auditor step of docs/base-standards.md §7.1 first (the spec-audit-gate hook denies code edits until it exists).
-      - Prefer /openspec-implement or /opsx:apply with the same hooks; do not edit openspec/specs/ during apply unless syncing deliberately.
+      - Prefer /sdd-implement or /openspec-apply-change with the same hooks; do not edit openspec/specs/ during apply unless syncing deliberately.
       - Run focused tests (CMD_TEST_FILTER) before the full suite when available.
   archive:
     guidance:
       - Archive only after /show-spec-working, /verify-against-spec and /adversarial-review have run on the open PR and their fixes are committed to it; commit the archive to the same PR, before the merge.
       - Keep the completion summary factual; put process learnings in project-context or standards, not in the archive blurb.
-      - Right after archiving, run /openspec-archive (kit skill, .claude/openspec-archive.sh post-archive <dated-folder>) to write the openspec/changes/archive/INDEX.md row, create the archive commit with the delta specs, and prune deltas per KIT_ARCHIVE_PRUNE_DELTAS; never push or tag-push without the author's confirmation.
+      - Right after archiving, run /sdd-archive (kit skill, .claude/openspec-archive.sh post-archive <dated-folder>) to write the openspec/changes/archive/INDEX.md row, create the archive commit with the delta specs, and prune deltas per KIT_ARCHIVE_PRUNE_DELTAS; never push or tag-push without the author's confirmation.
       - Do not read openspec/changes/archive/*/ for context; use openspec/changes/archive/INDEX.md and Git history.

@@ -3,10 +3,10 @@
 # Tests for core/.claude/openspec-archive.sh (OpenSpec archive retention).
 # Kit-repo only (not installed). Plain bash, no framework.
 #
-# Usage:  bash tests/openspec-archive.test.sh [name-filter]
+# Usage:  bash tests/sdd-archive.test.sh [name-filter]
 # Needs:  git, openspec CLI (>= 1.9.0), jq (hygiene hook test). Each test runs in a fresh
 #         temporary Git repo with the kit's .claude/ copied in, mimicking an installed project.
-# One test function per scenario in openspec/changes/openspec-archive-retention/specs/.
+# One test function per scenario in openspec/changes/sdd-archive-retention/specs/.
 # ─────────────────────────────────────────────────────────────────────────────
 set -uo pipefail
 
@@ -316,7 +316,7 @@ test_folder_tag_name_collision() {
   local orig; orig="$(git rev-parse "openspec-archive-snapshot-$MONTH")"
   kit prune-folders --apply >/dev/null 2>&1
   assert_eq "$(git rev-parse "openspec-archive-snapshot-$MONTH")" "$orig"
-  assert git rev-parse -q --verify "refs/tags/openspec-archive-snapshot-$MONTH-2"
+  assert git rev-parse -q --verify "refs/tags/sdd-archive-snapshot-$MONTH-2"
 }
 
 test_folder_index_rows_keep_pruned_changes() {

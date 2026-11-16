@@ -270,7 +270,7 @@ ACCEPTANCE CRITERIA
 
 ## P5 · Specify the change
 
-**Clean context mandatory.** If you use OpenSpec, the `/opsx:propose "<description>"` command does
+**Clean context mandatory.** If you use OpenSpec, the `/openspec-propose "<description>"` command does
 the same thing. This prompt is the controlled version, and it also works without OpenSpec.
 
 ```
@@ -761,8 +761,8 @@ ACCEPTANCE CRITERIA
 
 ## P15 · Close and learn
 
-The change was archived on its pull request before the merge (`/opsx:archive`, then
-`/openspec-archive`). Then:
+The change was archived on its pull request before the merge (`/openspec-archive-change`, then
+`/sdd-archive`). Then:
 
 ```
 CONTEXT AND ROLE

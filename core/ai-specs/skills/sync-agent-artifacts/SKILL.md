@@ -34,8 +34,14 @@ reference paths:
 | Real copy, identical to the source | Correct in copy mode |
 | Real copy, different from the source | Drift: someone edited the copy instead of the canonical file |
 | Missing | Never linked |
-| Present in the references, name matches `openspec-*`, absent from `ai-specs` | **KEEP:** native OpenSpec skill from `openspec init` (`/opsx:*`). Not kit-owned. Leave it. |
-| Present in the references, any other name, absent from `ai-specs` | Orphan: the kit source was deleted or renamed. The human decides whether to delete. |
+| Present in the references, name is an official OpenSpec 2.0 skill (allowlist below), absent from `ai-specs` | **KEEP:** OpenSpec-owned skill from `openspec init` / `update`. Leave it. |
+| Present in the references, any other name, absent from `ai-specs` | **ORPHAN:** kit source deleted/renamed (incl. legacy `openspec-implement` / `openspec-archive`). The human decides whether to delete. |
+
+OpenSpec 2.0 KEEP allowlist: `openspec-propose`, `openspec-explore`, `openspec-apply-change`,
+`openspec-update-change`, `openspec-sync-specs`, `openspec-archive-change`, `openspec-new-change`,
+`openspec-continue-change`, `openspec-ff-change`, `openspec-verify-change`,
+`openspec-bulk-archive-change`, `openspec-onboard`. Kit skills use the `sdd-*` prefix and must not
+use the `openspec-*` namespace.
 
 Report the table before acting. Sync labels these `KEEP` and `ORPHAN` / `HUÉRFANO`; `KEEP` is not a
 failure.
@@ -61,7 +67,7 @@ what changed and any remaining blocker. `KEEP` lines after `openspec init` are h
 
 **Never:**
 - Delete a real directory containing work that is not in `ai-specs`
-- Delete `openspec-*` skills that are not in `ai-specs` — they are OpenSpec's `/opsx:*` commands, not leftover kit copies
+- Delete allowlisted OpenSpec 2.0 skills that are not in `ai-specs` — they are package-owned, not leftover kit copies
 - Treat a `KEEP` line as an orphan to clean up
 - Overwrite a divergent copy without showing the difference first
 - Create a reference to a target that does not exist
@@ -69,6 +75,7 @@ what changed and any remaining blocker. `KEEP` lines after `openspec init` are h
 
 **Always:**
 - Diagnose the full picture before the first mutation
-- Treat `ai-specs` as the single source of truth **for kit artifacts**; OpenSpec owns `openspec-*` guests
+- Treat `ai-specs` as the single source of truth **for kit artifacts**; OpenSpec owns the allowlisted `openspec-*` guests
 - Leave the tree in a state where every skill loads in both tools
 - Report what you could not fix, and exactly what is needed to fix it
+- After upgrading from kit ≤1.6, treat leftover `openspec-implement` / `openspec-archive` references as ORPHANs and delete them once `/sdd-implement` / `/sdd-archive` are synced

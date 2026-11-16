@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Checks that the SDD Harness Kit is healthy in an already installed project.
 

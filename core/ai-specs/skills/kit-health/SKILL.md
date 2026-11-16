@@ -41,8 +41,8 @@ Whether the doctor ran or not, ensure the report covers these cracks:
 | **jq missing** | `command -v jq` fails; hooks no-op | Install jq (`winget install jqlang.jq` on Windows; apt/brew elsewhere). Hooks degrade safely but guards are off. |
 | **Hooks not executable / no bash** | `.claude/hooks/*.sh` present but bash missing (Windows without Git Bash) | Install Git for Windows; run hooks via `bash`. |
 | **Sync divergent** | `.claude/skills/*` is a 22-byte text stub, broken symlink, or copy that differs from `ai-specs/skills/*` | `bash .claude/sync-artifacts.sh` or `pwsh -File .claude/sync-artifacts.ps1`. Never edit only the copy. |
-| **OpenSpec skills reported as KEEP** | Sync lists `openspec-*` under `.claude/skills` / `.cursor/skills` with tag `KEEP` | Healthy after `openspec init`. Not a crack. **Never delete them** — they are `/opsx:*`. |
-| **True orphan (not `openspec-*`)** | Sync `ORPHAN` / `HUÉRFANO` for a name that is not `openspec-*` | Leftover kit copy or a skill edited only under `.claude/skills`. Human decides; do not auto-delete. |
+| **OpenSpec skills reported as KEEP** | Sync lists allowlisted OpenSpec 2.0 skills (`openspec-propose`, `openspec-apply-change`, …) under `.claude/skills` / `.cursor/skills` with tag `KEEP` | Healthy after `openspec init` / `update`. Not a crack. **Never delete them**. |
+| **True orphan** | Sync `ORPHAN` / `HUÉRFANO` for a name outside the OpenSpec allowlist (incl. legacy kit `openspec-implement` / `openspec-archive`) | Leftover kit copy, renamed skill, or a skill edited only under `.claude/skills`. Human decides; do not auto-delete. |
 | **Skills missing from slash menu** | Canonical skill in `ai-specs/skills/<name>/SKILL.md` but no reference under `.claude/skills` / `.cursor/skills` | Sync artifacts; restart the agent session. |
 | **`project-context` empty / placeholders** | `docs/project-context.md` missing, or still contains `{{...}}` | Complete via human edit or prompt P0. Highest leverage crack. |
 | **OpenSpec not initialised** | No `openspec/` with `changes/` / `specs/` (or init never run) | `openspec init` **after** kit install. Then apply `ai-specs/templates/openspec/config.yaml.tpl` → `openspec/config.yaml`. |
@@ -85,7 +85,7 @@ Severity: Critical (kit unsafe / silent), High (major feature off), Medium, Low.
 - Rewrite `docs/base-standards.md` to "fix" a local preference.
 - Run `/init` as a remedy (it overwrites doctrine through the memory files).
 - Overwrite a divergent skill copy without showing the diff (see `/sync-agent-artifacts`).
-- Delete `openspec-*` skills that are not in `ai-specs` (OpenSpec native `/opsx:*`; sync tags them `KEEP`).
+- Delete allowlisted OpenSpec 2.0 skills that are not in `ai-specs` (sync tags them `KEEP`).
 - Claim PASS if jq is missing — call it degraded, not healthy.
 
 **Always:**
