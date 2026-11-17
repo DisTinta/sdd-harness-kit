@@ -17,6 +17,11 @@
 
 </div>
 
+> **v1.7.0 — OpenSpec 2.0.** The kit is aligned with [OpenSpec](https://github.com/Fission-AI/OpenSpec) ≥ 2.0
+> (`/openspec-*` skills; the kit uses `/sdd-implement` and `/sdd-archive`). Upgrading from 1.6.x: install
+> CLI `openspec@2`, run `openspec update` in the project, and read the
+> [update notes](CHANGELOG.en.md#170).
+
 ---
 
 ## What it is
